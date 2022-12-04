@@ -1,0 +1,18 @@
+.root{
+-fx-background-color:#252525;
+}
+.button{
+-fx-background-color:#403D3D;
+-fx-text-fill:#fff;
+-fx-font-size:16px;
+-fx-pref-width:124px;
+-fx-pref-height:60px;
+}
+.text {
+-fx-font-size:16px;
+-fx-text-fill:#fff;
+}
+.input{
+-fx-background-color:#403D3D;
+-fx-text-fill:#fff;
+}
