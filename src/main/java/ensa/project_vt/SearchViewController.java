@@ -21,6 +21,7 @@ public class SearchViewController {
    public void createResultView(String title,String duration){
 
    }
+   /*
    public String getInputType(String input){
             // check if input is a valid url
             if(isValidURL(input)){
@@ -28,6 +29,8 @@ public class SearchViewController {
 
             }
    }
+
+    */
    public boolean isValidURL(String url){
        String regex = "((http|https)://)(www.)?"
                + "[a-zA-Z0-9@:%._\\+~#?&//=]"
@@ -48,9 +51,11 @@ public class SearchViewController {
        return m.matches();
    }
    // return true if the argument is url
-   public boolean isYtUrl(){
+   /*public boolean isYtUrl(){
 
    }
+
+    */
    public String getSearchInput(){
        return this.searchInput;
    }
