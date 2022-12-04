@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+
 import java.util.regex.*;
 
 public class SearchViewController {
@@ -12,21 +15,34 @@ public class SearchViewController {
     private TextField searchField;
    @FXML
     private Button search;
+   @FXML
+   private Text mainText;
+   @FXML
+   private AnchorPane parent;
    private String searchInput;
    //method to be called when search button is clicked
    public void search(ActionEvent a){
        searchInput = searchField.getText();
        // check if the input is empty and return
     if(searchInput.isEmpty()){
-        System.out.println("Type a keyword or link");
+        mainText.setText("Type a link for a video or a keyword");
         return;
     }
        // get the type of input : is it a link or a keyword ?
        String type = getInputType(searchInput);
        switch (type) {
            case "yt-link" -> System.out.println("It's a youtube link");
-           case "link" -> System.out.println("It's not a youtube link");
-           case "keyword" -> System.out.println("Searching for keyword now");
+           case "link" -> {
+               mainText.setText("Oops .. this is not a youtube link");
+           }
+           case "keyword" -> {
+               //remove the main text
+               mainText.setVisible(false);
+               //after getting search results
+               //TO-DO : get data from yt api
+               // create a view for every search result
+               createResultView("Cute cats","2min00s");
+           }
            default -> System.out.println("Invalid input");
        }
 
