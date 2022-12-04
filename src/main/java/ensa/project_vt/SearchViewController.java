@@ -17,7 +17,10 @@ public class SearchViewController {
    public void search(ActionEvent a){
        searchInput = searchField.getText();
        // check if the input is empty and return
-
+    if(searchInput.isEmpty()){
+        System.out.println("Type a keyword or link");
+        return;
+    }
        // get the type of input : is it a link or a keyword ?
        String type = getInputType(searchInput);
        switch (type) {
