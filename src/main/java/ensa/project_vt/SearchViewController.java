@@ -1,9 +1,12 @@
 package ensa.project_vt;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -20,8 +23,19 @@ public class SearchViewController {
     @FXML
     private AnchorPane parent;
     private String searchInput;
+    @FXML
+    private ListView<Result> listView;
+
+    @FXML
+    private void initialize() {
+        ObservableList<Result> data = FXCollections.observableArrayList(new Result("hehehe","9:00","google.com"), new Result("hehehe","9:00","google.com"));
+        listView.setItems(data);
+        listView.setCellFactory(resultListView -> new ResultCell());
+
+    }
     //method to be called when search button is clicked
     public void search(ActionEvent a){
+
         searchInput = searchField.getText();
         // check if the input is empty and return
         if(searchInput.isEmpty()){
