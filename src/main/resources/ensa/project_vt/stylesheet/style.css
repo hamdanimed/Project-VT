@@ -1,0 +1,9 @@
+.control-bar
+{
+	-fx-background-color :transparent;
+
+}
+.media-view:hover .control-bar
+{
+	-fx-background-color: black;
+}
