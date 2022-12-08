@@ -10,11 +10,18 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.scene.media.Media;
 
+import java.io.File;
+import java.time.Duration;
 import java.util.regex.*;
 
 public class SearchViewController {
+    private Stage stage;
     @FXML
     private TextField searchField;
     @FXML
@@ -26,6 +33,9 @@ public class SearchViewController {
     private String searchInput;
     @FXML
     private ListView<Result> listView;
+    @FXML
+    private Button browse;
+
 
     @FXML
     private void initialize() {
@@ -33,7 +43,35 @@ public class SearchViewController {
         listView.setCellFactory(resultListView -> new ResultCell());
 
     }
+    private void createVideoInstance(File file){
+        Media mediaFile = new Media(file.toURI().toString());
 
+        MediaPlayer mediaPlayer = new MediaPlayer(mediaFile);
+
+        mediaPlayer.setOnReady(new Runnable() {
+
+            @Override
+            public void run() {
+
+                System.out.println("Duration: "+mediaFile.getDuration().toSeconds());
+                Result result = new Result(file.getName(),String.valueOf(mediaFile.getDuration().toSeconds()));
+
+            }
+        });
+    }
+    public void setStage(Stage stage) {
+        this.stage = stage;
+        browse.setOnMouseClicked(event -> {
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video Files", "*.mp4");
+            fileChooser.getExtensionFilters().add(extFilter);
+            // get the file selected
+            File file = fileChooser.showOpenDialog(stage);
+            if(file!=null) {
+
+            }
+        });
+    }
     //method to be called when search button is clicked
     public void search(ActionEvent a){
 

@@ -6,10 +6,15 @@ public class Result {
     private String duration;
     private String url;
 
+    // for online video results
     public Result(String videoTitle, String duration, String url) {
         this.videoTitle = videoTitle;
         this.duration = duration;
         this.url = url;
+    }
+    public Result(String videoTitle, String duration) {
+        this.videoTitle = videoTitle;
+        this.duration = duration;
     }
 
     public String getVideoTitle() {
