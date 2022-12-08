@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="hbox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="1000.0" style="-fx-background-color: #323232;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="hbox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1000.0" style="-fx-background-color: #323232;" styleClass="style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="titleLabel" style="-fx-padding: 24px; -fx-text-fill: #fff;" text="Cat Video funny 1080p" textAlignment="CENTER">
+      <ImageView fitHeight="45.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true" smooth="false" HBox.hgrow="ALWAYS">
+         <image>
+            <Image url="@assets/video_playlist.png" />
+         </image>
+         <HBox.margin>
+            <Insets left="20.0" />
+         </HBox.margin>
+      </ImageView>
+      <Label fx:id="titleLabel" style="-fx-padding: 24px; -fx-text-fill: #fff; -fx-font-size: 32px;" text="Cat Video funny 1080p" textAlignment="CENTER">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <Region prefHeight="140.0" prefWidth="600.0" HBox.hgrow="ALWAYS" />
+      <Region prefHeight="140.0" prefWidth="347.0" HBox.hgrow="ALWAYS" />
       <Label fx:id="durationLabel" alignment="CENTER" contentDisplay="TEXT_ONLY" prefHeight="50.0" prefWidth="200.0" style="-fx-label-padding: 10px; -fx-text-fill: #fff;" text="4:00" textAlignment="CENTER">
          <font>
             <Font size="18.0" />

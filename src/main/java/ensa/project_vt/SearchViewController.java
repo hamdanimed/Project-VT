@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
@@ -28,11 +29,11 @@ public class SearchViewController {
 
     @FXML
     private void initialize() {
-        ObservableList<Result> data = FXCollections.observableArrayList(new Result("hehehe","9:00","google.com"), new Result("hehehe","9:00","google.com"));
-        listView.setItems(data);
+        listView.setVisible(false);
         listView.setCellFactory(resultListView -> new ResultCell());
 
     }
+
     //method to be called when search button is clicked
     public void search(ActionEvent a){
 
@@ -52,18 +53,17 @@ public class SearchViewController {
             case "keyword" -> {
                 //remove the main text
                 mainText.setVisible(false);
+                listView.setVisible(true);
                 //after getting search results
                 //TO-DO : get data from yt api
-                // create a view for every search result
-                createResultView("Cute cats","2min00s");
+                ObservableList<Result> data = FXCollections.observableArrayList(new Result("hehehe","9:00","google.com"), new Result("hehehe","9:00","google.com"),new Result("hehehe","9:00","google.com"),new Result("hehehe","9:00","google.com"));
+                listView.setItems(data);
             }
             default -> System.out.println("Invalid input");
         }
 
     }
-    public void createResultView(String title,String duration){
 
-    }
     public String getInputType(String input){
         // check if input is a valid url
         if(isValidURL(input)){
