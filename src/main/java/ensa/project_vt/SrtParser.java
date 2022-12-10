@@ -2,6 +2,7 @@ package ensa.project_vt;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,21 +65,14 @@ public class SrtParser {
                 if(!line.equals("")) arr.add(line);
                 else
                 {
-                    Caption c = new Caption();
-                    String startStamp = arr.get(1).substring(0,12);
-                    String endStamp = arr.get(1).substring(17,29);
-                    c.setId(Integer.parseInt(arr.get(0)));
-                    c.setStart(sdf.parse(startStamp).getTime());
-                    c.setEnd(sdf.parse(endStamp).getTime());
-                    String text="";
-                    for (int i = 2; i < arr.size(); i++) {
-                        text+=" "+arr.get(i);
-                    }
-                    c.setText(text);
+                    Caption c = makeCaption(arr,sdf);
                     captions1.put(c.getId(),c);
                     arr = new ArrayList<String>();
                 }
+
             }
+            Caption c = makeCaption(arr,sdf);
+            captions1.put(c.getId(),c);
             setCaptions(captions1);
 
         }
@@ -90,6 +84,21 @@ public class SrtParser {
             System.out.println(captions1.get(i+1));
         }
 
+    }
+    public Caption makeCaption(ArrayList<String> arr,SimpleDateFormat sdf) throws ParseException
+    {
+        Caption c = new Caption();
+        String startStamp = arr.get(1).substring(0,12);
+        String endStamp = arr.get(1).substring(17,29);
+        c.setId(Integer.parseInt(arr.get(0)));
+        c.setStart(sdf.parse(startStamp).getTime());
+        c.setEnd(sdf.parse(endStamp).getTime());
+        String text="";
+        for (int i = 2; i < arr.size(); i++) {
+            text+=" "+arr.get(i);
+        }
+        c.setText(text);
+        return c;
     }
     public HashMap<Integer,Caption> find(double time)
     {
