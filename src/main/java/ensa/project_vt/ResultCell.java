@@ -1,20 +1,30 @@
 package ensa.project_vt;
 
+import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
-public class ResultCell extends ListCell<Result>{
+public class ResultCell extends ListCell<YoutubeVideo>{
     @FXML
     private Label titleLabel;
     @FXML
     private Label durationLabel;
+    @FXML
+    private ImageView imageView;
+    /*@FXML
+    private Pane pane;
+
+     */
+
     @FXML
     private HBox hbox;
     public ResultCell(){
@@ -32,18 +42,22 @@ public class ResultCell extends ListCell<Result>{
         }
     }
 
-    // To call when adding the item to the list view
+    // To call when adding the youtubeVideo to the list view
     @Override
-    protected void updateItem(Result item, boolean empty) {
-        super.updateItem(item, empty);
+    protected void updateItem(YoutubeVideo youtubeVideo, boolean empty) {
+        super.updateItem(youtubeVideo, empty);
 
-        if(empty || item == null) {
+        if(empty || youtubeVideo == null) {
             setText(null);
             setContentDisplay(null);
         }
         else {
-            titleLabel.setText(item.getVideoTitle());
-            durationLabel.setText(item.getDuration());
+            Image image = new Image(youtubeVideo.getThumbnailUrl());
+            imageView.setImage(image);
+
+            titleLabel.setText(youtubeVideo.getVideoTitle());
+            durationLabel.setText(youtubeVideo.getDuration());
+
             setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
             setText(null);
             setGraphic(hbox);

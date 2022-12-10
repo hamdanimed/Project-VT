@@ -1,20 +1,19 @@
 package ensa.project_vt;
 
-import javafx.event.EventHandler;
+import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 // A factory to create result cells
-public class ResultCellFactory implements Callback<ListView<Result>, ListCell<Result>> {
+public class ResultCellFactory implements Callback<ListView<YoutubeVideo>, ListCell<YoutubeVideo>> {
 
 
 
 
 
     @Override
-    public ListCell<Result> call(ListView<Result> resultListView) {
+    public ListCell<YoutubeVideo> call(ListView<YoutubeVideo> resultListView) {
         return new ResultCell();
     }
 }

@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="parent" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.SearchViewController">
    <children>
-      <Button mnemonicParsing="false" style="-fx-background-color: #403D3D; -fx-font-family: Poppins; -fx-text-fill: #fff;" text="Back" textAlignment="CENTER" />
+      <Button layoutX="36.0" layoutY="28.0" mnemonicParsing="false" style="-fx-background-color: #403D3D; -fx-font-family: Poppins; -fx-text-fill: #fff;" text="Back" textAlignment="CENTER" />
       <Button fx:id="browse" layoutX="64.0" layoutY="99.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="124.0" styleClass=".button" text="Browse" textAlignment="CENTER" />
       <TextField fx:id="searchField" alignment="CENTER" layoutX="215.0" layoutY="100.0" prefHeight="60.0" prefWidth="829.0" promptText="Link or keyword for video" style="-fx-background-color: #403D3D; -fx-text-fill: #fff;" styleClass=".input">
          <font>

@@ -1,11 +1,12 @@
 package ensa.project_vt;
 
+import ensa.project_vt.YoutubeSearch.VisitYoutube;
+import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -17,7 +18,7 @@ import javafx.stage.Stage;
 import javafx.scene.media.Media;
 
 import java.io.File;
-import java.time.Duration;
+import java.util.List;
 import java.util.regex.*;
 
 public class SearchViewController {
@@ -32,9 +33,12 @@ public class SearchViewController {
     private AnchorPane parent;
     private String searchInput;
     @FXML
-    private ListView<Result> listView;
+    private ListView<YoutubeVideo> listView;
     @FXML
     private Button browse;
+    @FXML
+    private ImageView imageView;
+
 
 
     @FXML
@@ -43,7 +47,7 @@ public class SearchViewController {
         listView.setCellFactory(resultListView -> new ResultCell());
 
     }
-    private void createVideoInstance(File file){
+    /*private void createVideoInstance(File file){
         Media mediaFile = new Media(file.toURI().toString());
 
         MediaPlayer mediaPlayer = new MediaPlayer(mediaFile);
@@ -54,11 +58,13 @@ public class SearchViewController {
             public void run() {
 
                 System.out.println("Duration: "+mediaFile.getDuration().toSeconds());
-                Result result = new Result(file.getName(),String.valueOf(mediaFile.getDuration().toSeconds()));
+                YoutubeVideo youtubeVideo = new YoutubeVideo(file.getName(),String.valueOf(mediaFile.getDuration().toSeconds()));
 
             }
         });
     }
+
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
         browse.setOnMouseClicked(event -> {
@@ -73,7 +79,7 @@ public class SearchViewController {
         });
     }
     //method to be called when search button is clicked
-    public void search(ActionEvent a){
+    public void search(ActionEvent a) throws Exception {
 
         searchInput = searchField.getText();
         // check if the input is empty and return
@@ -89,12 +95,15 @@ public class SearchViewController {
                 mainText.setText("Oops .. this is not a youtube link");
             }
             case "keyword" -> {
+                String apiKey = "AIzaSyC34VqBS3fiCsJyd2fX1P2fx5yBIQnimTY";
+                VisitYoutube client = new VisitYoutube(apiKey);
                 //remove the main text
                 mainText.setVisible(false);
                 listView.setVisible(true);
                 //after getting search results
                 //TO-DO : get data from yt api
-                ObservableList<Result> data = FXCollections.observableArrayList(new Result("hehehe","9:00","google.com"), new Result("hehehe","9:00","google.com"),new Result("hehehe","9:00","google.com"),new Result("hehehe","9:00","google.com"));
+                List<YoutubeVideo> videos = client.Search(searchInput, "snippet", "video", 10);
+                ObservableList<YoutubeVideo> data = FXCollections.observableArrayList(videos);
                 listView.setItems(data);
             }
             default -> System.out.println("Invalid input");

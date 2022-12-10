@@ -26,12 +26,10 @@ public class SearchView extends Application {
             Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
-
-
-        stage.setTitle("Search");
+            stage.setTitle("Search");
             stage.setScene(scene);
-        SearchViewController searchViewController = fxmlLoader.getController();
-        searchViewController.setStage(stage);
+            SearchViewController searchViewController = fxmlLoader.getController();
+            searchViewController.setStage(stage);
             stage.show();
 
 

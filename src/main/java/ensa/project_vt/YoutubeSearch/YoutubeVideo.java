@@ -1,0 +1,77 @@
+package ensa.project_vt.YoutubeSearch;
+
+import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+public class YoutubeVideo {
+
+
+    private String id;
+    private String videoTitle;
+    private String duration;
+    private String url;
+    private String thumbnailUrl;
+
+    // for online video results
+    public YoutubeVideo(String id, String url, String title,String duration, String thumbnailUrl) {
+        this.id = id;
+        this.url = url;
+        this.videoTitle = title;
+        this.thumbnailUrl = thumbnailUrl;
+        this.duration = duration;
+    }
+
+
+    public static YoutubeVideo getVideoInfo(JsonObject videoId, JsonObject videoInfo) throws IOException {
+        String id = videoId.get("videoId").getAsString();
+        String title = videoInfo.get("title").getAsString();
+        String thumbnailUrl=videoInfo.get("thumbnails").getAsJsonObject().get("default").getAsJsonObject().get("url").getAsString();
+        String url = "https://www.youtube.com/watch?v=" + id;
+
+
+        //to get duration
+        VisitYoutube client = new VisitYoutube("AIzaSyC34VqBS3fiCsJyd2fX1P2fx5yBIQnimTY");
+        String videoInfoDuration = client.GetVideoDetails(id);
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(videoInfoDuration, JsonObject.class);
+        JsonArray contents = jsonObject.getAsJsonArray("items").getAsJsonArray();
+        JsonObject info = contents.get(0).getAsJsonObject();
+        String duration = info.get("contentDetails").getAsJsonObject().get("duration").getAsString();
+        //System.out.println(duration +" "+duration.replace("PT","").replace("H",":").replace("M",":").replace("S",""));
+        String formated = duration.replace("PT","").replace("H",":").replace("M",":").replace("S","");
+
+        return new YoutubeVideo(id, url,title,formated, thumbnailUrl);
+    }
+
+
+    public String getVideoTitle() {
+        return videoTitle;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setVideoTitle(String videoTitle) {
+        this.videoTitle = videoTitle;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+}
