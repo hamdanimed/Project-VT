@@ -35,11 +35,11 @@
                      </Label>
                   </children>
                </VBox>
-             <AnchorPane layoutY="314.0" minHeight="0.0" minWidth="0.0" prefHeight="45.0" prefWidth="640.0">
+             <AnchorPane layoutY="309.0" minHeight="0.0" minWidth="0.0" prefHeight="51.0" prefWidth="640.0" style="-fx-opacity: 70%;">
                   <children>
-                     <VBox fx:id="controlBar" layoutY="-12.0" prefHeight="57.0" prefWidth="641.0">
+                     <VBox fx:id="controlBar" prefHeight="51.0" prefWidth="640.0">
                         <children>
-                           <Slider fx:id="timeSlider" max="1" opacity="0.98" style="-fx-background-color: black; -fx-opacity: 50%;">
+                           <Slider fx:id="timeSlider" max="1" opacity="0.98" prefHeight="5.0" prefWidth="640.0" style="-fx-background-color: black;" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
                               <opaqueInsets>
                                  <Insets />
                               </opaqueInsets>
@@ -50,9 +50,9 @@
                                  <Blend />
                               </effect>
                            </Slider>
-                           <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="584.0" style="-fx-background-color: black; -fx-opacity: 40%; -fx-min-height: 29px; -fx-min-width: 20px;" styleClass="control-bar" stylesheets="@stylesheet/style.css">
+                           <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="640.0" style="-fx-background-color: black; -fx-min-height: 29px; -fx-min-width: 20px;" styleClass="control-bar" stylesheets="@stylesheet/style.css">
                               <children>
-                                  <Button fx:id="playBtn" onAction="#playVideo" prefHeight="41.0" prefWidth="36.0" style="-fx-background-color: black;">
+                                  <Button fx:id="playBtn" onAction="#playVideo" prefHeight="18.0" prefWidth="29.0" style="-fx-background-color: black;">
                                     <HBox.margin>
                                        <Insets left="10.0" />
                                     </HBox.margin>
@@ -73,7 +73,7 @@
                                              <Glow />
                                           </effect>
                                        </Button>
-                                       <Slider fx:id="volumeSlider" max="1.0" prefHeight="15.0" prefWidth="61.0" value="1.0">
+                                       <Slider fx:id="volumeSlider" max="1.0" prefHeight="15.0" prefWidth="61.0" styleClass="volumeSlider" value="1.0">
                                           <cursor>
                                              <Cursor fx:constant="HAND" />
                                           </cursor>

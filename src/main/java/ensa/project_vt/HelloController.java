@@ -22,6 +22,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class HelloController implements Initializable {
@@ -45,6 +46,7 @@ public class HelloController implements Initializable {
     private Button muteBtn;
     @FXML
     private Label closedCaptions;
+
     private Image imgPlay,imgPause,imgMute,imgUnmute;
     private ImageView playIV,pauseIV,muteIV,unmuteIV;
     private boolean isPlaying,isMute;
@@ -52,6 +54,7 @@ public class HelloController implements Initializable {
 
     private double captionStart,captionEnd;
     private int captionIndex;
+    private Caption actualCaption,nextCaption;
 
     @Override
     public void initialize(URL url,ResourceBundle resourceBundle)
@@ -80,21 +83,16 @@ public class HelloController implements Initializable {
         isMute=false;
         muteBtn.setGraphic(unmuteIV);
 
+        //Initialize captions
+        captionIndex = 0;
+        actualCaption = new Caption();
+        nextCaption = sp.getCaptions().get(1);
 
-        // volume
-        Bindings.bindBidirectional(mediaPlayer.volumeProperty(),volumeSlider.valueProperty());
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                if(volumeSlider.getValue()==0){muteBtn.setGraphic(muteIV);}
-                else {muteBtn.setGraphic(unmuteIV);}
-
-            }
-        });
+        //Animation of control bar
         FadeTransition fadeIn = new FadeTransition(Duration.millis(200),controlBar);
         FadeTransition fadeOut = new FadeTransition(Duration.millis(200),controlBar);
-        fadeIn.setFromValue(0);fadeIn.setToValue(0.5);
-        fadeOut.setFromValue(0.5);fadeOut.setToValue(0);
+        fadeIn.setFromValue(0);fadeIn.setToValue(1);
+        fadeOut.setFromValue(1);fadeOut.setToValue(0);
         videoPlayer.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -107,6 +105,19 @@ public class HelloController implements Initializable {
                 fadeOut.play();
             }
         });
+
+
+        // volume
+        Bindings.bindBidirectional(mediaPlayer.volumeProperty(),volumeSlider.valueProperty());
+        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if(volumeSlider.getValue()==0){muteBtn.setGraphic(muteIV);}
+                else {muteBtn.setGraphic(unmuteIV);}
+
+            }
+        });
+
 
         // Progress bar slider
         mediaPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
@@ -124,36 +135,69 @@ public class HelloController implements Initializable {
                 }
             }
         });
+
+
         timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
                 double currentTime = mediaPlayer.getCurrentTime().toMillis();
-                if(Math.abs(currentTime-newValue.doubleValue())>50)
+                if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
+                    HashMap<Integer,Caption> result = sp.find(newValue.doubleValue());
+                    System.out.println(result);
+                    if(result==null)
+                    {
+                        closedCaptions.setText("");
+                    }
+                    else
+                    {
+                        if(result.containsKey(0))
+                        {
+
+                            closedCaptions.setText("");
+                            nextCaption=result.get(0);
+                            captionIndex = nextCaption.getId()-1;
+                            actualCaption = sp.getCaptions().get(captionIndex);
+                        }
+                        else {
+                            closedCaptions.setText(result.get(1).getText());
+                            actualCaption = result.get(1);
+                            captionIndex=actualCaption.getId();
+                            nextCaption = sp.getCaptions().get(captionIndex+1);
+                        }
+
+                    }
+
+
                 }
+
+
             }
         });
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
-            public void changed(ObservableValue<? extends Duration> observableValue, Duration oldTime, Duration newTime) {
+            public void changed(ObservableValue<? extends Duration> observableValue, Duration oldTime, Duration newValue) {
                 if(!timeSlider.isValueChanging())
                 {
-//                    System.out.println(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
                     timeSlider.setValue(mediaPlayer.getCurrentTime().toMillis());
+                    if(newValue.toMillis()>nextCaption.getStart())
+                    {
+                        captionIndex++;
+                        closedCaptions.setText(nextCaption.getText());
+                        actualCaption = nextCaption;
+                        if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
+                    }
+                    if(newValue.toMillis()>actualCaption.getEnd())
+                    {
+                        closedCaptions.setText("");
+                    }
+
                 }
             }
         });
-        //  Closed Captions:TODO
-        captionIndex = 0;
-        captionStart = sp.getCaptions().get(captionIndex).getStart();
-        captionEnd = sp.getCaptions().get(captionIndex).getEnd();
-        closedCaptions.setText(sp.getCaptions().get(captionIndex).getText());
-        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
-            @Override
-            public void changed(ObservableValue<? extends Duration> observableValue, Duration duration, Duration t1) {
-            }
-        });
+        System.out.println(sp.find(6000));
+
 
 
 
@@ -192,6 +236,7 @@ public class HelloController implements Initializable {
             muteBtn.setGraphic(muteIV);
         }
         isMute = !isMute;
+        mediaPlayer.seek(new Duration(5800));
     }
 
     public ImageView makeIcon(ImageView iv,Image img)

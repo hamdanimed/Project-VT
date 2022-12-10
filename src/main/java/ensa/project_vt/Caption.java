@@ -1,9 +1,18 @@
 package ensa.project_vt;
 
 public class Caption {
+    private int id;
     private double start;
     private double end;
     private String text;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public double getStart() {
         return start;
@@ -32,7 +41,8 @@ public class Caption {
     @Override
     public String toString() {
         return "Caption{" +
-                "start=" + start +
+                "id=" + id +
+                ", start=" + start +
                 ", end=" + end +
                 ", text='" + text + '\'' +
                 '}';
