@@ -24,14 +24,7 @@ public class SrtParser {
         this.videoLength = videoLength;
     }
 
-    @Override
-    public String toString() {
-        return "SrtParser{" +
-                "fr=" + fr +
-                ", captions=" + captions +
-                ", videoLength=" + videoLength +
-                '}';
-    }
+
 
     public HashMap<Integer, Caption> getCaptions() {
         return captions;
@@ -87,7 +80,7 @@ public class SrtParser {
     }
     public Caption makeCaption(ArrayList<String> arr,SimpleDateFormat sdf) throws ParseException
     {
-        Caption c = new Caption();
+        Caption c = new Caption(0);
         String startStamp = arr.get(1).substring(0,12);
         String endStamp = arr.get(1).substring(17,29);
         c.setId(Integer.parseInt(arr.get(0)));
@@ -102,13 +95,14 @@ public class SrtParser {
     }
     public HashMap<Integer,Caption> find(double time)
     {
-        Caption nextCaption=null;
+        Caption nextCaption=captions.get(1);
         Caption caption=null;
         HashMap<Integer,Caption> result = new HashMap<>();
         for (int i = 0 ; i < captions.size(); i++) {
             if(time>=captions.get(i+1).getStart())
             {
-                nextCaption =  captions.get(i+2);
+                if(captions.containsKey(i+2)) nextCaption =  captions.get(i+2);
+                else nextCaption = null;
                 if(time<=captions.get(i+1).getEnd()){ caption = captions.get(i+1);break;}
             }
         }

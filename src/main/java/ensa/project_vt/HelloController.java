@@ -47,14 +47,12 @@ public class HelloController implements Initializable {
     @FXML
     private Label closedCaptions;
 
-    private Image imgPlay,imgPause,imgMute,imgUnmute;
-    private ImageView playIV,pauseIV,muteIV,unmuteIV;
-    private boolean isPlaying,isMute;
-    private double videoLength;
+    private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay;
+    private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV;
+    private boolean isPlaying,isMute,isOver;
 
-    private double captionStart,captionEnd;
     private int captionIndex;
-    private Caption actualCaption,nextCaption;
+    private Caption actualCaption,nextCaption,captionInit;
 
     @Override
     public void initialize(URL url,ResourceBundle resourceBundle)
@@ -71,22 +69,26 @@ public class HelloController implements Initializable {
         imgPause = new Image(new File("src/main/resources/ensa/project_vt/UI/pause.png").toURI().toString());
         imgMute = new Image(new File("src/main/resources/ensa/project_vt/UI/mute.png").toURI().toString());
         imgUnmute = new Image(new File("src/main/resources/ensa/project_vt/UI/unmute.png").toURI().toString());
+        imgReplay = new Image(new File("src/main/resources/ensa/project_vt/UI/replay.png").toURI().toString());
         // ImageView's
         playIV = makeIcon(playIV,imgPlay);
         pauseIV = makeIcon(pauseIV,imgPause);
         muteIV = makeIcon(muteIV,imgMute);
         unmuteIV = makeIcon(unmuteIV,imgUnmute);
+        replayIV = makeIcon(replayIV,imgReplay);
 
         playBtn.setGraphic(pauseIV);
         mediaPlayer.play();
         isPlaying=true;
         isMute=false;
+        isOver=false;
         muteBtn.setGraphic(unmuteIV);
 
         //Initialize captions
         captionIndex = 0;
-        actualCaption = new Caption();
+        actualCaption = new Caption(0);
         nextCaption = sp.getCaptions().get(1);
+        captionInit = new Caption(0);
 
         //Animation of control bar
         FadeTransition fadeIn = new FadeTransition(Duration.millis(200),controlBar);
@@ -129,10 +131,7 @@ public class HelloController implements Initializable {
         timeSlider.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean wasChanging, Boolean isChanging) {
-                if(true)
-                {
                     mediaPlayer.seek(new Duration(timeSlider.getValue()));
-                }
             }
         });
 
@@ -144,6 +143,7 @@ public class HelloController implements Initializable {
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
+
                     HashMap<Integer,Caption> result = sp.find(newValue.doubleValue());
                     System.out.println(result);
                     if(result==null)
@@ -158,13 +158,15 @@ public class HelloController implements Initializable {
                             closedCaptions.setText("");
                             nextCaption=result.get(0);
                             captionIndex = nextCaption.getId()-1;
-                            actualCaption = sp.getCaptions().get(captionIndex);
+                            if(captionIndex==0) actualCaption = captionInit;
+                            else actualCaption = sp.getCaptions().get(captionIndex);
                         }
                         else {
                             closedCaptions.setText(result.get(1).getText());
                             actualCaption = result.get(1);
                             captionIndex=actualCaption.getId();
                             nextCaption = sp.getCaptions().get(captionIndex+1);
+                            System.out.println(nextCaption);
                         }
 
                     }
@@ -192,11 +194,16 @@ public class HelloController implements Initializable {
                     {
                         closedCaptions.setText("");
                     }
+                    if(newValue.toMillis()>=mediaVideo.getDuration().toMillis())
+                    {
+                        isOver=true;
+                        playBtn.setGraphic(replayIV);
+                        System.out.println("event replay");
+                    }
 
                 }
             }
         });
-        System.out.println(sp.find(6000));
 
 
 
@@ -208,17 +215,29 @@ public class HelloController implements Initializable {
     @FXML
     protected void playVideo()
     {
-        if(!isPlaying)
+        if(isOver)
         {
+            mediaPlayer.seek(new Duration(0));
             mediaPlayer.play();
             playBtn.setGraphic(pauseIV);
+            isPlaying = true;
+            isOver=false;
         }
-        else {
-            mediaPlayer.pause();
-            playBtn.setGraphic(playIV);
+        else
+        {
+            if(!isPlaying)
+            {
+                mediaPlayer.play();
+                playBtn.setGraphic(pauseIV);
+            }
+            else {
+                mediaPlayer.pause();
+                playBtn.setGraphic(playIV);
+
+            }
+            isPlaying = !isPlaying;
 
         }
-        isPlaying = !isPlaying;
     }
     @FXML
     protected void mute()

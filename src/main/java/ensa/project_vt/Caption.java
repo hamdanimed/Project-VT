@@ -47,4 +47,8 @@ public class Caption {
                 ", text='" + text + '\'' +
                 '}';
     }
+
+    public Caption(int id) {
+        this.id = id;
+    }
 }
