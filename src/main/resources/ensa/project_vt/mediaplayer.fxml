@@ -5,98 +5,119 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.Blend?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="550.0" prefWidth="640.0" spacing="20.0" style="-fx-background-color: #1E1E1E;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-   <StackPane alignment="CENTER_LEFT">
-      <children>
-       <AnchorPane fx:id="videoPlayer" prefHeight="360.0" prefWidth="640.0" style="-fx-max-width: 640px; -fx-background-color: #1E1E1E;">
-            <children>
-               <MediaView fx:id="mediaView" fitHeight="360.0" fitWidth="640.0" />
-               <VBox alignment="CENTER" layoutY="229.0" prefHeight="74.0" prefWidth="641.0">
-                  <children>
-                     <Label fx:id="closedCaptions" alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: black; -fx-opacity: 65%;" text="" textAlignment="JUSTIFY" textFill="WHITE">
-                        <font>
-                           <Font size="14.0" />
-                        </font>
-                        <padding>
-                           <Insets left="10.0" right="10.0" />
-                        </padding>
-                     </Label>
-                  </children>
-               </VBox>
-             <AnchorPane layoutY="309.0" minHeight="0.0" minWidth="0.0" prefHeight="51.0" prefWidth="640.0" style="-fx-opacity: 70%;">
-                  <children>
-                     <VBox fx:id="controlBar" prefHeight="51.0" prefWidth="640.0">
-                        <children>
-                           <Slider fx:id="timeSlider" max="1" opacity="0.98" prefHeight="5.0" prefWidth="640.0" style="-fx-background-color: black;" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
-                              <opaqueInsets>
-                                 <Insets />
-                              </opaqueInsets>
-                              <cursor>
-                                 <Cursor fx:constant="HAND" />
-                              </cursor>
-                              <effect>
-                                 <Blend />
-                              </effect>
-                           </Slider>
-                           <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="640.0" style="-fx-background-color: black; -fx-min-height: 29px; -fx-min-width: 20px;" styleClass="control-bar" stylesheets="@stylesheet/style.css">
-                              <children>
-                                  <Button fx:id="playBtn" onAction="#playVideo" prefHeight="18.0" prefWidth="29.0" style="-fx-background-color: black;">
-                                    <HBox.margin>
-                                       <Insets left="10.0" />
-                                    </HBox.margin>
-                                    <cursor>
-                                       <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                 </Button>
-                                 <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="175.0">
-                                    <HBox.margin>
-                                       <Insets left="20.0" />
-                                    </HBox.margin>
-                                    <children>
-                                       <Button fx:id="muteBtn" mnemonicParsing="false" onAction="#mute" style="-fx-background-color: none;">
-                                          <cursor>
-                                             <Cursor fx:constant="HAND" />
-                                          </cursor>
-                                          <effect>
-                                             <Glow />
-                                          </effect>
-                                       </Button>
-                                       <Slider fx:id="volumeSlider" max="1.0" prefHeight="15.0" prefWidth="61.0" styleClass="volumeSlider" value="1.0">
-                                          <cursor>
-                                             <Cursor fx:constant="HAND" />
-                                          </cursor>
-                                       </Slider>
-                                    </children>
-                                 </HBox>
-                              </children>
-                           </HBox>
-                        </children>
-                     </VBox>
-                  </children>
-               </AnchorPane>
-            </children>
-            <effect>
-               <DropShadow height="121.41" radius="58.465" width="114.45">
-                  <color>
-                     <Color green="1.0" blue="0.8196078538894653" />
-                  </color>
-               </DropShadow>
-            </effect>
-         </AnchorPane>
-      </children>
-   </StackPane>
-</VBox>
+<HBox prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.HelloController">
+   <children>
+      <StackPane prefHeight="700.0" prefWidth="917.0" style="-fx-background-color: #1E1E1E;">
+         <children>
+          <AnchorPane fx:id="videoPlayer" maxHeight="-Infinity" maxWidth="641.0" prefHeight="316.0" prefWidth="641.0" style="-fx-max-width: 640px; -fx-background-color: #1E1E1E;">
+               <children>
+                  <MediaView fx:id="mediaView" fitHeight="360.0" fitWidth="640.0" />
+                  <VBox alignment="CENTER" layoutY="229.0" prefHeight="74.0" prefWidth="641.0">
+                     <children>
+                        <Label fx:id="closedCaptions" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#loadCaption" style="-fx-background-color: black; -fx-opacity: 65%;" text="" textAlignment="JUSTIFY" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Label>
+                     </children>
+                  </VBox>
+                <AnchorPane layoutY="309.0" minHeight="0.0" minWidth="0.0" prefHeight="51.0" prefWidth="640.0" style="-fx-opacity: 70%;">
+                     <children>
+                        <VBox fx:id="controlBar" prefHeight="51.0" prefWidth="640.0">
+                           <children>
+                              <Slider fx:id="timeSlider" max="1" opacity="0.98" prefHeight="5.0" prefWidth="640.0" style="-fx-background-color: black;" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </Slider>
+                              <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="640.0" style="-fx-background-color: black; -fx-min-height: 29px; -fx-min-width: 20px;" styleClass="control-bar" stylesheets="@stylesheet/style.css">
+                                 <children>
+                                     <Button fx:id="playBtn" onAction="#playVideo" prefHeight="18.0" prefWidth="29.0" style="-fx-background-color: black;">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="175.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                       <children>
+                                          <Button fx:id="muteBtn" mnemonicParsing="false" onAction="#mute" style="-fx-background-color: none;">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <effect>
+                                                <Glow />
+                                             </effect>
+                                          </Button>
+                                          <Slider fx:id="volumeSlider" max="1.0" prefHeight="15.0" prefWidth="61.0" styleClass="volumeSlider" value="1.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Slider>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
+      <VBox alignment="CENTER" prefHeight="700.0" prefWidth="560.0" style="-fx-background-color: #1E1E1E;">
+         <children>
+            <Label fx:id="captionEditLabel" text="Select a caption to edit:" textFill="WHITE">
+               <font>
+                  <Font size="21.0" />
+               </font></Label>
+            <TextArea fx:id="captionEditText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="114.0" prefWidth="229.0" promptText="Subtitles content here">
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </TextArea>
+            <Button fx:id="saveCaptionBtn" mnemonicParsing="false" onAction="#saveCaptions" prefHeight="34.0" prefWidth="73.0" style="-fx-background-color: #00FFD1;;" text="SAVE">
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+         </children>
+         <padding>
+            <Insets bottom="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </children>
+</HBox>

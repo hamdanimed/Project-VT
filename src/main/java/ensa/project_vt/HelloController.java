@@ -4,12 +4,14 @@ import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -22,6 +24,9 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
+import java.security.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -46,6 +51,13 @@ public class HelloController implements Initializable {
     private Button muteBtn;
     @FXML
     private Label closedCaptions;
+    @FXML
+    private Label captionEditLabel;
+    @FXML
+    private TextArea captionEditText;
+    @FXML
+    private Button saveCaptionBtn;
+
 
     private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay;
     private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV;
@@ -145,7 +157,6 @@ public class HelloController implements Initializable {
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
 
                     HashMap<Integer,Caption> result = sp.find(newValue.doubleValue());
-                    System.out.println(result);
                     if(result==null)
                     {
                         closedCaptions.setText("");
@@ -166,7 +177,6 @@ public class HelloController implements Initializable {
                             actualCaption = result.get(1);
                             captionIndex=actualCaption.getId();
                             nextCaption = sp.getCaptions().get(captionIndex+1);
-                            System.out.println(nextCaption);
                         }
 
                     }
@@ -194,11 +204,13 @@ public class HelloController implements Initializable {
                     {
                         closedCaptions.setText("");
                     }
-                    if(newValue.toMillis()>=mediaVideo.getDuration().toMillis())
+                    if(actualCaption!= null && actualCaption.getId()!=0)
                     {
-                        isOver=true;
-                        playBtn.setGraphic(replayIV);
-                        System.out.println("event replay");
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss:SSS");
+                        captionEditText.setText(actualCaption.getText());
+                        String start = sdf.format(new Date((long)actualCaption.getStart()));
+                        String end = sdf.format(new Date((long)actualCaption.getEnd()));
+                        captionEditLabel.setText(start+" -> "+end);
                     }
 
                 }
@@ -215,47 +227,49 @@ public class HelloController implements Initializable {
     @FXML
     protected void playVideo()
     {
-        if(isOver)
+        if(!isPlaying)
         {
-            mediaPlayer.seek(new Duration(0));
             mediaPlayer.play();
             playBtn.setGraphic(pauseIV);
-            isPlaying = true;
-            isOver=false;
         }
-        else
-        {
-            if(!isPlaying)
-            {
-                mediaPlayer.play();
-                playBtn.setGraphic(pauseIV);
-            }
-            else {
-                mediaPlayer.pause();
-                playBtn.setGraphic(playIV);
-
-            }
-            isPlaying = !isPlaying;
+        else {
+            mediaPlayer.pause();
+            playBtn.setGraphic(playIV);
 
         }
+        isPlaying = !isPlaying;
     }
     @FXML
     protected void mute()
     {
         if(isMute || volumeSlider.getValue()==0)
         {
-            System.out.println("mute");
             mediaPlayer.setVolume(1);
             muteBtn.setGraphic(unmuteIV);
         }
         else
         {
-            System.out.println("unmute");
             mediaPlayer.setVolume(0);
             muteBtn.setGraphic(muteIV);
         }
         isMute = !isMute;
         mediaPlayer.seek(new Duration(5800));
+    }
+    @FXML
+    void saveCaptions(ActionEvent event) {
+        System.out.println(captionEditText.getText());
+    }
+    @FXML
+    void loadCaption(MouseEvent event) {
+        if(actualCaption!= null && actualCaption.getId()!=0)
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss:SSS");
+            captionEditText.setText(actualCaption.getText());
+            String start = sdf.format(new Date((long)actualCaption.getStart()));
+            String end = sdf.format(new Date((long)actualCaption.getEnd()));
+            captionEditLabel.setText(start+" -> "+end);
+        }
+
     }
 
     public ImageView makeIcon(ImageView iv,Image img)
@@ -265,5 +279,6 @@ public class HelloController implements Initializable {
         iv.setFitWidth(20);
         return iv;
     }
+
 
 }

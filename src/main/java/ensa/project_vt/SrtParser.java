@@ -88,7 +88,7 @@ public class SrtParser {
         c.setEnd(sdf.parse(endStamp).getTime());
         String text="";
         for (int i = 2; i < arr.size(); i++) {
-            text+=" "+arr.get(i);
+            text+=arr.get(i)+"\n";
         }
         c.setText(text);
         return c;
