@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
@@ -39,7 +40,17 @@ public class SearchViewController {
     @FXML
     private ImageView imageView;
 
-
+    // To handle mouse click on an item of the list
+    @FXML
+    public void handleMouseClick(MouseEvent arg0) {
+        System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
+        YoutubeVideo ytVid = listView.getSelectionModel().getSelectedItem();
+        // get information about the video to be displayed in a preview
+        String videoTitle = ytVid.getVideoTitle();
+        String videoUrl = ytVid.getUrl();
+        String videoDuration = ytVid.getDuration();
+        // pass those parameters to a method to display them in preview
+    }
 
     @FXML
     private void initialize() {
@@ -65,6 +76,7 @@ public class SearchViewController {
     }
 
      */
+
     public void setStage(Stage stage) {
         this.stage = stage;
         browse.setOnMouseClicked(event -> {
@@ -74,6 +86,8 @@ public class SearchViewController {
             // get the file selected
             File file = fileChooser.showOpenDialog(stage);
             if(file!=null) {
+// create a new video object with the information from the file
+                String title = file.getName();
 
             }
         });
