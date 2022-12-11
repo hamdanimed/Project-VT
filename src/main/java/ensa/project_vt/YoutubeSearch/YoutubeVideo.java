@@ -1,10 +1,15 @@
 package ensa.project_vt.YoutubeSearch;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
 
 public class YoutubeVideo {
 
@@ -27,7 +32,9 @@ public class YoutubeVideo {
 
     public static YoutubeVideo getVideoInfo(JsonObject videoId, JsonObject videoInfo) throws IOException {
         String id = videoId.get("videoId").getAsString();
-        String title = videoInfo.get("title").getAsString();
+        //String title = videoInfo.get("title").getAsString();
+        String title = unescapeHtml4(videoInfo.get("title").getAsString());
+
         String thumbnailUrl=videoInfo.get("thumbnails").getAsJsonObject().get("default").getAsJsonObject().get("url").getAsString();
         String url = "https://www.youtube.com/watch?v=" + id;
 
@@ -41,7 +48,7 @@ public class YoutubeVideo {
         JsonObject info = contents.get(0).getAsJsonObject();
         String duration = info.get("contentDetails").getAsJsonObject().get("duration").getAsString();
         //System.out.println(duration +" "+duration.replace("PT","").replace("H",":").replace("M",":").replace("S",""));
-        String formated = duration.replace("PT","").replace("H",":").replace("M",":").replace("S","");
+        String formated = duration.replace("PT","").replace("H","h ").replace("M","min ").replace("S","s");
 
         return new YoutubeVideo(id, url,title,formated, thumbnailUrl);
     }

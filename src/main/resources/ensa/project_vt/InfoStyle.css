@@ -1,0 +1,15 @@
+
+.root{
+    -fx-background-color:#1E1E1E;
+}
+#pane{
+    -fx-background-color: #403D3D;
+    -fx-background-radius: 10px;
+
+}
+
+
+.label{
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+}

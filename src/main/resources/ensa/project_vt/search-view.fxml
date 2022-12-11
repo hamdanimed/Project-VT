@@ -12,7 +12,6 @@
 
 <AnchorPane fx:id="parent" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.SearchViewController">
    <children>
-      <Button layoutX="36.0" layoutY="28.0" mnemonicParsing="false" style="-fx-background-color: #403D3D; -fx-font-family: Poppins; -fx-text-fill: #fff;" text="Back" textAlignment="CENTER" />
       <Button fx:id="browse" layoutX="64.0" layoutY="99.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="124.0" styleClass=".button" text="Browse" textAlignment="CENTER" />
       <TextField fx:id="searchField" alignment="CENTER" layoutX="215.0" layoutY="100.0" prefHeight="60.0" prefWidth="829.0" promptText="Link or keyword for video" style="-fx-background-color: #403D3D; -fx-text-fill: #fff;" styleClass=".input">
          <font>
@@ -31,9 +30,19 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <ListView fx:id="listView" layoutX="45.0" layoutY="209.0" onMouseClicked="#handleMouseClick" prefWidth="1100.0" styleClass="style.css">
+      <ListView fx:id="listView" layoutX="65.0" layoutY="235.0" onMouseClicked="#handleMouseClick" prefHeight="415.0" prefWidth="1079.0" styleClass="style.css">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></ListView>
+      <ImageView fitHeight="69.0" fitWidth="75.0" layoutX="26.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/back.png" />
+         </image>
+      </ImageView>
+      <Text fill="WHITE" layoutX="87.0" layoutY="216.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Results">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

@@ -3,6 +3,7 @@ module ensa.project_vt {
     requires javafx.fxml;
     requires javafx.media;
     requires com.google.gson;
+    requires org.apache.commons.lang3;
 
 
     opens ensa.project_vt to javafx.fxml;
