@@ -19,31 +19,38 @@ public class YoutubeDl {
     public String videoPath="";
     public List<String> progressValues=new ArrayList<>();
 
-    public YoutubeDl(String youtubelink,String configurationFilePath,String executableLocation){
+    public YoutubeDl(String youtubelink,String videoAndAudioRepository,String configurationFilePath,String executableLocation){
 
         this.youtubelink=youtubelink;
         this.configurationFilePath=configurationFilePath;
         this.executableLocation=executableLocation;
+        this.videoAndAudioRepository=videoAndAudioRepository;
     }
 
-    public int downloadVideoAndAudio(){
+    public void downloadVideoAndAudio(){
         int exitCode=1;
         System.out.println("YoutubeDL downloadVideoAndAudio()-------------------------------------------------------------------");
         this.videoId=youtubelink.substring(youtubelink.length()-11);
         //checking the existance of the srt file
-        File folder = new File(videoAndAudioRepository);
-        File[] listOfFiles = folder.listFiles();
-
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                System.out.println("File " + listOfFiles[i].getName());
-            }
-        }
+//        File folder = new File(videoAndAudioRepository+this.videoId);
+//        if(folder.exists()){
+//            System.out.println("exists");
+//            this.videoPath=videoAndAudioRepository+this.videoId+"\\"+this.videoId+".mp4";
+//            this.audioPath=videoAndAudioRepository+this.videoId+"\\"+this.videoId+".wav";
+//            return ;
+//        }
+//        File[] listOfFiles = folder.listFiles();
+//        for (int i = 0; i < listOfFiles.length; i++) {
+//            if (listOfFiles[i].isFile()) {
+//                System.out.println("File " + listOfFiles[i].getName());
+//
+//            }
+//        }
 //        File subsFile = new File(videoAndAudioRepository+this.videoId+".srt");
 //        subsFile.exists();
 //        if(subsFile.exists()){
 //            System.out.println("File "+this.videoId+".srt already exists");
-//            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);
 //            System.out.println("Do you want to override the file ? (0:no,1:yes) :");
 //            int choice = scanner.nextInt();
 //            if(choice == 0) {
@@ -78,11 +85,10 @@ public class YoutubeDl {
         catch (UnsupportedOperationException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
-        return exitCode;
     }
 
-    private void parseDownloadVideoAndAudio(String s){
-        String[] outputLineAsArray=s.split("\s+");
+    private void parseDownloadVideoAndAudio(String line){
+        String[] outputLineAsArray=line.split("\s+");
 
         if(outputLineAsArray[0].equals("[download]")){
 
@@ -94,12 +100,11 @@ public class YoutubeDl {
 //                this.videoPath=outputLineAsArray[2];
 //            }
 
-            if (Arrays.asList(outputLineAsArray).contains("ETA")) {
+            if (line.contains("ETA")) {
                 //Tracking progress (2 ways)
                 this.progressValues=new ArrayList<>(Arrays.asList(outputLineAsArray[1],outputLineAsArray[3],outputLineAsArray[5],outputLineAsArray[7]));
-                System.out.println(this.progressValues);
 //                this.progressValues.addAll(Arrays.asList(outputLineAsArray[1],outputLineAsArray[3],outputLineAsArray[5],outputLineAsArray[7]));
-//                System.out.println(this.progressValues.toString());
+                System.out.println(this.progressValues.toString());
 //                this.progressValues.clear();
             }
         }

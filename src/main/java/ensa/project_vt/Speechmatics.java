@@ -24,7 +24,7 @@ public class Speechmatics {
 
     public Speechmatics(String subtitlesRepository,String configFilePath){
         this.subtitlesRepository=subtitlesRepository;
-        this.configFilePath=this.configFilePath+configFilePath;
+        this.configFilePath="config=<"+configFilePath;
     }
 
     public void sendAudio(){
@@ -41,7 +41,7 @@ public class Speechmatics {
             BufferedReader read = new BufferedReader(new InputStreamReader(ins));
             String[] lastLine = new String[1];
             read.lines().forEach(line -> {
-//                System.out.println(line);
+                System.out.println(line);
                 parseSendAudio(line);
                 lastLine[0] =line;
             });
@@ -51,6 +51,7 @@ public class Speechmatics {
             proc.destroy();// finally destroy the process
 
             //to get http code of the post request
+            System.out.println(lastLine[0]);
             this.httpCode=Integer.parseInt(lastLine[0].substring(lastLine[0].length()-3));
             if(this.httpCode > 299 || this.httpCode <200){
                 System.out.println("[Speechmatics : sendAudio] An error accured with 'sendAudio' , http code : "+this.httpCode);

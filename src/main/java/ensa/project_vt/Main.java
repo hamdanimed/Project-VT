@@ -1,11 +1,7 @@
 package ensa.project_vt;
 
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
 import java.io.*;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -34,7 +30,7 @@ public class Main {
         }
 
 
-        YoutubeDl vid=new YoutubeDl("https://www.youtube.com/watch?v=-EbzDqtZEh4",youtubeDlConfigFilePath,youtubeDlExePath);
+        YoutubeDl vid=new YoutubeDl("https://www.youtube.com/watch?v=-EbzDqtZEh4","C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\",youtubeDlConfigFilePath,youtubeDlExePath);
         vid.checkAvailableQualities();
         vid.downloadVideoAndAudio();
 
@@ -42,21 +38,25 @@ public class Main {
         System.out.println("Video Path : "+vid.videoPath);
         System.out.println("Audio Path : "+vid.audioPath);
 
-//        Speechmatics speech=new Speechmatics(,speechmaticsConfigFilePath);
-//        speech.setAudioPath(vid.audioPath);
-//        speech.setYoutubeId(vid.videoId);
-//        speech.sendAudio();
-//        for(int i=60;i>=0;i--){
-//            System.out.println("wait "+i+" second");
-//            Thread.sleep(1000);
-//        }
-//        speech.getSubstitles(speech.getJobId(), vid.videoId);
+        Speechmatics speech=new Speechmatics("C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\",speechmaticsConfigFilePath);
+        speech.setAudioPath(vid.audioPath);
+        speech.setYoutubeId(vid.videoId);
+        speech.sendAudio();
+        for(int i=60;i>=0;i--){
+            System.out.println("wait "+i+" second");
+            Thread.sleep(1000);
+        }
+        speech.getSubstitles(speech.getJobId(), vid.videoId);
 
-//        speech.checkOnJob("n5a217psey");
-//        System.out.println(speech.getHttpCode());
-//        speech.getSubstitles("n5a217psey","-EbzDqtZEh4");
-//        System.out.println(speech.getHttpCode());
-        //n5a217psey
+//        //check if video is subtitled ?
+//        File folder=new File("C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\-EbzDqtZEh4");
+//        File[] list=folder.listFiles();
+//
+//        for (int i=0;i<list.length;i++){
+//            if((list[i].getName().substring(list[i].getName().length()-4)).equals(".srt")){
+//                System.out.println(list[i].getName());
+//            }
+//        }
 
 
 //        StringBuilder sb = speechmaticsApi("z22xcbwbfy");
