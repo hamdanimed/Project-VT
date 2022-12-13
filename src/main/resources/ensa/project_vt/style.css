@@ -1,0 +1,44 @@
+.root{
+-fx-background-color:#252525;
+}
+.button{
+-fx-background-color:#403D3D;
+-fx-text-fill:#fff;
+-fx-font-size:16px;
+-fx-pref-width:124px;
+-fx-pref-height:60px;
+-fx-cursor: hand;
+}
+.text {
+-fx-font-size:16px;
+-fx-text-fill:#fff;
+}
+.input{
+-fx-background-color:#403D3D;
+-fx-text-fill:#fff;
+}
+.result-item{
+-fx-background-color:#403D3D;
+-fx-text-fill:#fff;
+}
+
+.list-view .list-cell:even {
+-fx-background-color: #252525;
+}
+.list-view .list-cell:odd {
+-fx-background-color: #252525;
+}
+.list-cell {
+    -fx-padding: 15px;
+    -fx-border-color:#252525;
+    }
+
+ .list-view{
+ -fx-box-border:#252525;
+ -fx-box-background:#252525;
+
+ }
+ .virtual-flow > .corner {
+     -fx-background-color: #2c365d ;
+ }
+

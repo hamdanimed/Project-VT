@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="parent" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.SearchViewController">
+   <children>
+      <Button layoutX="36.0" layoutY="28.0" mnemonicParsing="false" style="-fx-background-color: #403D3D; -fx-font-family: Poppins; -fx-text-fill: #fff;" text="Back" textAlignment="CENTER" />
+      <Button fx:id="browse" layoutX="64.0" layoutY="99.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="124.0" styleClass=".button" text="Browse" textAlignment="CENTER" />
+      <TextField fx:id="searchField" alignment="CENTER" layoutX="215.0" layoutY="100.0" prefHeight="60.0" prefWidth="829.0" promptText="Link or keyword for video" style="-fx-background-color: #403D3D; -fx-text-fill: #fff;" styleClass=".input">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <Button fx:id="search" layoutX="1074.0" layoutY="100.0" maxHeight="60.0" maxWidth="70.0" mnemonicParsing="false" onAction="#search" prefHeight="60.0" prefWidth="70.0" style="-fx-padding: 0;" styleClass=".button" textAlignment="CENTER">
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@assets/search.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Text fx:id="mainText" boundsType="VISUAL" layoutX="510.0" layoutY="344.0" lineSpacing="1.5" opacity="0.6" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 30px; -fx-fill: #fff;" text="Search for a video" textAlignment="CENTER" textOrigin="CENTER">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <ListView fx:id="listView" layoutX="45.0" layoutY="209.0" onMouseClicked="#handleMouseClick" prefWidth="1100.0" styleClass="style.css">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></ListView>
+   </children>
+</AnchorPane>
