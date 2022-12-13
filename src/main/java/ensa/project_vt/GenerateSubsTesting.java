@@ -33,7 +33,7 @@ public class GenerateSubsTesting {
 //        }
 //
 //
-//        YoutubeDl vid=new YoutubeDl("https://www.youtube.com/watch?v=-EbzDqtZEh4","C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\",youtubeDlConfigFilePath,youtubeDlExePath);
+//        YoutubeDl vid=new YoutubeDl("https://www.youtube.com/watch?v=-EbzDqtZEh4","C:\\Users\\hp\\PC\\project-vt-files\\",youtubeDlConfigFilePath,youtubeDlExePath);
 //        vid.checkAvailableQualities();
 //        vid.downloadVideoAndAudio();
 //
@@ -41,7 +41,7 @@ public class GenerateSubsTesting {
 //        System.out.println("Video Path : "+vid.videoPath);
 //        System.out.println("Audio Path : "+vid.audioPath);
 //
-//        Speechmatics speech=new Speechmatics("C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\",speechmaticsConfigFilePath);
+//        Speechmatics speech=new Speechmatics("C:\\Users\\hp\\PC\\project-vt-files\\",speechmaticsConfigFilePath);
 //        speech.setAudioPath(vid.audioPath);
 //        speech.setYoutubeId(vid.videoId);
 //        speech.sendAudio();
