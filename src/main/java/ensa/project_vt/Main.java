@@ -1,52 +1,105 @@
 package ensa.project_vt;
 
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import java.io.*;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        String speechmaticsConfigFilePath="";
-        String youtubeDlConfigFilePath="";
-        String youtubeDlExePath="";
+//        String speechmaticsConfigFilePath="";
+//        String youtubeDlConfigFilePath="";
+//        String youtubeDlExePath="";
+//
+//        File myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/speechmatics-config-standard.json");
+//        if (myObjForInfo.exists()) {
+//            speechmaticsConfigFilePath= myObjForInfo.getAbsolutePath();
+//        } else {
+//            System.out.println("The file does not exist.");
+//        }
+//        myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/youtube-dl-config.conf");
+//        if (myObjForInfo.exists()) {
+//            youtubeDlConfigFilePath= myObjForInfo.getAbsolutePath();
+//        } else {
+//            System.out.println("The file does not exist.");
+//        }
+//        myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/youtube-dl.exe");
+//        if (myObjForInfo.exists()) {
+//            youtubeDlExePath= myObjForInfo.getAbsolutePath();
+//        } else {
+//            System.out.println("The file does not exist.");
+//        }
+//
+//
+//        YoutubeDl vid=new YoutubeDl("https://www.youtube.com/watch?v=-EbzDqtZEh4","C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\",youtubeDlConfigFilePath,youtubeDlExePath);
+//        vid.checkAvailableQualities();
+//        vid.downloadVideoAndAudio();
+//
+//        System.out.println("Video id : "+vid.videoId);
+//        System.out.println("Video Path : "+vid.videoPath);
+//        System.out.println("Audio Path : "+vid.audioPath);
+//
+//        Speechmatics speech=new Speechmatics("C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\",speechmaticsConfigFilePath);
+//        speech.setAudioPath(vid.audioPath);
+//        speech.setYoutubeId(vid.videoId);
+//        speech.sendAudio();
+//        for(int i=60;i>=0;i--){
+//            System.out.println("wait "+i+" second");
+//            Thread.sleep(1000);
+//        }
+//        speech.getSubstitles(speech.getJobId(), vid.videoId);
 
-        File myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/speechmatics-config-standard.json");
-        if (myObjForInfo.exists()) {
-            speechmaticsConfigFilePath= myObjForInfo.getAbsolutePath();
-        } else {
-            System.out.println("The file does not exist.");
+
+//        Object dataObject=JSONValue.parse("{}");
+//        JSONObject dataJsonObject=(JSONObject) dataObject;
+
+        JSONObject dataObject=new JSONObject();
+        JSONObject content=new JSONObject();
+        content.put("jobId","sldkfjskl");
+        content.put("title","something somewhere somehow");
+
+        dataObject.put("-EbzDqtZEh4",content);
+        System.out.println(dataObject);
+
+
+        //WRITE TO A FILE
+        try {
+            FileWriter myWriter = new FileWriter("C:\\Users\\hp\\PC\\project-vt-files\\data.json");
+            myWriter.write(dataObject.toJSONString());
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file.");
+            e.printStackTrace();
         }
-        myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/youtube-dl-config.conf");
-        if (myObjForInfo.exists()) {
-            youtubeDlConfigFilePath= myObjForInfo.getAbsolutePath();
-        } else {
-            System.out.println("The file does not exist.");
+        String data="{}";
+        //READ A FILE
+        try {
+            File myObj = new File("C:\\Users\\hp\\PC\\project-vt-files\\data.json");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                data = myReader.nextLine();
+                System.out.println(data);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
-        myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/youtube-dl.exe");
-        if (myObjForInfo.exists()) {
-            youtubeDlExePath= myObjForInfo.getAbsolutePath();
-        } else {
-            System.out.println("The file does not exist.");
-        }
+
+        dataObject=(JSONObject) JSONValue.parse(data);
+        JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get("-EbzDqtZEh4").toString());
+        System.out.println(dataObject);
+        System.out.println(contentObject);
+        System.out.println(contentObject.get("t"));
 
 
-        YoutubeDl vid=new YoutubeDl("https://www.youtube.com/watch?v=-EbzDqtZEh4","C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\",youtubeDlConfigFilePath,youtubeDlExePath);
-        vid.checkAvailableQualities();
-        vid.downloadVideoAndAudio();
-
-        System.out.println("Video id : "+vid.videoId);
-        System.out.println("Video Path : "+vid.videoPath);
-        System.out.println("Audio Path : "+vid.audioPath);
-
-        Speechmatics speech=new Speechmatics("C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\",speechmaticsConfigFilePath);
-        speech.setAudioPath(vid.audioPath);
-        speech.setYoutubeId(vid.videoId);
-        speech.sendAudio();
-        for(int i=60;i>=0;i--){
-            System.out.println("wait "+i+" second");
-            Thread.sleep(1000);
-        }
-        speech.getSubstitles(speech.getJobId(), vid.videoId);
+//        String idString=outputLineAsArray[0];
+//        Object idObject= JSONValue.parse(line);
+//        JSONObject idJsonObject=(JSONObject) idObject;
+//        this.jobId=(String)idJsonObject.get("id");
 
 //        //check if video is subtitled ?
 //        File folder=new File("C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\-EbzDqtZEh4");
