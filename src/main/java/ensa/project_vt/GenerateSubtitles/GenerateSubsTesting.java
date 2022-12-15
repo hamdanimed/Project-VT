@@ -55,45 +55,53 @@ public class GenerateSubsTesting {
 //        Object dataObject=JSONValue.parse("{}");
 //        JSONObject dataJsonObject=(JSONObject) dataObject;
 
-        JSONObject dataObject=new JSONObject();
-        JSONObject content=new JSONObject();
-        content.put("jobId","sldkfjskl");
-        content.put("title","something somewhere somehow");
+        DataFile data=new DataFile("C:\\Users\\hp\\PC\\project-vt-files");
+        System.out.println(data.isVideoDownloaded("l086Ps61o1U","ytb"));
+        data.addVideo("l086Ps61o1U","NSIT","ytb");
+        data.setJobId("l086Ps61o1U","dddddddttt","ytb");
+        data.setSubtitled("l086Ps61o1U",true,"ytb");
+        System.out.println(data.isSubtitled("l086Ps61o1U","ytb"));
+        System.out.println(data.getJobId("l086Ps61o1U","ytb"));
 
-        dataObject.put("-EbzDqtZEh4",content);
-        System.out.println(dataObject);
-
-
-        //WRITE TO A FILE
-        try {
-            FileWriter myWriter = new FileWriter("C:\\Users\\hp\\PC\\project-vt-files\\data.json");
-            myWriter.write(dataObject.toJSONString());
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file.");
-            e.printStackTrace();
-        }
-        String data="{}";
-        //READ A FILE
-        try {
-            File myObj = new File("C:\\Users\\hp\\PC\\project-vt-files\\data.json");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                data = myReader.nextLine();
-                System.out.println(data);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        dataObject=(JSONObject) JSONValue.parse(data);
-        JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get("-EbzDqtZEh4").toString());
-        System.out.println(dataObject);
-        System.out.println(contentObject);
-        System.out.println(contentObject.get("t"));
+//        JSONObject dataObject=new JSONObject();
+//        JSONObject content=new JSONObject();
+//        content.put("jobId","sldkfjskl");
+//        content.put("title","something somewhere somehow");
+//
+//        dataObject.put("-EbzDqtZEh4",content);
+//        System.out.println(dataObject);
+//
+//
+//        //WRITE TO A FILE
+//        try {
+//            FileWriter myWriter = new FileWriter("C:\\Users\\hp\\PC\\project-vt-files\\data.json");
+//            myWriter.write(dataObject.toJSONString());
+//            myWriter.close();
+//            System.out.println("Successfully wrote to the file.");
+//        } catch (IOException e) {
+//            System.out.println("An error occurred while writing to the file.");
+//            e.printStackTrace();
+//        }
+//        String data="{}";
+//        //READ A FILE
+//        try {
+//            File myObj = new File("C:\\Users\\hp\\PC\\project-vt-files\\data.json");
+//            Scanner myReader = new Scanner(myObj);
+//            while (myReader.hasNextLine()) {
+//                data = myReader.nextLine();
+//                System.out.println(data);
+//            }
+//            myReader.close();
+//        } catch (FileNotFoundException e) {
+//            System.out.println("An error occurred.");
+//            e.printStackTrace();
+//        }
+//
+//        dataObject=(JSONObject) JSONValue.parse(data);
+//        JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get("-EbzDqtZEh4").toString());
+//        System.out.println(dataObject);
+//        System.out.println(contentObject);
+//        System.out.println(contentObject.get("t"));
 
 
 //        String idString=outputLineAsArray[0];
