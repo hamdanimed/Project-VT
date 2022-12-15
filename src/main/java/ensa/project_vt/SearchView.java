@@ -25,7 +25,6 @@ public class SearchView extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("search-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
             scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-
             stage.setTitle("Search");
             stage.setScene(scene);
             SearchViewController searchViewController = fxmlLoader.getController();

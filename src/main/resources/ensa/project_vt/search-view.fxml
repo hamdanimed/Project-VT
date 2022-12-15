@@ -16,7 +16,7 @@
       <Button fx:id="browse" layoutX="64.0" layoutY="99.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="124.0" styleClass=".button" text="Browse" textAlignment="CENTER" />
       <TextField fx:id="searchField" alignment="CENTER" layoutX="215.0" layoutY="100.0" prefHeight="60.0" prefWidth="829.0" promptText="Link or keyword for video" style="-fx-background-color: #403D3D; -fx-text-fill: #fff;" styleClass=".input">
          <font>
-            <Font size="16.0" />
+            <Font size="24.0" />
          </font></TextField>
       <Button fx:id="search" layoutX="1074.0" layoutY="100.0" maxHeight="60.0" maxWidth="70.0" mnemonicParsing="false" onAction="#search" prefHeight="60.0" prefWidth="70.0" style="-fx-padding: 0;" styleClass=".button" textAlignment="CENTER">
          <graphic>
@@ -26,7 +26,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Text fx:id="mainText" boundsType="VISUAL" layoutX="510.0" layoutY="344.0" lineSpacing="1.5" opacity="0.6" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 30px; -fx-fill: #fff;" text="Search for a video" textAlignment="CENTER" textOrigin="CENTER">
+      <Text fx:id="mainText" boundsType="VISUAL" layoutX="510.0" layoutY="344.0" lineSpacing="1.5" opacity="0.6" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 30px; -fx-font-weight: 700; -fx-fill: #fff;" text="Search for a video" textAlignment="CENTER" textOrigin="CENTER">
          <font>
             <Font size="16.0" />
          </font>

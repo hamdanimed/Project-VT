@@ -2,6 +2,7 @@ package ensa.project_vt;
 
 import ensa.project_vt.YoutubeSearch.VisitYoutube;
 import ensa.project_vt.YoutubeSearch.YoutubeVideo;
+import ensa.project_vt.localVideo.localVideo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -58,7 +59,7 @@ public class SearchViewController {
         listView.setCellFactory(resultListView -> new ResultCell());
 
     }
-    /*private void createVideoInstance(File file){
+    private void createVideoInstance(File file){
         Media mediaFile = new Media(file.toURI().toString());
 
         MediaPlayer mediaPlayer = new MediaPlayer(mediaFile);
@@ -69,13 +70,13 @@ public class SearchViewController {
             public void run() {
 
                 System.out.println("Duration: "+mediaFile.getDuration().toSeconds());
-                YoutubeVideo youtubeVideo = new YoutubeVideo(file.getName(),String.valueOf(mediaFile.getDuration().toSeconds()));
-
+                localVideo localVideo = new localVideo("id"+file.getName(),file.getName(),String.valueOf(mediaFile.getDuration().toSeconds()),file.getPath());
+                // after creating an instance of localVideo , call the method to create the preview view
             }
         });
     }
 
-     */
+
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -86,8 +87,8 @@ public class SearchViewController {
             // get the file selected
             File file = fileChooser.showOpenDialog(stage);
             if(file!=null) {
-// create a new video object with the information from the file
-                String title = file.getName();
+
+                createVideoInstance(file);
 
             }
         });

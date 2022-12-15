@@ -5,23 +5,21 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import ensa.project_vt.Video;
 
-public class YoutubeVideo {
+public class YoutubeVideo extends Video {
 
 
-    private String id;
-    private String videoTitle;
-    private String duration;
+
     private String url;
     private String thumbnailUrl;
 
     // for online video results
     public YoutubeVideo(String id, String url, String title,String duration, String thumbnailUrl) {
-        this.id = id;
+        super(id,title,duration);
         this.url = url;
-        this.videoTitle = title;
         this.thumbnailUrl = thumbnailUrl;
-        this.duration = duration;
+
     }
 
 
@@ -47,13 +45,7 @@ public class YoutubeVideo {
     }
 
 
-    public String getVideoTitle() {
-        return videoTitle;
-    }
 
-    public String getDuration() {
-        return duration;
-    }
 
     public String getUrl() {
         return url;
