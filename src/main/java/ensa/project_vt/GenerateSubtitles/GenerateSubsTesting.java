@@ -1,8 +1,7 @@
-package ensa.project_vt;
+package ensa.project_vt.GenerateSubtitles;
 
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import ensa.project_vt.GenerateSubtitles.DataFile;
 
 import java.io.*;
 import java.util.Scanner;

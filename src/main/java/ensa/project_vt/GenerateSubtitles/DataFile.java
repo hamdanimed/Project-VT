@@ -1,4 +1,4 @@
-package ensa.project_vt;
+package ensa.project_vt.GenerateSubtitles;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;

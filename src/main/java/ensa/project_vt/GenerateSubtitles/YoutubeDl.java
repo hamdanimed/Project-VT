@@ -1,4 +1,4 @@
-package ensa.project_vt;
+package ensa.project_vt.GenerateSubtitles;
 
 import java.io.*;
 import java.util.ArrayList;

@@ -10,4 +10,6 @@ module ensa.project_vt {
     exports ensa.project_vt;
     exports ensa.project_vt.YoutubeSearch;
     opens ensa.project_vt.YoutubeSearch to javafx.fxml;
+    exports ensa.project_vt.GenerateSubtitles;
+    opens ensa.project_vt.GenerateSubtitles to javafx.fxml;
 }
