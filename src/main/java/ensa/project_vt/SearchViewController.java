@@ -12,11 +12,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -39,7 +42,7 @@ public class SearchViewController {
     @FXML
     private Text mainText;
     @FXML
-    private AnchorPane parent;
+    private Pane pane;
     private String searchInput;
     @FXML
     private ListView<YoutubeVideo> listView;
@@ -47,38 +50,48 @@ public class SearchViewController {
     private Button browse;
     @FXML
     private ImageView imageView;
-
-    // To handle mouse click on an item of the list
     @FXML
-    /*public void handleMouseClick(MouseEvent arg0) {
-        System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
-        YoutubeVideo ytVid = listView.getSelectionModel().getSelectedItem();
-        // get information about the video to be displayed in a preview
-        String videoTitle = ytVid.getVideoTitle();
-        String videoUrl = ytVid.getUrl();
-        String videoDuration = ytVid.getDuration();
-        // pass those parameters to a method to display them in preview
+    Label videoLinkLabel;
+    @FXML
+    Label videoTitleLabel;
+
+    @FXML
+    Label videoDurationLabel;
+    @FXML
+    Text textInfo;
+    @FXML
+    ImageView Back;
+
+    public void Back(){
+        if(pane.isVisible()){
+            pane.setVisible(false);
+            listView.setVisible(true);
+            textInfo.setText("Results");
+        }
     }
 
-     */
-
+    public void displayInfo(YoutubeVideo video){
+        Image image = new Image(video.getThumbnailUrl());
+        imageView.setImage(image);
+        videoTitleLabel.setText(video.getVideoTitle());
+        videoDurationLabel.setText(video.getDuration());
+        videoLinkLabel.setText(video.getUrl());
+        textInfo.setVisible(true);
+        textInfo.setText("Your Video");
+    }
     public void handleMouseClick(MouseEvent e) throws IOException {
-        //System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
+        System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
         YoutubeVideo video = listView.getSelectionModel().getSelectedItem();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("video_info.fxml"));
-        root = loader.load();
-        VideoInfo videoInfo = loader.getController();
-        videoInfo.displayInfo(video);
 
-        stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
-        scene = new Scene(root, 1200, 700);
-        scene.getStylesheets().add(getClass().getResource("InfoStyle.css").toExternalForm());
-        stage.setScene(scene);
-        stage.show();
+        listView.setVisible(false);
+        displayInfo(video);
+        pane.setVisible(true);
     }
 
     @FXML
     private void initialize() {
+        textInfo.setVisible(false);
+        pane.setVisible(false);
         listView.setVisible(false);
         listView.setCellFactory(resultListView -> new ResultCell());
 
@@ -119,9 +132,12 @@ public class SearchViewController {
     }
     //method to be called when search button is clicked
     public void search(ActionEvent a) throws Exception {
+        pane.setVisible(false);
+        textInfo.setVisible(true);
+        textInfo.setText("Results :");
 
-        searchInput = searchField.getText();
         // check if the input is empty and return
+        searchInput = searchField.getText();
         if(searchInput.isEmpty()){
             mainText.setText("Type a link for a video or a keyword");
             return;
