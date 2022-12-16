@@ -1,32 +1,41 @@
 package ensa.project_vt.YoutubeSearch;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import ensa.project_vt.Video;
 
-public class YoutubeVideo extends Video {
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
+
+public class YoutubeVideo {
 
 
-
+    private String id;
+    private String videoTitle;
+    private String duration;
     private String url;
     private String thumbnailUrl;
 
     // for online video results
     public YoutubeVideo(String id, String url, String title,String duration, String thumbnailUrl) {
-        super(id,title,duration);
+        this.id = id;
         this.url = url;
+        this.videoTitle = title;
         this.thumbnailUrl = thumbnailUrl;
-
+        this.duration = duration;
     }
 
 
     public static YoutubeVideo getVideoInfo(JsonObject videoId, JsonObject videoInfo) throws IOException {
         String id = videoId.get("videoId").getAsString();
-        String title = videoInfo.get("title").getAsString();
-        String thumbnailUrl=videoInfo.get("thumbnails").getAsJsonObject().get("default").getAsJsonObject().get("url").getAsString();
+        //String title = videoInfo.get("title").getAsString();
+        String title = unescapeHtml4(videoInfo.get("title").getAsString());
+
+        String thumbnailUrl=videoInfo.get("thumbnails").getAsJsonObject().get("medium").getAsJsonObject().get("url").getAsString();
         String url = "https://www.youtube.com/watch?v=" + id;
 
 
@@ -39,13 +48,19 @@ public class YoutubeVideo extends Video {
         JsonObject info = contents.get(0).getAsJsonObject();
         String duration = info.get("contentDetails").getAsJsonObject().get("duration").getAsString();
         //System.out.println(duration +" "+duration.replace("PT","").replace("H",":").replace("M",":").replace("S",""));
-        String formated = duration.replace("PT","").replace("H",":").replace("M",":").replace("S","");
+        String formated = duration.replace("PT","").replace("H","h ").replace("M","min ").replace("S","s");
 
         return new YoutubeVideo(id, url,title,formated, thumbnailUrl);
     }
 
 
+    public String getVideoTitle() {
+        return videoTitle;
+    }
 
+    public String getDuration() {
+        return duration;
+    }
 
     public String getUrl() {
         return url;

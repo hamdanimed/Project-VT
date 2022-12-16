@@ -1,4 +1,7 @@
 package ensa.project_vt;
+import org.apache.commons.lang3.StringEscapeUtils;
+
+
 
 import javafx.application.Application;
 import javafx.css.Style;
@@ -16,6 +19,11 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
 
 public class SearchView extends Application {
     private Button browse;

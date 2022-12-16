@@ -7,6 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -20,11 +24,14 @@ import javafx.stage.Stage;
 import javafx.scene.media.Media;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.*;
 
 public class SearchViewController {
     private Stage stage;
+    private Parent root;
+    private Scene scene;
     @FXML
     private TextField searchField;
     @FXML
@@ -43,7 +50,7 @@ public class SearchViewController {
 
     // To handle mouse click on an item of the list
     @FXML
-    public void handleMouseClick(MouseEvent arg0) {
+    /*public void handleMouseClick(MouseEvent arg0) {
         System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
         YoutubeVideo ytVid = listView.getSelectionModel().getSelectedItem();
         // get information about the video to be displayed in a preview
@@ -51,6 +58,23 @@ public class SearchViewController {
         String videoUrl = ytVid.getUrl();
         String videoDuration = ytVid.getDuration();
         // pass those parameters to a method to display them in preview
+    }
+
+     */
+
+    public void handleMouseClick(MouseEvent e) throws IOException {
+        //System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
+        YoutubeVideo video = listView.getSelectionModel().getSelectedItem();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("video_info.fxml"));
+        root = loader.load();
+        VideoInfo videoInfo = loader.getController();
+        videoInfo.displayInfo(video);
+
+        stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
+        scene = new Scene(root, 1200, 700);
+        scene.getStylesheets().add(getClass().getResource("InfoStyle.css").toExternalForm());
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
