@@ -35,7 +35,7 @@ public class YoutubeVideo {
         //String title = videoInfo.get("title").getAsString();
         String title = unescapeHtml4(videoInfo.get("title").getAsString());
 
-        String thumbnailUrl=videoInfo.get("thumbnails").getAsJsonObject().get("default").getAsJsonObject().get("url").getAsString();
+        String thumbnailUrl=videoInfo.get("thumbnails").getAsJsonObject().get("medium").getAsJsonObject().get("url").getAsString();
         String url = "https://www.youtube.com/watch?v=" + id;
 
 
