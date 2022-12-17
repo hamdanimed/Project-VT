@@ -1,5 +1,8 @@
 package ensa.project_vt;
 
+import ensa.project_vt.GenerateSubtitles.Speechmatics;
+import ensa.project_vt.GenerateSubtitles.YoutubeDl;
+import ensa.project_vt.GenerateSubtitles.YoutubeDlTask;
 import ensa.project_vt.YoutubeSearch.VisitYoutube;
 import ensa.project_vt.YoutubeSearch.YoutubeApiThread;
 import ensa.project_vt.YoutubeSearch.YoutubeVideo;
@@ -42,6 +45,7 @@ public class SearchViewController {
     private Parent root;
     private Scene scene;
     private YoutubeVideo selectedVideo;
+
     @FXML
     private TextField searchField;
     @FXML
@@ -74,6 +78,40 @@ public class SearchViewController {
     Label operation;
     @FXML
     Label operationProgress;
+
+    //YoutubeDl , Speechmatics Variables
+    private String speechmaticsConfigFilePath;
+    private String youtubeDlConfigFilePath;
+    private String youtubeDlExePath;
+    private String appFolder;
+    private YoutubeDl youtubeDl;
+    private Speechmatics speechmatics;
+
+    public void initializeYoutubeDlandSpeechmaticsObjects(){
+        File myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/speechmatics-config-standard.json");
+        if (myObjForInfo.exists()) {
+            this.speechmaticsConfigFilePath= myObjForInfo.getAbsolutePath();
+        } else {
+            System.out.println("The speechmatics-config-standard.json file does not exist.");
+        }
+        myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/youtube-dl-config.conf");
+        if (myObjForInfo.exists()) {
+            this.youtubeDlConfigFilePath= myObjForInfo.getAbsolutePath();
+        } else {
+            System.out.println("The youtube-dl-config.conf file does not exist.");
+        }
+        myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/youtube-dl.exe");
+        if (myObjForInfo.exists()) {
+            this.youtubeDlExePath= myObjForInfo.getAbsolutePath();
+        } else {
+            System.out.println("The youtube-dl.exe file does not exist.");
+        }
+
+        this.appFolder="C:\\Users\\hp\\PC\\project-vt-files\\";
+        this.youtubeDl=new YoutubeDl(appFolder,youtubeDlConfigFilePath,youtubeDlExePath) ;
+        this.speechmatics=new Speechmatics(appFolder,speechmaticsConfigFilePath) ;
+
+    }
 
     public void Back(){
         if(pane.isVisible()){
@@ -137,8 +175,11 @@ public class SearchViewController {
     }
     public void handleMouseClick(MouseEvent e) throws IOException {
         if(listView.getSelectionModel().getSelectedItem() != null){
-            System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
             selectedVideo = listView.getSelectionModel().getSelectedItem();
+            System.out.println("clicked on " + selectedVideo.getVideoTitle());
+            System.out.println(selectedVideo.getYtVideoQuality());
+            System.out.println(selectedVideo.getDuration());
+            System.out.println(selectedVideo.getUrl());
             listView.setVisible(false);
             displayInfo(selectedVideo);
             pane.setVisible(true);
@@ -147,6 +188,7 @@ public class SearchViewController {
 
     @FXML
     private void initialize() {
+        initializeYoutubeDlandSpeechmaticsObjects();
         textInfo.setVisible(false);
         pane.setVisible(false);
         listView.setVisible(false);
@@ -188,8 +230,10 @@ public class SearchViewController {
 
                 // create a new video object with the information from the file
                 String title = file.getName();
+                System.out.println(file);
 
-
+            }else {
+                System.out.println("No file was selected.");
             }
         });
     }
@@ -213,6 +257,13 @@ public class SearchViewController {
         String type = getInputType(searchInput);
         switch (type) {
             case "yt-link" -> System.out.println("It's a youtube link");
+//            case "yt-link" -> {
+//                mainText.setVisible(false);
+//
+//                YoutubeApiThread apiThread = new YoutubeApiThread(searchInput,listView,progressArea,textInfo);
+//                apiThread.start();
+//                apiThread.interrupt();
+//            }
             case "link" -> {
                 mainText.setText("Oops .. this is not a youtube link");
             }
@@ -282,8 +333,20 @@ public class SearchViewController {
     }
     @FXML
     public void transcript(){
-        chooseQuality();
-        System.out.println("I transcript the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
+//        chooseQuality();
+        System.out.println("I transcript the video : " + selectedVideo.getVideoTitle()+" the link is : "+selectedVideo.getUrl());
+        youtubeDl.setYoutubelink(selectedVideo.getUrl());
+//        System.out.println(youtubeDl.checkAvailableQualities());
+//        youtubeDl.downloadVideoAndAudio();
+//        YoutubeDlTask task=new YoutubeDlTask("");
+//        new Thread(task).start();
+        Thread downloadVideoAndAudio = new Thread(new YoutubeDlTask(youtubeDl,"downloadVideoAndAudio"));
+        Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,"checkQuality"));
+        checkQualityThread.start();
+        //this doesnt invoke the downloadVideoAndAudioThread
+        if(!checkQualityThread.isAlive()){
+            downloadVideoAndAudio.start();
+        }
     }
 
 }

@@ -19,9 +19,9 @@ public class YoutubeDl {
     public String videoPath="";
     public List<String> progressValues=new ArrayList<>();
 
-    public YoutubeDl(String youtubelink,String videoAndAudioRepository,String configurationFilePath,String executableLocation){
+    public YoutubeDl(String videoAndAudioRepository,String configurationFilePath,String executableLocation){
 
-        this.youtubelink=youtubelink;
+        this.youtubelink="";
         this.configurationFilePath=configurationFilePath;
         this.executableLocation=executableLocation;
         this.videoAndAudioRepository=videoAndAudioRepository;
@@ -30,6 +30,10 @@ public class YoutubeDl {
     public void downloadVideoAndAudio(){
         int exitCode=1;
         System.out.println("YoutubeDL downloadVideoAndAudio()-------------------------------------------------------------------");
+        if(youtubelink.length() == 0){
+            System.out.println("setYoutubeLink");
+            return;
+        }
         this.videoId=youtubelink.substring(youtubelink.length()-11);
         //checking the existance of the srt file
 //        File folder = new File(videoAndAudioRepository+this.videoId);
@@ -50,7 +54,7 @@ public class YoutubeDl {
 //        subsFile.exists();
 //        if(subsFile.exists()){
 //            System.out.println("File "+this.videoId+".srt already exists");
-            Scanner scanner = new Scanner(System.in);
+//            Scanner scanner = new Scanner(System.in);
 //            System.out.println("Do you want to override the file ? (0:no,1:yes) :");
 //            int choice = scanner.nextInt();
 //            if(choice == 0) {
@@ -122,6 +126,10 @@ public class YoutubeDl {
     public int checkAvailableQualities(){
         int exitCode=1;
         System.out.println("YoutubeDL checkAvailableQualities()-------------------------------------------------------------------");
+        if(youtubelink.length() == 0){
+            System.out.println("setYoutubeLink");
+            return 1;
+        }
         try {
             ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-F");
             this.videoId=youtubelink.substring(youtubelink.length()-11);
@@ -154,10 +162,13 @@ public class YoutubeDl {
             for (int i=0;i<videoOptions.size();i++){
                 System.out.println(videoOptions.get(i));
             }
+
         }
         catch (UnsupportedOperationException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
+        audioOptions=new ArrayList<>();
+        videoOptions=new ArrayList<>();
         return exitCode;
     }
 
@@ -192,5 +203,13 @@ public class YoutubeDl {
             }
         }
 
+    }
+
+    public String getYoutubelink() {
+        return youtubelink;
+    }
+
+    public void setYoutubelink(String youtubelink) {
+        this.youtubelink = youtubelink;
     }
 }

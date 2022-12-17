@@ -32,7 +32,8 @@ public class GenerateSubsTesting {
 //        }
 //
 //
-//        YoutubeDl vid=new YoutubeDl("https://www.youtube.com/watch?v=-EbzDqtZEh4","C:\\Users\\hp\\PC\\project-vt-files\\",youtubeDlConfigFilePath,youtubeDlExePath);
+//        YoutubeDl vid=new YoutubeDl("C:\\Users\\hp\\PC\\project-vt-files\\",youtubeDlConfigFilePath,youtubeDlExePath);
+//        vid.setYoutubeLink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
 //        vid.checkAvailableQualities();
 //        vid.downloadVideoAndAudio();
 //
