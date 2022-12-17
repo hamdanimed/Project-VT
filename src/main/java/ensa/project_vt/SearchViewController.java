@@ -1,7 +1,9 @@
 package ensa.project_vt;
 
 import ensa.project_vt.YoutubeSearch.VisitYoutube;
+import ensa.project_vt.YoutubeSearch.YoutubeApiThread;
 import ensa.project_vt.YoutubeSearch.YoutubeVideo;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -79,12 +81,14 @@ public class SearchViewController {
         textInfo.setText("Your Video");
     }
     public void handleMouseClick(MouseEvent e) throws IOException {
-        System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
-        YoutubeVideo video = listView.getSelectionModel().getSelectedItem();
+        if(listView.getSelectionModel().getSelectedItem() != null){
+            System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
+            YoutubeVideo video = listView.getSelectionModel().getSelectedItem();
 
-        listView.setVisible(false);
-        displayInfo(video);
-        pane.setVisible(true);
+            listView.setVisible(false);
+            displayInfo(video);
+            pane.setVisible(true);
+        }
     }
 
     @FXML
@@ -123,7 +127,7 @@ public class SearchViewController {
             // get the file selected
             File file = fileChooser.showOpenDialog(stage);
             if(file!=null) {
-// create a new video object with the information from the file
+                // create a new video object with the information from the file
                 String title = file.getName();
 
             }
@@ -149,20 +153,13 @@ public class SearchViewController {
                 mainText.setText("Oops .. this is not a youtube link");
             }
             case "keyword" -> {
-                String apiKey = "AIzaSyC34VqBS3fiCsJyd2fX1P2fx5yBIQnimTY";
-                VisitYoutube client = new VisitYoutube(apiKey);
-                //remove the main text
                 mainText.setVisible(false);
-                listView.setVisible(true);
-                //after getting search results
-                //TO-DO : get data from yt api
-                List<YoutubeVideo> videos = client.Search(searchInput, "snippet", "video", 10);
-                ObservableList<YoutubeVideo> data = FXCollections.observableArrayList(videos);
-                listView.setItems(data);
+                YoutubeApiThread apiThread = new YoutubeApiThread(searchInput,listView);
+                apiThread.start();
+                apiThread.interrupt();
             }
             default -> System.out.println("Invalid input");
         }
-
     }
 
     public String getInputType(String input){
@@ -203,6 +200,23 @@ public class SearchViewController {
     }
     public String getSearchInput(){
         return this.searchInput;
+    }
+
+    public Text getMainText() {
+        return mainText;
+    }
+
+    public ListView<YoutubeVideo> getListView() {
+        return listView;
+    }
+    public void play(){
+        System.out.println("I play the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
+    }
+    public void save(){
+        System.out.println("I save the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
+    }
+    public void transcript(){
+        System.out.println("I transcript the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
     }
 
 }
