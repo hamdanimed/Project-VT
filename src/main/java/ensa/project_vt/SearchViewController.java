@@ -17,6 +17,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -130,6 +131,8 @@ public class SearchViewController {
             }
         });
     }
+    // set an event handler for ENTER key in search bar
+
     //method to be called when search button is clicked
     public void search(ActionEvent a) throws Exception {
         pane.setVisible(false);

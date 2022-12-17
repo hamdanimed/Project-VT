@@ -32,13 +32,13 @@
     -fx-background-color: #252525;
 }
 .list-cell {
-    -fx-padding: 15px;
+    -fx-padding: 5px;
     -fx-border-color:#252525;
 }
 
 .list-view{
     -fx-box-border:#252525;
-    -fx-box-background:#252525;
+    -fx-box-background:#1E1E1E;
 
 }
 .virtual-flow > .corner {
