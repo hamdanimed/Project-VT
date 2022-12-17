@@ -17,10 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -35,13 +32,16 @@ import javafx.scene.media.Media;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.*;
 
 public class SearchViewController {
     private Stage stage;
     private Parent root;
     private Scene scene;
+    private YoutubeVideo selectedVideo;
     @FXML
     private TextField searchField;
     @FXML
@@ -83,6 +83,49 @@ public class SearchViewController {
         }
     }
 
+    public void chooseQuality(){
+    // load the fxml for the popup window
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("quality-popup.fxml"));
+        try {
+            // load the dialog view
+            DialogPane dialogPane = fxmlLoader.load();
+            // load the controller for the dialog
+            MenuDialogController menuDialogController = fxmlLoader.getController();
+            List<String> videoQualities = new ArrayList<>();
+            videoQualities.add("1080P");
+            videoQualities.add("720P");
+            videoQualities.add("480P");
+            List<String> audioQualities = new ArrayList<>();
+            audioQualities.add("wav");
+            audioQualities.add("mp3");
+            // add quality options
+            menuDialogController.setVideoQualityOptions(videoQualities,audioQualities);
+            Dialog<ButtonType> dialog = new Dialog<>();
+
+            dialog.setDialogPane(dialogPane);
+            dialog.setTitle("Video & audio quality");
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            // if you click on Finish
+            if(clickedButton.get()==ButtonType.FINISH){
+                // Check if both qualities were choosen
+                    if(menuDialogController.isAudioQualityChoosen() && menuDialogController.isVideoQualityChoosen()) {
+                        // get the video & audio quality values from menuDialogController
+                        // set the video & audio quality to the global selectedVideo variable
+                        selectedVideo.setVideoQuality(menuDialogController.getVideoQuality());
+                        selectedVideo.setAudioQuality(menuDialogController.getAudioQuality());
+                        System.out.println(selectedVideo.getYtVideoQuality()+" : "+selectedVideo.getYtAudioQuality());
+
+                    }
+
+            }
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     public void displayInfo(YoutubeVideo video){
         Image image = new Image(video.getThumbnailUrl());
         imageView.setImage(image);
@@ -95,10 +138,9 @@ public class SearchViewController {
     public void handleMouseClick(MouseEvent e) throws IOException {
         if(listView.getSelectionModel().getSelectedItem() != null){
             System.out.println("clicked on " + listView.getSelectionModel().getSelectedItem().getVideoTitle());
-            YoutubeVideo video = listView.getSelectionModel().getSelectedItem();
-
+            selectedVideo = listView.getSelectionModel().getSelectedItem();
             listView.setVisible(false);
-            displayInfo(video);
+            displayInfo(selectedVideo);
             pane.setVisible(true);
         }
     }
@@ -155,6 +197,7 @@ public class SearchViewController {
 
     //method to be called when search button is clicked
     public void search(ActionEvent a) throws Exception {
+
         pane.setVisible(false);
         progressArea.setVisible(true);
         operation.setText("Fetching Data from Youtube ");
@@ -237,7 +280,9 @@ public class SearchViewController {
     public void save(){
         System.out.println("I save the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
     }
+    @FXML
     public void transcript(){
+        chooseQuality();
         System.out.println("I transcript the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
     }
 

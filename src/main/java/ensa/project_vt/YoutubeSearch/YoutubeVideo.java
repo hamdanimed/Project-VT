@@ -19,6 +19,8 @@ public class YoutubeVideo {
     private String duration;
     private String url;
     private String thumbnailUrl;
+    private String videoQuality;
+    private String audioQuality;
 
     // for online video results
     public YoutubeVideo(String id, String url, String title,String duration, String thumbnailUrl) {
@@ -29,6 +31,9 @@ public class YoutubeVideo {
         this.duration = duration;
     }
 
+    public void setVideoQuality(String videoQuality) {
+        this.videoQuality = videoQuality;
+    }
 
     public static YoutubeVideo getVideoInfo(JsonObject videoId, JsonObject videoInfo) throws IOException {
         String id = videoId.get("videoId").getAsString();
@@ -80,5 +85,17 @@ public class YoutubeVideo {
 
     public String getThumbnailUrl() {
         return thumbnailUrl;
+    }
+
+    public void setAudioQuality(String audioQuality) {
+        this.audioQuality = audioQuality;
+    }
+
+    public String getYtVideoQuality() {
+        return videoQuality;
+    }
+
+    public String getYtAudioQuality() {
+        return audioQuality;
     }
 }
