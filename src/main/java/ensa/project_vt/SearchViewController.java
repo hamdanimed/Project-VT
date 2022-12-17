@@ -4,6 +4,7 @@ import ensa.project_vt.YoutubeSearch.VisitYoutube;
 import ensa.project_vt.YoutubeSearch.YoutubeApiThread;
 import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -62,6 +63,12 @@ public class SearchViewController {
     Text textInfo;
     @FXML
     ImageView Back;
+    @FXML
+    Pane progressArea;
+    @FXML
+    Label operation;
+    @FXML
+    Label operationProgress;
 
     public void Back(){
         if(pane.isVisible()){
@@ -96,6 +103,7 @@ public class SearchViewController {
         textInfo.setVisible(false);
         pane.setVisible(false);
         listView.setVisible(false);
+        progressArea.setVisible(false);
         listView.setCellFactory(resultListView -> new ResultCell());
 
     }
@@ -136,8 +144,9 @@ public class SearchViewController {
     //method to be called when search button is clicked
     public void search(ActionEvent a) throws Exception {
         pane.setVisible(false);
-        textInfo.setVisible(true);
-        textInfo.setText("Results :");
+        progressArea.setVisible(true);
+        operation.setText("Fetching Data from Youtube ");
+
 
         // check if the input is empty and return
         searchInput = searchField.getText();
@@ -154,7 +163,8 @@ public class SearchViewController {
             }
             case "keyword" -> {
                 mainText.setVisible(false);
-                YoutubeApiThread apiThread = new YoutubeApiThread(searchInput,listView);
+
+                YoutubeApiThread apiThread = new YoutubeApiThread(searchInput,listView,progressArea,textInfo);
                 apiThread.start();
                 apiThread.interrupt();
             }

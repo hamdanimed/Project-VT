@@ -3,6 +3,7 @@
     -fx-background-color:#1E1E1E;
 }
 
+
 .button{
     -fx-background-color:#403D3D;
     -fx-text-fill:#fff;
@@ -11,10 +12,13 @@
     -fx-pref-height:60px;
     -fx-cursor: hand;
 }
+/*
 .text {
     -fx-font-size:16px;
     -fx-text-fill:#fff;
 }
+
+ */
 .input{
     -fx-background-color:#403D3D;
     -fx-text-fill:#fff;
@@ -51,14 +55,24 @@
 
 }
 
-/*
-#videoTitleLabel,#videoDurationLabel,#videoLinkLabel{
-    -fx-text-fill: #FFFFFF;
-    -fx-font-weight: bold
-}
 
- */
+#videoDurationLabel,#videoLinkLabel{
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+#videoTitleLabel{
+    -fx-font-weight: bold;
+    -fx-font-size: 30px;
+}
 .label{
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
+}
+#playArea,#saveArea,#transcriptArea,#Back{
+    -fx-cursor: hand;
+}
+#progressArea{
+    -fx-background-color: #403D3D;
+    -fx-background-radius: 5px;
 }
