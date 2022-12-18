@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<DialogPane prefHeight="294.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.ProgressUploadAudio">
+<header>
+    <AnchorPane prefHeight="295.0" prefWidth="512.0">
+        <children>
+            <Label layoutX="67.0" layoutY="36.0" text="Uploading Audio to Speechmatics">
+                <font>
+                    <Font name="System Bold" size="25.0" />
+                </font>
+            </Label>
+            <Label layoutX="88.0" layoutY="100.0" text="Upload speed :">
+                <font>
+                    <Font size="15.0" />
+                </font>
+            </Label>
+            <ProgressBar layoutX="87.0" layoutY="168.0" prefHeight="30.0" prefWidth="326.0" progress="0.37" />
+            <Label layoutX="88.0" layoutY="125.0" text="Time remaining :">
+                <font>
+                    <Font size="15.0" />
+                </font>
+            </Label>
+            <Label layoutX="94.0" layoutY="203.0" text="20">
+                <font>
+                    <Font size="13.0" />
+                </font>
+            </Label>
+            <Label layoutX="114.0" layoutY="203.0" text="\% of">
+                <font>
+                    <Font size="13.0" />
+                </font>
+            </Label>
+            <Label layoutX="147.0" layoutY="203.0" text="200MB">
+                <font>
+                    <Font size="13.0" />
+                </font>
+            </Label>
+            <Label layoutX="221.0" layoutY="102.0" text="30kps">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Label>
+            <Label layoutX="215.0" layoutY="126.0" text="98:23:00">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Label>
+        </children>
+    </AnchorPane>
+</header>
+<buttonTypes>
+    <ButtonType fx:constant="FINISH" />
+    <ButtonType fx:constant="CANCEL" />
+</buttonTypes>
+</DialogPane>

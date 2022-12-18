@@ -36,6 +36,7 @@ import javafx.scene.media.Media;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.*;
@@ -78,6 +79,8 @@ public class SearchViewController {
     Label operation;
     @FXML
     Label operationProgress;
+    @FXML
+    Pane stepsPane;
 
     //YoutubeDl , Speechmatics Variables
     private String speechmaticsConfigFilePath;
@@ -118,32 +121,41 @@ public class SearchViewController {
             pane.setVisible(false);
             listView.setVisible(true);
             textInfo.setText("Results");
+        }else{
+            HandleDialogs();
         }
     }
 
-    public void chooseQuality(){
-    // load the fxml for the popup window
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("quality-popup.fxml"));
+    public void HandleDialogs(){
         try {
-            // load the dialog view
-            DialogPane dialogPane = fxmlLoader.load();
-            // load the controller for the dialog
-            MenuDialogController menuDialogController = fxmlLoader.getController();
-            List<String> videoQualities = new ArrayList<>();
-            videoQualities.add("1080P");
-            videoQualities.add("720P");
-            videoQualities.add("480P");
-            List<String> audioQualities = new ArrayList<>();
-            audioQualities.add("wav");
-            audioQualities.add("mp3");
-            // add quality options
-            menuDialogController.setVideoQualityOptions(videoQualities,audioQualities);
-            Dialog<ButtonType> dialog = new Dialog<>();
+            // load the fxml for the popup window
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("quality-popup.fxml"));
+            DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
 
-            dialog.setDialogPane(dialogPane);
-            dialog.setTitle("Video & audio quality");
-            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            MenuDialogController menuDialogController = fxmlLoader.getController(); // load the controller for the dialog
+            youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
+            Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,menuDialogController,"checkQuality"));
+            checkQualityThread.start();
+//            List<String> videoQualities = new ArrayList<>(Arrays.asList("1080P","720P","480P"));
+//            List<String> audioQualities = new ArrayList<>(Arrays.asList("wav","mp3"));
+            // add quality options
+//            menuDialogController.setVideoQualityOptions(videoQualities,audioQualities);
+
+            Dialog<ButtonType> qualitiesDialog = new Dialog<>();
+            qualitiesDialog.setDialogPane(dialogPane);
+            qualitiesDialog.setTitle("Video & audio quality");
+
+            Dialog<ButtonType> downloadingDialog=new Dialog<>();
+            downloadingDialog.setTitle("Downloading Progress");
+//            downloadingDialog.setDialogPane(dialogPane);
+
+            Dialog<ButtonType> uploadAudioDialog= new Dialog<>();
+            uploadAudioDialog.setTitle("Uploading the Audio");
+//            downloadingDialog.setDialogPane(dialogPane);
+
+            Optional<ButtonType> clickedButton = qualitiesDialog.showAndWait();
+            Optional<ButtonType> clickedButton2= Optional.of(ButtonType.NO);
             // if you click on Finish
             if(clickedButton.get()==ButtonType.FINISH){
                 // Check if both qualities were choosen
@@ -153,10 +165,31 @@ public class SearchViewController {
                         selectedVideo.setVideoQuality(menuDialogController.getVideoQuality());
                         selectedVideo.setAudioQuality(menuDialogController.getAudioQuality());
                         System.out.println(selectedVideo.getYtVideoQuality()+" : "+selectedVideo.getYtAudioQuality());
-
                     }
-
             }
+            System.out.println(clickedButton.get());
+            if(clickedButton.get()==ButtonType.NEXT){
+                fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("progress.fxml"));
+                dialogPane=fxmlLoader.load();
+                downloadingDialog.setDialogPane(dialogPane);
+            }
+            if(qualitiesDialog.isShowing()){
+                qualitiesDialog.close();
+            }
+            clickedButton2 = downloadingDialog.showAndWait();
+            System.out.println("clicked2"+clickedButton2.get());
+            if(clickedButton2.get()==ButtonType.NEXT){
+                fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("progressUploadAudio.fxml"));
+                dialogPane=fxmlLoader.load();
+                uploadAudioDialog.setDialogPane(dialogPane);
+                if(downloadingDialog.isShowing()){
+                    downloadingDialog.close();
+                }
+                uploadAudioDialog.showAndWait();
+            }
+
 
 
         } catch (IOException e) {
@@ -332,21 +365,23 @@ public class SearchViewController {
         System.out.println("I save the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
     }
     @FXML
-    public void transcript(){
-//        chooseQuality();
+    public void transcript() throws IOException {
         System.out.println("I transcript the video : " + selectedVideo.getVideoTitle()+" the link is : "+selectedVideo.getUrl());
+        //test loading a fxml on top of another for the popup
+        stepsPane=FXMLLoader.load(getClass().getResource("steps.fxml"));
         youtubeDl.setYoutubelink(selectedVideo.getUrl());
 //        System.out.println(youtubeDl.checkAvailableQualities());
 //        youtubeDl.downloadVideoAndAudio();
 //        YoutubeDlTask task=new YoutubeDlTask("");
 //        new Thread(task).start();
-        Thread downloadVideoAndAudio = new Thread(new YoutubeDlTask(youtubeDl,"downloadVideoAndAudio"));
-        Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,"checkQuality"));
+        Thread downloadVideoAndAudio = new Thread(new YoutubeDlTask(youtubeDl,new Object(),"downloadVideoAndAudio"));
+        Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,new Object(),"checkQuality"));
         checkQualityThread.start();
+        HandleDialogs();
         //this doesnt invoke the downloadVideoAndAudioThread
-        if(!checkQualityThread.isAlive()){
-            downloadVideoAndAudio.start();
-        }
+//        if(!checkQualityThread.isAlive()){
+//            downloadVideoAndAudio.start();
+//        }
     }
 
 }

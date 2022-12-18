@@ -1,5 +1,7 @@
 package ensa.project_vt.GenerateSubtitles;
 
+import ensa.project_vt.MenuDialogController;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,7 +125,7 @@ public class YoutubeDl {
 //        System.out.println(Arrays.toString(outputLineAsArray));
     }
 
-    public int checkAvailableQualities(){
+    public int checkAvailableQualities(MenuDialogController controller){
         int exitCode=1;
         System.out.println("YoutubeDL checkAvailableQualities()-------------------------------------------------------------------");
         if(youtubelink.length() == 0){
@@ -151,7 +153,8 @@ public class YoutubeDl {
             exitCode= proc.exitValue();
             if(exitCode==1){
                 System.out.println("[YoutubeDl] An error accured with 'checkAvailableQualities'");
-                System.exit(1);
+//                System.exit(1);
+                return 1;
             }
 
             System.out.println("AUDIO OPTIONS :");
@@ -162,6 +165,7 @@ public class YoutubeDl {
             for (int i=0;i<videoOptions.size();i++){
                 System.out.println(videoOptions.get(i));
             }
+            controller.setVideoQualityOptions(videoOptions,audioOptions);
 
         }
         catch (UnsupportedOperationException | InterruptedException | IOException e) {

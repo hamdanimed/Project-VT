@@ -27,20 +27,28 @@ import java.util.regex.Pattern;
 
 public class MenuDialogController {
 
-@FXML
+    @FXML
     ComboBox videoQuality;
-@FXML
+    @FXML
     ComboBox audioQuality;
 
+    @FXML
+    Label progressMsg;
 
+    boolean videoQualityChoosen;
+    boolean audioQualityChoosen;
 
-boolean videoQualityChoosen;
-boolean audioQualityChoosen;
+    public void setVideoQualityOptions(List<String> VideoOptions, List<String> AudioOptions){
+        videoQuality.getItems().addAll(VideoOptions);
+        audioQuality.getItems().addAll(AudioOptions);
+    }
+    public Label getProgressMsg() {
+        return progressMsg;
+    }
 
-public void setVideoQualityOptions(List<String> VideoOptions, List<String> AudioOptions){
-videoQuality.getItems().addAll(VideoOptions);
-audioQuality.getItems().addAll(AudioOptions);
-}
+    public void setProgressMsg(Label progressMsg) {
+        this.progressMsg = progressMsg;
+    }
     public boolean isVideoQualityChoosen() {
         return videoQuality.getValue() != null;
     }
@@ -48,9 +56,9 @@ audioQuality.getItems().addAll(AudioOptions);
         return audioQuality.getValue() != null;
     }
     public String getVideoQuality(){
-    return videoQuality.getValue().toString();
+        return videoQuality.getValue().toString();
     }
     public String getAudioQuality(){
-    return audioQuality.getValue().toString();
+        return audioQuality.getValue().toString();
     }
 }

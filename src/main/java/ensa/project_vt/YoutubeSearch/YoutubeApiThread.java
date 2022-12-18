@@ -50,7 +50,9 @@ public class YoutubeApiThread  extends Thread  {
             });
 
         } catch (IOException e) {
-            System.out.println("hello");
+            System.out.println("Execption was invoked in YoutubeApiThread");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
 
