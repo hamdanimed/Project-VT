@@ -167,6 +167,8 @@ public class SearchViewController {
                         System.out.println(selectedVideo.getYtVideoQuality()+" : "+selectedVideo.getYtAudioQuality());
                     }
             }
+
+            //NOT WORKING CODE ,NOT GOOD CODE
             System.out.println(clickedButton.get());
             if(clickedButton.get()==ButtonType.NEXT){
                 fxmlLoader = new FXMLLoader();
