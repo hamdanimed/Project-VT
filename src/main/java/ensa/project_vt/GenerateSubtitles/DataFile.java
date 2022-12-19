@@ -20,7 +20,7 @@ public class DataFile {
         String data="{}";
         //READ A FILE
         try {
-            File myObj = new File(appFolderPath+"\\data.json");
+            File myObj = new File(appFolderPath+"data.json");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
@@ -36,7 +36,7 @@ public class DataFile {
 
         //WRITE TO A FILE
         try {
-            FileWriter myWriter = new FileWriter(appFolderPath+"\\data.json");
+            FileWriter myWriter = new FileWriter(appFolderPath+"data.json");
             myWriter.write(dataObject.toJSONString());
             myWriter.close();
             //System.out.println("Successfully wrote to the file.");
@@ -73,7 +73,7 @@ public class DataFile {
             String data = "{}";
             //READ A FILE
             try {
-                File myObj = new File(appFolderPath + "\\data.json");
+                File myObj = new File(appFolderPath + "data.json");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     data = myReader.nextLine();
@@ -86,7 +86,7 @@ public class DataFile {
 
             JSONObject dataObject = (JSONObject) JSONValue.parse(data);
             if (dataObject.containsKey(id)) {
-                return appFolderPath + "\\" + id;
+                return appFolderPath + "" + id;
             } else {
                 return "null";
             }
@@ -101,7 +101,7 @@ public class DataFile {
             String data="{}";
             //READ A FILE
             try {
-                File myObj = new File(appFolderPath+"\\data.json");
+                File myObj = new File(appFolderPath+"data.json");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     data = myReader.nextLine();
@@ -124,7 +124,7 @@ public class DataFile {
 
             //WRITE TO A FILE
             try {
-                FileWriter myWriter = new FileWriter(appFolderPath+"\\data.json");
+                FileWriter myWriter = new FileWriter(appFolderPath+"data.json");
                 myWriter.write(dataObject.toJSONString());
                 myWriter.close();
                 //System.out.println("Successfully wrote to the file.");
@@ -142,7 +142,7 @@ public class DataFile {
             String data="{}";
             //READ A FILE
             try {
-                File myObj = new File(appFolderPath+"\\data.json");
+                File myObj = new File(appFolderPath+"data.json");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     data = myReader.nextLine();
@@ -178,7 +178,7 @@ public class DataFile {
             String data="{}";
             //READ A FILE
             try {
-                File myObj = new File(appFolderPath+"\\data.json");
+                File myObj = new File(appFolderPath+"data.json");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     data = myReader.nextLine();
@@ -199,7 +199,7 @@ public class DataFile {
 
             //WRITE TO A FILE
             try {
-                FileWriter myWriter = new FileWriter(appFolderPath+"\\data.json");
+                FileWriter myWriter = new FileWriter(appFolderPath+"data.json");
                 myWriter.write(dataObject.toJSONString());
                 myWriter.close();
                 //System.out.println("Successfully wrote to the file.");
@@ -217,7 +217,7 @@ public class DataFile {
             String data="{}";
             //READ A FILE
             try {
-                File myObj = new File(appFolderPath+"\\data.json");
+                File myObj = new File(appFolderPath+"data.json");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     data = myReader.nextLine();
@@ -232,7 +232,7 @@ public class DataFile {
             if(dataObject.containsKey(id)){
                 JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get(id).toString());
                 if((boolean)contentObject.get("status")){
-                    return appFolderPath+"\\"+id+"\\"+id+".srt";
+                    return appFolderPath+""+id+"\\"+id+".srt";
                 }else {
                     return "null";
                 }
@@ -250,7 +250,7 @@ public class DataFile {
             String data="{}";
             //READ A FILE
             try {
-                File myObj = new File(appFolderPath+"\\data.json");
+                File myObj = new File(appFolderPath+"data.json");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     data = myReader.nextLine();
@@ -271,7 +271,7 @@ public class DataFile {
 
             //WRITE TO A FILE
             try {
-                FileWriter myWriter = new FileWriter(appFolderPath+"\\data.json");
+                FileWriter myWriter = new FileWriter(appFolderPath+"data.json");
                 myWriter.write(dataObject.toJSONString());
                 myWriter.close();
                 //System.out.println("Successfully wrote to the file.");

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane prefHeight="294.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.ProgressUploadAudio">
+<DialogPane prefHeight="294.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.ProgressUploadAudioController">
 <header>
     <AnchorPane prefHeight="295.0" prefWidth="512.0">
         <children>
@@ -57,6 +57,6 @@
 </header>
 <buttonTypes>
     <ButtonType fx:constant="FINISH" />
-    <ButtonType fx:constant="CANCEL" />
+      <ButtonType fx:constant="CANCEL" />
 </buttonTypes>
 </DialogPane>

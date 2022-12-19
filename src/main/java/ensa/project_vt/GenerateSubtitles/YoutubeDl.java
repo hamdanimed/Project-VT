@@ -1,6 +1,8 @@
 package ensa.project_vt.GenerateSubtitles;
 
 import ensa.project_vt.MenuDialogController;
+import ensa.project_vt.ProgressController;
+import javafx.application.Platform;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,40 +31,15 @@ public class YoutubeDl {
         this.videoAndAudioRepository=videoAndAudioRepository;
     }
 
-    public void downloadVideoAndAudio(){
+    public int downloadVideoAndAudio(ProgressController progressController){
         int exitCode=1;
         System.out.println("YoutubeDL downloadVideoAndAudio()-------------------------------------------------------------------");
         if(youtubelink.length() == 0){
             System.out.println("setYoutubeLink");
-            return;
+            return 1;
         }
         this.videoId=youtubelink.substring(youtubelink.length()-11);
-        //checking the existance of the srt file
-//        File folder = new File(videoAndAudioRepository+this.videoId);
-//        if(folder.exists()){
-//            System.out.println("exists");
-//            this.videoPath=videoAndAudioRepository+this.videoId+"\\"+this.videoId+".mp4";
-//            this.audioPath=videoAndAudioRepository+this.videoId+"\\"+this.videoId+".wav";
-//            return ;
-//        }
-//        File[] listOfFiles = folder.listFiles();
-//        for (int i = 0; i < listOfFiles.length; i++) {
-//            if (listOfFiles[i].isFile()) {
-//                System.out.println("File " + listOfFiles[i].getName());
-//
-//            }
-//        }
-//        File subsFile = new File(videoAndAudioRepository+this.videoId+".srt");
-//        subsFile.exists();
-//        if(subsFile.exists()){
-//            System.out.println("File "+this.videoId+".srt already exists");
-//            Scanner scanner = new Scanner(System.in);
-//            System.out.println("Do you want to override the file ? (0:no,1:yes) :");
-//            int choice = scanner.nextInt();
-//            if(choice == 0) {
-//                return ;
-//            }
-//        }
+
         try {
             ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+this.videoId+"\\"+"%(id)s.%(ext)s","-f","(webm)[height<360]+bestaudio","--config-location",configurationFilePath);
 
@@ -74,8 +51,8 @@ public class YoutubeDl {
             // creating a buffered reader
             BufferedReader read = new BufferedReader(new InputStreamReader(ins));
             read.lines().forEach(line -> {
-//                System.out.println(line);
-                this.parseDownloadVideoAndAudio(line);
+                System.out.println(line);
+                this.parseDownloadVideoAndAudio(line,progressController);
             });
             read.close();
 
@@ -85,15 +62,21 @@ public class YoutubeDl {
             exitCode= proc.exitValue();
             if(exitCode==1){
                 System.out.println("[YoutubeDl] An error accured with 'downloadVideoAndAudio'");
-                System.exit(1);
+//                System.exit(1);
+                return 1;
             }
         }
-        catch (UnsupportedOperationException | InterruptedException | IOException e) {
+        catch(InterruptedException e){
+            System.out.println("[YoutubeDl] 'downloadVideoAndAudio' was interrupted .");
+            return 1;
+        }
+        catch (UnsupportedOperationException | IOException e) {
             e.printStackTrace();
         }
+        return exitCode;
     }
 
-    private void parseDownloadVideoAndAudio(String line){
+    private void parseDownloadVideoAndAudio(String line, ProgressController progressController){
         String[] outputLineAsArray=line.split("\s+");
 
         if(outputLineAsArray[0].equals("[download]")){
@@ -110,6 +93,13 @@ public class YoutubeDl {
                 //Tracking progress (2 ways)
                 this.progressValues=new ArrayList<>(Arrays.asList(outputLineAsArray[1],outputLineAsArray[3],outputLineAsArray[5],outputLineAsArray[7]));
 //                this.progressValues.addAll(Arrays.asList(outputLineAsArray[1],outputLineAsArray[3],outputLineAsArray[5],outputLineAsArray[7]));
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressController.setProgress(outputLineAsArray[5],outputLineAsArray[7],outputLineAsArray[1],outputLineAsArray[3]);
+
+                    }
+                });
                 System.out.println(this.progressValues.toString());
 //                this.progressValues.clear();
             }
@@ -125,7 +115,7 @@ public class YoutubeDl {
 //        System.out.println(Arrays.toString(outputLineAsArray));
     }
 
-    public int checkAvailableQualities(MenuDialogController controller){
+    public int checkAvailableQualities(MenuDialogController controller) {
         int exitCode=1;
         System.out.println("YoutubeDL checkAvailableQualities()-------------------------------------------------------------------");
         if(youtubelink.length() == 0){
@@ -167,8 +157,11 @@ public class YoutubeDl {
             }
             controller.setVideoQualityOptions(videoOptions,audioOptions);
 
+        }catch(InterruptedException e){
+            System.out.println("[YoutubeDl] 'checkAvailableQualities' was interrupted .");
+            return 1;
         }
-        catch (UnsupportedOperationException | InterruptedException | IOException e) {
+        catch (UnsupportedOperationException | IOException e) {
             e.printStackTrace();
         }
         audioOptions=new ArrayList<>();
@@ -179,7 +172,7 @@ public class YoutubeDl {
     List<String> audioOptions=new ArrayList<>();
     List<String> videoOptions=new ArrayList<>();
     private void parseCheckAvailableQualities(String line){
-        System.out.println(line);
+//        System.out.println(line);
         String[] lineAsArray=line.replace(",","").split("\s+");
 
         ArrayList<String> filteredDownLine=new ArrayList<>();

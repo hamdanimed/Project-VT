@@ -7,32 +7,32 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane maxWidth="783.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="324.0" prefWidth="422.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.MenuDialogController">
+<DialogPane maxWidth="783.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="314.0" prefWidth="422.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.MenuDialogController">
    <buttonTypes>
       <ButtonType fx:constant="NEXT" />
       <ButtonType fx:constant="CANCEL" />
    </buttonTypes>
    <header>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="422.0">
+      <AnchorPane prefHeight="318.0" prefWidth="428.0" style="-fx-background-color: #252525;">
          <children>
-            <Label layoutX="110.0" layoutY="28.0" text="Choose Quality : ">
+            <Label layoutX="110.0" layoutY="28.0" text="Choose Quality : " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>
             </Label>
-            <Label layoutX="49.0" layoutY="125.0" text="Video Quality :">
+            <Label layoutX="49.0" layoutY="125.0" text="Video Quality :" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="videoQuality" layoutX="170.0" layoutY="122.0" maxWidth="224.0" minWidth="190.0" prefHeight="26.0" prefWidth="224.0" promptText="----------" style="-fx-background-color: #fff;" />
-            <Label layoutX="50.0" layoutY="187.0" text="Audio Quality :">
+            <ComboBox fx:id="videoQuality" layoutX="170.0" layoutY="122.0" maxWidth="224.0" minWidth="190.0" prefHeight="26.0" prefWidth="224.0" promptText="----------" />
+            <Label layoutX="50.0" layoutY="187.0" text="Audio Quality :" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="audioQuality" layoutX="169.0" layoutY="184.0" maxWidth="228.0" minWidth="190.0" prefHeight="26.0" prefWidth="228.0" promptText="-----------" style="-fx-background-color: #fff;" />
-            <Label fx:id="progressMsg" layoutX="163.0" layoutY="74.0" text="Getting Qualities ...">
+            <ComboBox fx:id="audioQuality" layoutX="169.0" layoutY="184.0" maxWidth="228.0" minWidth="190.0" prefHeight="26.0" prefWidth="228.0" promptText="-----------" />
+            <Label fx:id="progressMsg" layoutX="163.0" layoutY="74.0" text="Getting Qualities ..." textFill="WHITE">
                <font>
                   <Font name="System Italic" size="14.0" />
                </font>

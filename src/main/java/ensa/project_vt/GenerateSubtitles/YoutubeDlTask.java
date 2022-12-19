@@ -1,6 +1,7 @@
 package ensa.project_vt.GenerateSubtitles;
 
 import ensa.project_vt.MenuDialogController;
+import ensa.project_vt.ProgressController;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
@@ -17,12 +18,13 @@ public class YoutubeDlTask extends Task<Integer> {
     }
 
     @Override
-    protected Integer call() throws Exception {
+    protected Integer call(){
 
         switch (this.action) {
             case "checkQuality" -> {
-                System.out.println("checkQuality");
+                System.out.println("Thread checkQuality");
                 MenuDialogController chooseQualitesDialogController=(MenuDialogController) this.controller;
+
                 int exitCode=this.youtubeDlObject.checkAvailableQualities(chooseQualitesDialogController);
                 Platform.runLater(new Runnable() {
                     @Override
@@ -38,8 +40,10 @@ public class YoutubeDlTask extends Task<Integer> {
 
             }
             case "downloadVideoAndAudio" -> {
-                System.out.println("downloadVideoAndAudio");
-                this.youtubeDlObject.downloadVideoAndAudio();
+                System.out.println("Thread downloadVideoAndAudio");
+                ProgressController downloadVideoAndAudio=(ProgressController) this.controller;
+                int exitCode=this.youtubeDlObject.downloadVideoAndAudio(downloadVideoAndAudio);
+
             }
             default -> {
                 System.out.println("Task was Invoked");
