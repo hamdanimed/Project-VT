@@ -142,6 +142,5 @@
             </HBox>
          </children>
       </Pane>
-      <Button fx:id="stopBtn" layoutX="972.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleMouseClick" text="Stop Download" />
    </children>
 </AnchorPane>

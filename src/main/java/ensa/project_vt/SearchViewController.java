@@ -10,6 +10,7 @@ import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 import ensa.project_vt.localVideo.localVideo;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,9 +26,11 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.regex.*;
 
@@ -107,6 +110,7 @@ public class SearchViewController {
         this.youtubeDl=new YoutubeDl(appFolder,youtubeDlConfigFilePath,youtubeDlExePath) ;
         this.speechmatics=new Speechmatics(appFolder,speechmaticsConfigFilePath) ;
         this.dataFile=new DataFile(appFolder);
+        this.youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
     }
 
     public void Back(){
@@ -119,97 +123,45 @@ public class SearchViewController {
         }
     }
 
-//    Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,menuDialogController,"checkQuality"));
-//    Thread downloadVideoAndAudioThread=new Thread(new YoutubeDlTask(youtubeDl,progressController,"downloadVideoAndAudio"));
-//            youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
+
 //            youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=Pw-0pbY9JeU");
 //            ProgressQualitiesController menuDialogController = fxmlLoader.getController(); // load the controller for the dialog
+//    Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,ProgressQualitiesController,"checkQuality"));
+//    Thread downloadVideoAndAudioThread=new Thread(new YoutubeDlTask(youtubeDl,progressController,"downloadVideoAndAudio"));
 
     public void HandleDialogs(){
         try {
-            // load the fxml for the popup window
+            // load the fxml for the dialog to track progress
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
             DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
+            ProgressQualitiesController qualitiesController=fxmlLoader.getController();
+            qualitiesController.setYoutubeDl(this.youtubeDl);
+//            ProgressQualitiesController p=fxmlLoader.getController();
+
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setDialogPane(dialogPane);
+//            dialog.getDialogPane().getScene().getWindow().setUserData("userData");
+            dialog.show();
+
+//            dialog.setOnCloseRequest(e->{
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//                alert.setTitle("Confirmation");
+//                alert.setHeaderText("You're about to Cancel t");
+//                alert.setContentText("Do really want to exit ?");
+//                Optional<ButtonType> btn = alert.showAndWait();
+//                if (btn.get() == ButtonType.OK) {
+//                    System.out.println(";alksdfja;lksdjfl;kasjdf");
+//                    e.consume();
+//                }
+//            });
 
 
-//            checkQualityThread.start();
 
 
-            Dialog<ButtonType> qualitiesDialog = new Dialog<>();
-
-            qualitiesDialog.setDialogPane(dialogPane);
-            qualitiesDialog.setTitle("Video & audio quality");
-
-            qualitiesDialog.setOnCloseRequest(e->{
-                Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation");
-                alert.setHeaderText("You're about to Cancel t");
-                alert.setContentText("Do really want to exit ?");
-                if(alert.showAndWait().get()== ButtonType.OK){
-                    e.consume();
-                }
-            });
-
-            Dialog<ButtonType> downloadingDialog=new Dialog<>();
-            downloadingDialog.setTitle("Downloading Progress");
-
-
-            Optional<ButtonType> clickedButtonQualities = qualitiesDialog.showAndWait();
-            Optional<ButtonType> clickedButtonDownloading= Optional.of(ButtonType.NO);
-
-            //handle qualitiesDialog
-            if(clickedButtonQualities.isPresent() && clickedButtonQualities.get()==ButtonType.NEXT){
-//                checkQualityThread.interrupt();
-
-                fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("progress.fxml"));
-                dialogPane=fxmlLoader.load();
-
-                ProgressDownloadController progressController=fxmlLoader.getController();
-                progressController.videoIdLabel.setText(youtubeDl.videoId);
-                progressController.youtubeDl=youtubeDl;
-
-
-//                dialogPane.setUserData(downloadVideoAndAudioThread);
-                downloadingDialog.setDialogPane(dialogPane);
-
-                //if the video is already downloaded
-                if(dataFile.isVideoDownloaded(youtubeDl.videoId,"ytb")!="null"){
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("ERROR");
-                    alert.setContentText("The video has already been downloaded");
-                    alert.showAndWait();
-                }
-                else if (dataFile.isVideoDownloaded(youtubeDl.videoId,"ytb")=="null") {
-
-//                    downloadVideoAndAudioThread.setDaemon(true);
-//                    downloadVideoAndAudioThread.start();
-
-                    downloadingDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-                    Node closeButton = downloadingDialog.getDialogPane().lookupButton(ButtonType.CLOSE);
-                    closeButton.managedProperty().bind(closeButton.visibleProperty());
-                    closeButton.setVisible(false);
-
-                    downloadingDialog.showAndWait();
-
-                }
-
-            }
-            else if (clickedButtonQualities.isPresent() && clickedButtonQualities.get()==ButtonType.CANCEL) {
-//                checkQualityThread.interrupt();
-                qualitiesDialog.close();
-            }
-            //handle downloadingDialog
-//            if(clickedButtonDownloading.isPresent() && clickedButtonDownloading.get()==ButtonType.NEXT){
-//                downloadingDialog.close();
-//            }
-//            else if(clickedButtonDownloading.isPresent() && clickedButtonDownloading.get()==ButtonType.CANCEL){
-//                checkQualityThread.interrupt();
-//                downloadingDialog.close();
-//            }
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 

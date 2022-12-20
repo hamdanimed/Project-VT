@@ -1,6 +1,7 @@
 package ensa.project_vt;
 
 import ensa.project_vt.GenerateSubtitles.YoutubeDl;
+import ensa.project_vt.GenerateSubtitles.YoutubeDlTask;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,16 +34,20 @@ public class ProgressDownloadController {
     private AnchorPane scenePane;
     @FXML
     public Label videoIdLabel;
+    @FXML
+    private DialogPane dialogPane;
+    @FXML
+    private Button nextBtn;
+    @FXML
+    private Button cancelBtn;
+    @FXML
+    private Button startBtn;
+    private Scene scene;
+    private Parent root;
 
     public Thread downloadVideoAndAudioThread;
 
     public YoutubeDl youtubeDl;
-
-    @FXML
-    private DialogPane dialogPane;
-    private Scene scene;
-    private Parent root;
-
     @FXML
     public void initialize(){
         dialogPane.getButtonTypes().add(ButtonType.CLOSE);
@@ -50,8 +55,17 @@ public class ProgressDownloadController {
         closeButton.managedProperty().bind(closeButton.visibleProperty());
         closeButton.setVisible(false);
 
+//        nextBtn.setDisable(true);
+        
     }
 
+    @FXML
+    public void start(ActionEvent event){
+        this.youtubeDl= (YoutubeDl) dialogPane.getScene().getWindow().getUserData();
+        downloadVideoAndAudioThread=new Thread(new YoutubeDlTask(this.youtubeDl,this,"downloadVideoAndAudio"));
+        downloadVideoAndAudioThread.setDaemon(true);
+        downloadVideoAndAudioThread.start();
+    }
     @FXML
     public void next(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("progressUploadAudio.fxml"));
@@ -62,14 +76,18 @@ public class ProgressDownloadController {
     }
     @FXML
     public void cancel(ActionEvent event) throws IOException {
+        System.out.println();
         System.out.println("download , cancel buttton clicked");
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(videoIdLabel.getText());
         alert.setHeaderText("You're about to Cancel t");
         alert.setContentText("Do really want to exit ?");
         if(alert.showAndWait().get()== ButtonType.OK){
-            stage=(Stage) dialogPane.getScene().getWindow();
-            stage.close();
+                if(downloadVideoAndAudioThread.isAlive()){
+                    downloadVideoAndAudioThread.interrupt();
+                }
+//            stage=(Stage) dialogPane.getScene().getWindow();
+//            stage.close();
         }
     }
 

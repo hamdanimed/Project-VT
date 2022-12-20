@@ -20,6 +20,8 @@ public class YoutubeDl {
     public String videoId="";
     public String audioPath="";
     public String videoPath="";
+    public String audioQuality="";
+    public String videoQuality="";
     public List<String> progressValues=new ArrayList<>();
 
     public YoutubeDl(String videoAndAudioRepository,String configurationFilePath,String executableLocation){
@@ -40,7 +42,9 @@ public class YoutubeDl {
         this.videoId=youtubelink.substring(youtubelink.length()-11);
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+this.videoId+"\\"+"%(id)s.%(ext)s","-f","(webm)[height<360]+bestaudio","--config-location",configurationFilePath);
+//            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+this.videoId+"\\"+"%(id)s.%(ext)s","-f","(webm)[height<360]+bestaudio","--config-location",configurationFilePath);
+            System.out.println(audioQuality+" "+videoQuality);
+            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+this.videoId+"\\"+"%(id)s.%(ext)s","-f",videoQuality+"+"+audioQuality,"--config-location",configurationFilePath);
 
 
             pb.redirectErrorStream(true); // errorstream of the process will be redirected to standard output
@@ -207,5 +211,21 @@ public class YoutubeDl {
 
     public void setYoutubelink(String youtubelink) {
         this.youtubelink = youtubelink;
+    }
+
+    public String getAudioQuality() {
+        return audioQuality;
+    }
+
+    public void setAudioQuality(String audioQuality) {
+        this.audioQuality = audioQuality;
+    }
+
+    public String getVideoQuality() {
+        return videoQuality;
+    }
+
+    public void setVideoQuality(String videoQuality) {
+        this.videoQuality = videoQuality;
     }
 }

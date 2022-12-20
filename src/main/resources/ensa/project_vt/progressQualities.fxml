@@ -11,7 +11,7 @@
    <header>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="430.0">
          <children>
-            <Label layoutX="110.0" layoutY="28.0" text="Choose Quality : " textFill="WHITE">
+            <Label layoutX="96.0" layoutY="14.0" text="Choose Quality : " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>
@@ -21,14 +21,14 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="videoQuality" layoutX="170.0" layoutY="122.0" maxWidth="224.0" minWidth="190.0" prefHeight="26.0" prefWidth="224.0" promptText="----------" />
+            <ComboBox fx:id="videoQualityCombo" layoutX="170.0" layoutY="122.0" maxWidth="224.0" minWidth="190.0" onAction="#selectVideoQuality" prefHeight="26.0" prefWidth="224.0" promptText="----------" />
             <Label layoutX="50.0" layoutY="187.0" text="Audio Quality :" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="audioQuality" layoutX="169.0" layoutY="184.0" maxWidth="228.0" minWidth="190.0" prefHeight="26.0" prefWidth="228.0" promptText="-----------" />
-            <Label fx:id="progressMsg" layoutX="163.0" layoutY="74.0" text="Getting Qualities ..." textFill="WHITE">
+            <ComboBox fx:id="audioQualityCombo" layoutX="169.0" layoutY="184.0" maxWidth="228.0" minWidth="190.0" onAction="#selectAudioQuality" prefHeight="26.0" prefWidth="228.0" promptText="-----------" />
+            <Label fx:id="progressMsg" layoutX="235.0" layoutY="71.0" text="Getting Qualities ..." textFill="WHITE">
                <font>
                   <Font name="System Italic" size="14.0" />
                </font>
@@ -43,6 +43,7 @@
                   <Font size="15.0" />
                </font>
             </Button>
+            <Button fx:id="startBtn" layoutX="67.0" layoutY="68.0" mnemonicParsing="false" onAction="#start" text="Get available qualities" />
          </children>
       </AnchorPane>
    </header>
