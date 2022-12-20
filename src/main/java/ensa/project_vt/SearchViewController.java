@@ -136,6 +136,7 @@ public class SearchViewController {
             fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
             DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
             ProgressQualitiesController qualitiesController=fxmlLoader.getController();
+            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics);
             qualitiesController.setYoutubeDl(this.youtubeDl);
 //            ProgressQualitiesController p=fxmlLoader.getController();
 

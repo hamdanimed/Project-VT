@@ -11,57 +11,58 @@
 <header>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="430.0" style="-fx-background-color: #252525;">
         <children>
-            <Label layoutX="34.0" layoutY="36.0" prefHeight="36.0" prefWidth="370.0" text="Uploading Audio to Speechmatics" textFill="WHITE">
+            <Label layoutX="63.0" layoutY="32.0" prefHeight="36.0" prefWidth="198.0" text="Uploading Audio" textFill="WHITE">
                 <font>
                     <Font name="System Bold" size="23.0" />
                 </font>
             </Label>
-            <Label layoutX="51.0" layoutY="88.0" text="Upload speed :" textFill="WHITE">
+            <Label layoutX="51.0" layoutY="96.0" text="Upload speed :" textFill="WHITE">
                 <font>
                     <Font size="15.0" />
                 </font>
             </Label>
-            <ProgressBar layoutX="52.0" layoutY="173.0" prefHeight="30.0" prefWidth="326.0" progress="0.37" style="-fx-accent: #00FFD1;" />
-            <Label layoutX="51.0" layoutY="113.0" text="Time remaining :" textFill="WHITE">
+            <ProgressBar fx:id="progressBar" layoutX="52.0" layoutY="181.0" prefHeight="30.0" prefWidth="326.0" progress="0.0" style="-fx-accent: #00FFD1;" />
+            <Label layoutX="51.0" layoutY="121.0" text="Time remaining :" textFill="WHITE">
                 <font>
                     <Font size="15.0" />
                 </font>
             </Label>
-            <Label layoutX="357.0" layoutY="204.0" text="0%" textFill="WHITE">
+            <Label fx:id="percentageLabel" layoutX="357.0" layoutY="212.0" text="0%" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>
             </Label>
-            <Label layoutX="179.0" layoutY="135.0" text="200MB" textFill="WHITE">
+            <Label fx:id="sizeLabel" layoutX="179.0" layoutY="143.0" text="0MB" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>
             </Label>
-            <Label layoutX="184.0" layoutY="90.0" text="0kps" textFill="WHITE">
+            <Label fx:id="speedLabel" layoutX="184.0" layoutY="98.0" text="0kps" textFill="WHITE">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Label>
-            <Label layoutX="178.0" layoutY="114.0" text="00:00:00" textFill="WHITE">
+            <Label fx:id="timeLabel" layoutX="178.0" layoutY="122.0" text="00:00:00" textFill="WHITE">
                 <font>
                     <Font size="14.0" />
                 </font>
             </Label>
-            <Button layoutX="242.0" layoutY="255.0" mnemonicParsing="false" onAction="#finish" text="Finish">
+            <Button fx:id="finishBtn" layoutX="257.0" layoutY="258.0" mnemonicParsing="false" onAction="#finish" text="Finish">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button layoutX="327.0" layoutY="255.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+            <Button layoutX="342.0" layoutY="258.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Label layoutX="51.0" layoutY="134.0" text="File size :" textFill="WHITE">
+            <Label layoutX="51.0" layoutY="142.0" text="File size :" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
+            <Button fx:id="startBtn" layoutX="314.0" layoutY="37.0" mnemonicParsing="false" onAction="#start" text="Start upload" />
         </children>
     </AnchorPane>
 </header>

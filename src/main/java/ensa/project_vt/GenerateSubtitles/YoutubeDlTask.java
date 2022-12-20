@@ -41,9 +41,18 @@ public class YoutubeDlTask extends Task<Integer> {
             }
             case "downloadVideoAndAudio" -> {
                 System.out.println("Thread downloadVideoAndAudio");
-                ProgressDownloadController downloadVideoAndAudio=(ProgressDownloadController) this.controller;
-                int exitCode=this.youtubeDlObject.downloadVideoAndAudio(downloadVideoAndAudio);
-
+                ProgressDownloadController downloadVideoAndAudioController=(ProgressDownloadController) this.controller;
+                int exitCode=this.youtubeDlObject.downloadVideoAndAudio(downloadVideoAndAudioController);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(exitCode==0){
+                            downloadVideoAndAudioController.getNextBtn().setDisable(false);
+                        }else{
+                            System.out.println("something went wrong");
+                        }
+                    }
+                });
             }
             default -> {
                 System.out.println("Task was Invoked");

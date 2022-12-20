@@ -21,19 +21,19 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="videoQualityCombo" layoutX="170.0" layoutY="122.0" maxWidth="224.0" minWidth="190.0" onAction="#selectVideoQuality" prefHeight="26.0" prefWidth="224.0" promptText="----------" />
+            <ComboBox fx:id="videoQualityCombo" layoutX="170.0" layoutY="122.0" maxWidth="224.0" minWidth="190.0" onAction="#selectVideoQuality" prefHeight="26.0" prefWidth="224.0" promptText="               ---------------------" />
             <Label layoutX="50.0" layoutY="187.0" text="Audio Quality :" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="audioQualityCombo" layoutX="169.0" layoutY="184.0" maxWidth="228.0" minWidth="190.0" onAction="#selectAudioQuality" prefHeight="26.0" prefWidth="228.0" promptText="-----------" />
+            <ComboBox fx:id="audioQualityCombo" layoutX="169.0" layoutY="184.0" maxWidth="228.0" minWidth="190.0" onAction="#selectAudioQuality" prefHeight="26.0" prefWidth="228.0" promptText="               ---------------------" />
             <Label fx:id="progressMsg" layoutX="235.0" layoutY="71.0" text="Getting Qualities ..." textFill="WHITE">
                <font>
                   <Font name="System Italic" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="nextBtn" layoutX="267.0" layoutY="257.0" mnemonicParsing="false" onAction="#next" text="Next">
+            <Button fx:id="nextBtn" layoutX="158.0" layoutY="257.0" mnemonicParsing="false" onAction="#next" text="Next : Download video">
                <font>
                   <Font size="15.0" />
                </font>

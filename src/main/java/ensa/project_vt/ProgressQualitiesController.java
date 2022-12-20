@@ -44,6 +44,7 @@ public class ProgressQualitiesController {
     boolean videoQualityChoosen;
     boolean audioQualityChoosen;
 
+    public DataObject dataObject;
     public YoutubeDl youtubeDl;
     private Thread checkQualitiesThread;
     private String videoQuality="";
@@ -57,10 +58,10 @@ public class ProgressQualitiesController {
 //    }
 
     public void initialize() {
-        dialogPane.getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-        closeButton.setVisible(false);
+//        dialogPane.getButtonTypes().add(ButtonType.CLOSE);
+//        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
+//        closeButton.managedProperty().bind(closeButton.visibleProperty());
+//        closeButton.setVisible(false);
         nextBtn.setDisable(true);
 //        System.out.println(this.youtubeDl.getYoutubelink());
 
@@ -87,7 +88,8 @@ public class ProgressQualitiesController {
     public void next(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("progressDownload.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setUserData(this.youtubeDl);
+//        stage.setUserData(this.youtubeDl);
+        stage.setUserData(dataObject);
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
@@ -101,6 +103,9 @@ public class ProgressQualitiesController {
         alert.setHeaderText("You're about to Cancel t");
         alert.setContentText("Do really want to exit ?");
         if(alert.showAndWait().get()== ButtonType.OK){
+            if(checkQualitiesThread!=null && checkQualitiesThread.isAlive()){
+                checkQualitiesThread.interrupt();
+            }
             stage=(Stage) dialogPane.getScene().getWindow();
             stage.close();
         }

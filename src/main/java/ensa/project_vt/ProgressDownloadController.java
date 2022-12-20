@@ -46,23 +46,27 @@ public class ProgressDownloadController {
     private Parent root;
 
     public Thread downloadVideoAndAudioThread;
-
+    public YoutubeDlTask task;
     public YoutubeDl youtubeDl;
+    public DataObject dataObject;
     @FXML
     public void initialize(){
-        dialogPane.getButtonTypes().add(ButtonType.CLOSE);
-        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
-        closeButton.managedProperty().bind(closeButton.visibleProperty());
-        closeButton.setVisible(false);
+//        dialogPane.getButtonTypes().add(ButtonType.CLOSE);
+//        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
+//        closeButton.managedProperty().bind(closeButton.visibleProperty());
+//        closeButton.setVisible(false);
 
-//        nextBtn.setDisable(true);
-        
+        nextBtn.setDisable(true);
+
     }
 
     @FXML
     public void start(ActionEvent event){
-        this.youtubeDl= (YoutubeDl) dialogPane.getScene().getWindow().getUserData();
-        downloadVideoAndAudioThread=new Thread(new YoutubeDlTask(this.youtubeDl,this,"downloadVideoAndAudio"));
+//        this.youtubeDl= (YoutubeDl) dialogPane.getScene().getWindow().getUserData();
+        this.dataObject=(DataObject) dialogPane.getScene().getWindow().getUserData();
+        this.youtubeDl=this.dataObject.youtubeDl;
+        task=new YoutubeDlTask(this.youtubeDl,this,"downloadVideoAndAudio");
+        downloadVideoAndAudioThread=new Thread(task);
         downloadVideoAndAudioThread.setDaemon(true);
         downloadVideoAndAudioThread.start();
     }
@@ -70,6 +74,7 @@ public class ProgressDownloadController {
     public void next(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("progressUploadAudio.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setUserData(dataObject);
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
@@ -83,11 +88,15 @@ public class ProgressDownloadController {
         alert.setHeaderText("You're about to Cancel t");
         alert.setContentText("Do really want to exit ?");
         if(alert.showAndWait().get()== ButtonType.OK){
-                if(downloadVideoAndAudioThread.isAlive()){
-                    downloadVideoAndAudioThread.interrupt();
-                }
-//            stage=(Stage) dialogPane.getScene().getWindow();
-//            stage.close();
+//                if(task.isRunning()){
+////                    downloadVideoAndAudioThread.interrupt();
+//                    task.cancel();
+//                }
+//                if(task.isCancelled()){
+//                    System.out.println("canceled");
+//                }
+                stage=(Stage) dialogPane.getScene().getWindow();
+                stage.close();
         }
     }
 
@@ -101,7 +110,11 @@ public class ProgressDownloadController {
         this.progressBar.setProgress(value/100.0);
     }
 
+    public Button getNextBtn() {
+        return nextBtn;
+    }
 
-
-
+    public void setNextBtn(Button nextBtn) {
+        this.nextBtn = nextBtn;
+    }
 }

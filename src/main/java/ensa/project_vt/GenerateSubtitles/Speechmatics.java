@@ -1,5 +1,7 @@
 package ensa.project_vt.GenerateSubtitles;
 
+import ensa.project_vt.ProgressUploadAudioController;
+import javafx.application.Platform;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -27,7 +29,7 @@ public class Speechmatics {
         this.configFilePath="config=<"+configFilePath;
     }
 
-    public void sendAudio(){
+    public int sendAudio(ProgressUploadAudioController uploadAudioController){
         System.out.println("Speechmatics sendAudio()-------------------------------------------------------------------");
         try {
             //POST AN AUDIO ,RECIEVE AND ID FOR THE JOB
@@ -42,7 +44,7 @@ public class Speechmatics {
             String[] lastLine = new String[1];
             read.lines().forEach(line -> {
                 System.out.println(line);
-                parseSendAudio(line);
+                parseSendAudio(line,uploadAudioController);
                 lastLine[0] =line;
             });
 
@@ -55,16 +57,17 @@ public class Speechmatics {
             this.httpCode=Integer.parseInt(lastLine[0].substring(lastLine[0].length()-3));
             if(this.httpCode > 299 || this.httpCode <200){
                 System.out.println("[Speechmatics : sendAudio] An error accured with 'sendAudio' , http code : "+this.httpCode);
-                System.exit(1);
-                //return ;
+//                System.exit(1);
+                return 1;
             }
 
         } catch (UnsupportedOperationException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
+        return 0;
     }
 
-    private void parseSendAudio(String line){
+    private void parseSendAudio(String line,ProgressUploadAudioController uploadAudioController){
         String[] outputLineAsArray=line.trim().split("\s+");
 //        System.out.println(Arrays.toString(outputLineAsArray));
 
@@ -75,6 +78,7 @@ public class Speechmatics {
                 Object idObject= JSONValue.parse(line);
                 JSONObject idJsonObject=(JSONObject) idObject;
                 this.jobId=(String)idJsonObject.get("id");
+                System.out.println(this.jobId);
             }
         }
 
@@ -82,14 +86,21 @@ public class Speechmatics {
             String regex="[0-9]+";
             Pattern p= Pattern.compile(regex);
             Matcher firstField=p.matcher(outputLineAsArray[0]);
-            Matcher lastField=p.matcher(outputLineAsArray[outputLineAsArray.length-1]);
+//            Matcher lastField=p.matcher(outputLineAsArray[outputLineAsArray.length-1]);
             //checking if the line is a progress line
-            if(firstField.matches() && lastField.matches()){
+            if(firstField.matches()){
 //                this.sendAudioProgress=new ArrayList<>(Arrays.asList(outputLineAsArray));
                 this.sendAudioProgress=new ArrayList<>();
                 // % sent,size of file getting sent,speed of upload,time left for the upload to be done
                 this.sendAudioProgress.add(Arrays.asList(outputLineAsArray[0],outputLineAsArray[1],outputLineAsArray[7],outputLineAsArray[10]).toString());
-                System.out.println(this.sendAudioProgress.toString());
+                System.out.println("happens");
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        uploadAudioController.setProgress(outputLineAsArray[7],outputLineAsArray[10],outputLineAsArray[0],outputLineAsArray[1]);
+                    }
+                });
+//                System.out.println(this.sendAudioProgress.toString());
             }
         }
 
