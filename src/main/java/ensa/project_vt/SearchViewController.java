@@ -10,7 +10,6 @@ import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 import ensa.project_vt.localVideo.localVideo;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -120,23 +119,37 @@ public class SearchViewController {
         }
     }
 
+//    Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,menuDialogController,"checkQuality"));
+//    Thread downloadVideoAndAudioThread=new Thread(new YoutubeDlTask(youtubeDl,progressController,"downloadVideoAndAudio"));
+//            youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
+//            youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=Pw-0pbY9JeU");
+//            ProgressQualitiesController menuDialogController = fxmlLoader.getController(); // load the controller for the dialog
+
     public void HandleDialogs(){
         try {
             // load the fxml for the popup window
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("quality-popup.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
             DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
 
-            MenuDialogController menuDialogController = fxmlLoader.getController(); // load the controller for the dialog
-//            youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
-            youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=Pw-0pbY9JeU");
-            Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,menuDialogController,"checkQuality"));
 
-            checkQualityThread.start();
+//            checkQualityThread.start();
+
 
             Dialog<ButtonType> qualitiesDialog = new Dialog<>();
+
             qualitiesDialog.setDialogPane(dialogPane);
             qualitiesDialog.setTitle("Video & audio quality");
+
+            qualitiesDialog.setOnCloseRequest(e->{
+                Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText("You're about to Cancel t");
+                alert.setContentText("Do really want to exit ?");
+                if(alert.showAndWait().get()== ButtonType.OK){
+                    e.consume();
+                }
+            });
 
             Dialog<ButtonType> downloadingDialog=new Dialog<>();
             downloadingDialog.setTitle("Downloading Progress");
@@ -147,19 +160,18 @@ public class SearchViewController {
 
             //handle qualitiesDialog
             if(clickedButtonQualities.isPresent() && clickedButtonQualities.get()==ButtonType.NEXT){
-                checkQualityThread.interrupt();
+//                checkQualityThread.interrupt();
 
                 fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("progress.fxml"));
                 dialogPane=fxmlLoader.load();
 
-                ProgressController progressController=fxmlLoader.getController();
+                ProgressDownloadController progressController=fxmlLoader.getController();
                 progressController.videoIdLabel.setText(youtubeDl.videoId);
                 progressController.youtubeDl=youtubeDl;
 
-                Thread downloadVideoAndAudioThread=new Thread(new YoutubeDlTask(youtubeDl,progressController,"downloadVideoAndAudio"));
 
-                dialogPane.setUserData(downloadVideoAndAudioThread);
+//                dialogPane.setUserData(downloadVideoAndAudioThread);
                 downloadingDialog.setDialogPane(dialogPane);
 
                 //if the video is already downloaded
@@ -185,7 +197,7 @@ public class SearchViewController {
 
             }
             else if (clickedButtonQualities.isPresent() && clickedButtonQualities.get()==ButtonType.CANCEL) {
-                checkQualityThread.interrupt();
+//                checkQualityThread.interrupt();
                 qualitiesDialog.close();
             }
             //handle downloadingDialog

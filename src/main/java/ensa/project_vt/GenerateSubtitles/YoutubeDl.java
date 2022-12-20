@@ -1,14 +1,13 @@
 package ensa.project_vt.GenerateSubtitles;
 
-import ensa.project_vt.MenuDialogController;
-import ensa.project_vt.ProgressController;
+import ensa.project_vt.ProgressQualitiesController;
+import ensa.project_vt.ProgressDownloadController;
 import javafx.application.Platform;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +30,7 @@ public class YoutubeDl {
         this.videoAndAudioRepository=videoAndAudioRepository;
     }
 
-    public int downloadVideoAndAudio(ProgressController progressController){
+    public int downloadVideoAndAudio(ProgressDownloadController progressController){
         int exitCode=1;
         System.out.println("YoutubeDL downloadVideoAndAudio()-------------------------------------------------------------------");
         if(youtubelink.length() == 0){
@@ -76,7 +75,7 @@ public class YoutubeDl {
         return exitCode;
     }
 
-    private void parseDownloadVideoAndAudio(String line, ProgressController progressController){
+    private void parseDownloadVideoAndAudio(String line, ProgressDownloadController progressController){
         String[] outputLineAsArray=line.split("\s+");
 
         if(outputLineAsArray[0].equals("[download]")){
@@ -115,7 +114,7 @@ public class YoutubeDl {
 //        System.out.println(Arrays.toString(outputLineAsArray));
     }
 
-    public int checkAvailableQualities(MenuDialogController controller) {
+    public int checkAvailableQualities(ProgressQualitiesController controller) {
         int exitCode=1;
         System.out.println("YoutubeDL checkAvailableQualities()-------------------------------------------------------------------");
         if(youtubelink.length() == 0){
