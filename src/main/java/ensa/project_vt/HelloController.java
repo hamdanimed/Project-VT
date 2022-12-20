@@ -1,6 +1,11 @@
 package ensa.project_vt;
 
+//Animations
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -8,23 +13,21 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
-import java.security.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,15 +59,21 @@ public class HelloController implements Initializable {
     @FXML
     private TextArea captionEditText;
     @FXML
-    private Button saveCaptionBtn;
+    private VBox editBox;
+    @FXML
+    private HBox editHBox;
 
 
     private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay;
     private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV;
-    private boolean isPlaying,isMute,isOver;
+    private boolean isPlaying,isMute,isOver,isEditMode;
+    private double currentVolume;
 
     private int captionIndex;
     private Caption actualCaption,nextCaption,captionInit;
+    private TranslateTransition translateEditBox,translateVideo;
+    private ScaleTransition scaleVideo;
+    private FadeTransition fadeIn,fadeOut;
 
     @Override
     public void initialize(URL url,ResourceBundle resourceBundle)
@@ -94,19 +103,30 @@ public class HelloController implements Initializable {
         isPlaying=true;
         isMute=false;
         isOver=false;
+        isEditMode=false;
+        currentVolume=1;
         muteBtn.setGraphic(unmuteIV);
 
         //Initialize captions
-        captionIndex = 0;
-        actualCaption = new Caption(0);
-        nextCaption = sp.getCaptions().get(1);
-        captionInit = new Caption(0);
+        captionIndex = -1;
+        actualCaption = new Caption(-1);
+        nextCaption = sp.getCaptions().get(0);
+        captionInit = new Caption(-1);
 
-        //Animation of control bar
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(200),controlBar);
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(200),controlBar);
+        System.out.println("Search for time : 5400");
+        System.out.println(sp.search(9800,0,sp.getCaptions().size()));
+
+        // Initialize animations
+        translateEditBox = new TranslateTransition(Duration.millis(200),editBox);
+        translateVideo = new TranslateTransition(Duration.millis(200),videoPlayer);
+        scaleVideo = new ScaleTransition(Duration.millis(200),videoPlayer);
+            //Animation of control bar
+        fadeIn = new FadeTransition(Duration.millis(200),controlBar);
+        fadeOut = new FadeTransition(Duration.millis(200),controlBar);
         fadeIn.setFromValue(0);fadeIn.setToValue(1);
         fadeOut.setFromValue(1);fadeOut.setToValue(0);
+        editHBox.setClip(new Rectangle(320,700));
+        editHBox.setTranslateX(250);
         videoPlayer.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -155,8 +175,10 @@ public class HelloController implements Initializable {
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
+                    System.out.println("newValue = " + newValue.doubleValue());
 
-                    HashMap<Integer,Caption> result = sp.find(newValue.doubleValue());
+                    HashMap<Integer,Caption> result = sp.search(newValue.doubleValue(),0,sp.getCaptions().size());
+                    System.out.println("result = " + result);
                     if(result==null)
                     {
                         closedCaptions.setText("");
@@ -180,6 +202,8 @@ public class HelloController implements Initializable {
                         }
 
                     }
+                    loadCaption();
+                    System.out.println("event seek");
 
 
                 }
@@ -187,6 +211,7 @@ public class HelloController implements Initializable {
 
             }
         });
+
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
             public void changed(ObservableValue<? extends Duration> observableValue, Duration oldTime, Duration newValue) {
@@ -195,28 +220,21 @@ public class HelloController implements Initializable {
                     timeSlider.setValue(mediaPlayer.getCurrentTime().toMillis());
                     if(newValue.toMillis()>nextCaption.getStart())
                     {
+
                         captionIndex++;
                         closedCaptions.setText(nextCaption.getText());
                         actualCaption = nextCaption;
                         if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
+                        loadCaption();
                     }
                     if(newValue.toMillis()>actualCaption.getEnd())
                     {
                         closedCaptions.setText("");
                     }
-                    if(actualCaption!= null && actualCaption.getId()!=0)
-                    {
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss:SSS");
-                        captionEditText.setText(actualCaption.getText());
-                        String start = sdf.format(new Date((long)actualCaption.getStart()));
-                        String end = sdf.format(new Date((long)actualCaption.getEnd()));
-                        captionEditLabel.setText(start+" -> "+end);
-                    }
 
                 }
             }
         });
-
 
 
 
@@ -244,16 +262,17 @@ public class HelloController implements Initializable {
     {
         if(isMute || volumeSlider.getValue()==0)
         {
-            mediaPlayer.setVolume(1);
+            isMute = true;
+            mediaPlayer.setVolume(currentVolume);
             muteBtn.setGraphic(unmuteIV);
         }
         else
         {
+            currentVolume = mediaPlayer.getVolume();
             mediaPlayer.setVolume(0);
             muteBtn.setGraphic(muteIV);
         }
         isMute = !isMute;
-        mediaPlayer.seek(new Duration(5800));
     }
     @FXML
     void saveCaptions(ActionEvent event) {
@@ -261,6 +280,9 @@ public class HelloController implements Initializable {
     }
     @FXML
     void loadCaption(MouseEvent event) {
+        loadCaption();
+    }
+    public void loadCaption() {
         if(actualCaption!= null && actualCaption.getId()!=0)
         {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss:SSS");
@@ -268,8 +290,38 @@ public class HelloController implements Initializable {
             String start = sdf.format(new Date((long)actualCaption.getStart()));
             String end = sdf.format(new Date((long)actualCaption.getEnd()));
             captionEditLabel.setText(start+" -> "+end);
+            System.out.println("event load caption");
         }
 
+    }
+    @FXML
+    public void editMode()
+    {
+        if(!scaleVideo.getStatus().equals(Animation.Status.RUNNING))
+        {
+            if(!isEditMode)
+            {
+                scaleVideo.setToX(0.8);
+                scaleVideo.setToY(0.8);
+                translateVideo.setByX(-200);
+                scaleVideo.play();
+                translateVideo.play();
+                translateEditBox.setByX(-300);
+                translateEditBox.play();
+            }
+            else
+            {
+                scaleVideo.setToX(1);
+                scaleVideo.setToY(1);
+                translateVideo.setByX(200);
+                scaleVideo.play();
+                translateVideo.play();
+                translateEditBox.setByX(+300);
+                translateEditBox.play();
+            }
+            isEditMode = !isEditMode;
+
+        }
     }
 
     public ImageView makeIcon(ImageView iv,Image img)

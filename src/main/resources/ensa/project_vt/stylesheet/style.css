@@ -1,3 +1,8 @@
+@font-face
+{
+	font-family: 'Poppins Black';
+	src: url('Poppins-Black.ttf');
+}
 .slider .thumb {
 	-fx-background-color: #00FFD1;
 	-fx-background-radius: 0;
@@ -20,4 +25,19 @@
 	-fx-background-insets: 0;
 	-fx-border-insets: 0;
 	-fx-pref-height: 2px;
+}
+.editSubTextArea
+{
+	-fx-text-fill: white;
+	-fx-font-alignment: center;
+}
+.editSubTextArea .text
+{
+	-fx-font-alignment: center;
+	-fx-font-family: "Poppins";
+}
+.editSubTextArea .content
+{
+	-fx-background-color: #1E1E1E;
+	-fx-text-fill: white;
 }

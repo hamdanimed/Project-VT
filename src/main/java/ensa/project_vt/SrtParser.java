@@ -74,7 +74,7 @@ public class SrtParser {
             throw new RuntimeException();
         }
         for (int i = 0; i < captions1.size(); i++) {
-            System.out.println(captions1.get(i+1));
+            System.out.println(captions1.get(i));
         }
 
     }
@@ -83,7 +83,7 @@ public class SrtParser {
         Caption c = new Caption(0);
         String startStamp = arr.get(1).substring(0,12);
         String endStamp = arr.get(1).substring(17,29);
-        c.setId(Integer.parseInt(arr.get(0)));
+        c.setId(Integer.parseInt(arr.get(0))-1);
         c.setStart(sdf.parse(startStamp).getTime());
         c.setEnd(sdf.parse(endStamp).getTime());
         String text="";
@@ -92,6 +92,35 @@ public class SrtParser {
         }
         c.setText(text);
         return c;
+    }
+    public HashMap<Integer,Caption> search(double time,int start,int end)
+    {
+            HashMap<Integer,Caption> result = new HashMap<>();
+            Caption c=null;
+            Caption nc=null;
+            if(start>end) return null;
+            if(start==end)
+            {
+                result.put(1,captions.get(start));
+                return result;
+            }
+            int m=(start+end)/2;
+            c = captions.get(m);
+            if(captions.containsKey(m+1)) nc=captions.get(m+1);
+            if(nc==null) return null;
+            if(c.getStart()<=time && c.getEnd()>=time)
+            {
+                result.put(1,c);
+                return result;
+            }
+            if(c.getEnd()<time && nc.getStart()>time)
+            {
+                result.put(0,nc);
+                return result;
+            }
+            if(time>c.getStart()) return search(time,m,end);
+            return search(time,start,m);
+
     }
     public HashMap<Integer,Caption> find(double time)
     {
