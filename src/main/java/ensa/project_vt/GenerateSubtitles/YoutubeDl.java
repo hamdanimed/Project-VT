@@ -18,6 +18,7 @@ public class YoutubeDl {
     private String configurationFilePath = "C:\\Users\\hp\\Desktop\\Project_VT\\src\\main\\resources\\ensa\\project_vt\\generate_subtitles\\youtube-dl-config.conf";
     private String videoAndAudioRepository = "C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\";
     public String videoId="";
+    public String videoTitle="";
     public String audioPath="";
     public String videoPath="";
     public String audioQuality="";
@@ -211,6 +212,7 @@ public class YoutubeDl {
 
     public void setYoutubelink(String youtubelink) {
         this.youtubelink = youtubelink;
+        this.videoId=youtubelink.substring(youtubelink.length()-11);
     }
 
     public String getAudioQuality() {

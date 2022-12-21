@@ -65,7 +65,7 @@ public class ProgressDownloadController {
 //        this.youtubeDl= (YoutubeDl) dialogPane.getScene().getWindow().getUserData();
         this.dataObject=(DataObject) dialogPane.getScene().getWindow().getUserData();
         this.youtubeDl=this.dataObject.youtubeDl;
-        task=new YoutubeDlTask(this.youtubeDl,this,"downloadVideoAndAudio");
+        task=new YoutubeDlTask(this.dataObject,this,"downloadVideoAndAudio");
         downloadVideoAndAudioThread=new Thread(task);
         downloadVideoAndAudioThread.setDaemon(true);
         downloadVideoAndAudioThread.start();

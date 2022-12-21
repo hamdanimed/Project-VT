@@ -1,5 +1,6 @@
 package ensa.project_vt.GenerateSubtitles;
 
+import ensa.project_vt.DataObject;
 import ensa.project_vt.ProgressQualitiesController;
 import ensa.project_vt.ProgressDownloadController;
 import javafx.application.Platform;
@@ -9,12 +10,14 @@ public class YoutubeDlTask extends Task<Integer> {
     private String action;
     private YoutubeDl youtubeDlObject;
     private Object controller;
+    private DataFile dataFile;
 
-    public YoutubeDlTask(YoutubeDl youtubeDlObject,Object controller,String action) {
+    public YoutubeDlTask(DataObject dataObject, Object controller, String action) {
         super();
         this.action=action;
-        this.youtubeDlObject=youtubeDlObject;
+        this.youtubeDlObject=dataObject.youtubeDl;
         this.controller=controller;
+        this.dataFile=dataObject.dataFile;
     }
 
     @Override
@@ -47,6 +50,7 @@ public class YoutubeDlTask extends Task<Integer> {
                     @Override
                     public void run() {
                         if(exitCode==0){
+                            dataFile.addVideo(youtubeDlObject.videoId,youtubeDlObject.videoPath,"ytb");
                             downloadVideoAndAudioController.getNextBtn().setDisable(false);
                         }else{
                             System.out.println("something went wrong");

@@ -79,7 +79,7 @@ public class ProgressQualitiesController {
     public void start(ActionEvent event){
         System.out.println(youtubeDl.getYoutubelink());
         startBtn.setDisable(true);
-        checkQualitiesThread=new Thread(new YoutubeDlTask(this.youtubeDl,this,"checkQuality"));
+        checkQualitiesThread=new Thread(new YoutubeDlTask(this.dataObject,this,"checkQuality"));
         checkQualitiesThread.setDaemon(true);
         checkQualitiesThread.start();
     }
@@ -98,6 +98,7 @@ public class ProgressQualitiesController {
     public void cancel(ActionEvent event) throws IOException {
         System.out.println("check qualities , cancel buttton clicked");
         System.out.println(this.youtubeDl.getYoutubelink());
+
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("You're about to Cancel t");

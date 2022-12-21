@@ -129,14 +129,61 @@ public class SearchViewController {
 //    Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,ProgressQualitiesController,"checkQuality"));
 //    Thread downloadVideoAndAudioThread=new Thread(new YoutubeDlTask(youtubeDl,progressController,"downloadVideoAndAudio"));
 
-    public void HandleDialogs(){
+    public void launchProgressQualities(){
+
         try {
-            // load the fxml for the dialog to track progress
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
             DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
             ProgressQualitiesController qualitiesController=fxmlLoader.getController();
-            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics);
+            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
+            qualitiesController.setYoutubeDl(this.youtubeDl);
+//            ProgressQualitiesController p=fxmlLoader.getController();
+
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setDialogPane(dialogPane);
+//            dialog.getDialogPane().getScene().getWindow().setUserData("userData");
+            dialog.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void launchProgressUpload(){
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("progressUploadAudio.fxml"));
+            DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
+            YoutubeDl uploadYoutubeDl=this.youtubeDl;
+            uploadYoutubeDl.audioPath="";
+            DataObject dataObject=new DataObject(uploadYoutubeDl,this.speechmatics,this.dataFile);
+
+            Dialog<Void> dialog = new Dialog<>();
+
+            dialog.getDialogPane().getScene().getWindow().setUserData(dataObject);
+            dialog.setDialogPane(dialogPane);
+
+            dialog.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void HandleDialogs(){
+        try {
+            // load the fxml for the dialog to track progress
+
+            if(dataFile.isVideoDownloaded(this.youtubeDl.videoId,"ytb") != "null"){
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.showAndWait();
+                return ;
+            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
+            DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
+            ProgressQualitiesController qualitiesController=fxmlLoader.getController();
+            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
             qualitiesController.setYoutubeDl(this.youtubeDl);
 //            ProgressQualitiesController p=fxmlLoader.getController();
 
@@ -345,9 +392,9 @@ public class SearchViewController {
 //        youtubeDl.downloadVideoAndAudio();
 //        YoutubeDlTask task=new YoutubeDlTask("");
 //        new Thread(task).start();
-        Thread downloadVideoAndAudio = new Thread(new YoutubeDlTask(youtubeDl,new Object(),"downloadVideoAndAudio"));
-        Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,new Object(),"checkQuality"));
-        checkQualityThread.start();
+//        Thread downloadVideoAndAudio = new Thread(new YoutubeDlTask(this.dataObject,new Object(),"downloadVideoAndAudio"));
+//        Thread checkQualityThread = new Thread(new YoutubeDlTask(this.dataObject,new Object(),"checkQuality"));
+//        checkQualityThread.start();
         HandleDialogs();
         //this doesnt invoke the downloadVideoAndAudioThread
 //        if(!checkQualityThread.isAlive()){
