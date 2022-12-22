@@ -23,6 +23,7 @@ public class YoutubeDl {
     public String videoPath="";
     public String audioQuality="";
     public String videoQuality="";
+    private boolean signal=false;
     public List<String> progressValues=new ArrayList<>();
 
     public YoutubeDl(String videoAndAudioRepository,String configurationFilePath,String executableLocation){
@@ -55,7 +56,10 @@ public class YoutubeDl {
             // creating a buffered reader
             BufferedReader read = new BufferedReader(new InputStreamReader(ins));
             read.lines().forEach(line -> {
-                System.out.println(line);
+                if(this.signal){
+                    proc.destroy();
+                }
+//                System.out.println(line);
                 this.parseDownloadVideoAndAudio(line,progressController);
             });
             read.close();
@@ -65,8 +69,13 @@ public class YoutubeDl {
 
             exitCode= proc.exitValue();
             if(exitCode==1){
-                System.out.println("[YoutubeDl] An error accured with 'downloadVideoAndAudio'");
-//                System.exit(1);
+                if(this.signal){
+                    System.out.println("[YoutubeDl] 'downloadVideoAndAudio' was canceled");
+                    this.signal=false;
+                }else{
+                    System.out.println("[YoutubeDl] An error accured with 'downloadVideoAndAudio'");
+    //                System.exit(1);
+                }
                 return 1;
             }
         }
@@ -137,6 +146,9 @@ public class YoutubeDl {
             // creating a buffered reader
             BufferedReader read = new BufferedReader(new InputStreamReader(ins));
             read.lines().forEach(line -> {
+                if(this.signal){
+                    proc.destroy();
+                }
 //                System.out.println(line);
                 parseCheckAvailableQualities(line);
             });
@@ -146,8 +158,13 @@ public class YoutubeDl {
 
             exitCode= proc.exitValue();
             if(exitCode==1){
-                System.out.println("[YoutubeDl] An error accured with 'checkAvailableQualities'");
-//                System.exit(1);
+                if(this.signal){
+                    System.out.println("[YoutubeDl] 'checkAvailableQualities' was canceled");
+                    this.signal=false;
+                }else{
+                    System.out.println("[YoutubeDl] An error accured with 'checkAvailableQualities'");
+    //                System.exit(1);
+                }
                 return 1;
             }
 
@@ -229,5 +246,13 @@ public class YoutubeDl {
 
     public void setVideoQuality(String videoQuality) {
         this.videoQuality = videoQuality;
+    }
+
+    public boolean isSignal() {
+        return signal;
+    }
+
+    public void setSignal(boolean signal) {
+        this.signal = signal;
     }
 }

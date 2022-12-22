@@ -19,6 +19,7 @@ public class Speechmatics {
     private String subtitlesRepository = "C:\\Users\\hp\\PC\\project-vt-files\\videos-srts\\";
     private String audioPath="data_file=@";
     private String jobId="";
+    private boolean signal=false;
     private String youtubeId="";
     private int httpCode=000;
     private String jobStatus="done"; //Running-Done-Rejected
@@ -43,6 +44,9 @@ public class Speechmatics {
             BufferedReader read = new BufferedReader(new InputStreamReader(ins));
             String[] lastLine = new String[1];
             read.lines().forEach(line -> {
+                if(signal){
+                    proc.destroy();
+                }
                 System.out.println(line);
                 parseSendAudio(line,uploadAudioController);
                 lastLine[0] =line;
@@ -51,6 +55,12 @@ public class Speechmatics {
             read.close(); // close the buffered reader
             proc.waitFor();
             proc.destroy();// finally destroy the process
+
+            if(proc.exitValue()==1){
+                System.out.println("[Speechmatics : sendAudio] was canceled");
+                this.signal=false;
+                return 1;
+            }
 
             //to get http code of the post request
             System.out.println(lastLine[0]);
@@ -144,6 +154,9 @@ public class Speechmatics {
 
             StringBuilder sb = new StringBuilder();
             read.lines().forEach(line -> {
+                if(signal){
+                    proc.destroy();
+                }
 //                System.out.println(line);
                 sb.append(line+"\n");
             });
@@ -151,7 +164,12 @@ public class Speechmatics {
 
             proc.waitFor();
             proc.destroy();// finally destroy the process
-
+            if(proc.exitValue()==1){
+                System.out.println("[Speechmatics : getSubtitles] was canceled");
+                this.signal=false;
+                return ;
+//                return 1;
+            }
             //getting http code fo the request and writing the subtitles to a srt file
             parseGetSubtitles(sb,youtubeId);
         } catch (UnsupportedOperationException | InterruptedException | IOException e) {
@@ -265,10 +283,16 @@ public class Speechmatics {
     public String getJobId(){
         return this.jobId;
     }
-//    public int getHttpCode(){
-//        return this.httpCode;
-//    }
+
     public void setYoutubeId(String youtubeId) {
         this.youtubeId=youtubeId;
+    }
+
+    public boolean isSignal() {
+        return signal;
+    }
+
+    public void setSignal(boolean signal) {
+        this.signal = signal;
     }
 }

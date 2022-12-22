@@ -49,6 +49,7 @@ public class ProgressQualitiesController {
     private Thread checkQualitiesThread;
     private String videoQuality="";
     private String audioQuality="";
+    private YoutubeDlTask task;
 
     public void setYoutubeDl(YoutubeDl youtubeDl) {
         this.youtubeDl = youtubeDl;
@@ -79,7 +80,8 @@ public class ProgressQualitiesController {
     public void start(ActionEvent event){
         System.out.println(youtubeDl.getYoutubelink());
         startBtn.setDisable(true);
-        checkQualitiesThread=new Thread(new YoutubeDlTask(this.dataObject,this,"checkQuality"));
+        this.task=new YoutubeDlTask(this.dataObject,this,"checkQuality");
+        checkQualitiesThread=new Thread(task);
         checkQualitiesThread.setDaemon(true);
         checkQualitiesThread.start();
     }
@@ -96,16 +98,22 @@ public class ProgressQualitiesController {
     }
     @FXML
     public void cancel(ActionEvent event) throws IOException {
-        System.out.println("check qualities , cancel buttton clicked");
-        System.out.println(this.youtubeDl.getYoutubelink());
+//        System.out.println("check qualities , cancel buttton clicked");
+//        System.out.println(this.youtubeDl.getYoutubelink());
 
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("You're about to Cancel t");
         alert.setContentText("Do really want to exit ?");
         if(alert.showAndWait().get()== ButtonType.OK){
-            if(checkQualitiesThread!=null && checkQualitiesThread.isAlive()){
-                checkQualitiesThread.interrupt();
+            //first method for canceling (somehow works) , doesnt work for download dialog for some reason
+//            if(checkQualitiesThread!=null && checkQualitiesThread.isAlive()){
+//                checkQualitiesThread.interrupt();
+//            }
+            //second method for canceling (just to have a unified method with the download)
+            if(task!=null && task.isRunning()){
+                task.sendCancelSignal();
+
             }
             stage=(Stage) dialogPane.getScene().getWindow();
             stage.close();

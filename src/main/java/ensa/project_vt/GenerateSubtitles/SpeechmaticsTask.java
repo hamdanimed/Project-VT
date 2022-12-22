@@ -29,17 +29,14 @@ public class SpeechmaticsTask extends Task<Integer> {
                 ProgressUploadAudioController uploadAudioController= (ProgressUploadAudioController) this.controller;
                 this.speechmaticsObject.setAudioPath(this.youtubeDlObject.audioPath);
 
-                int exitCode=this.speechmaticsObject.sendAudio((ProgressUploadAudioController) this.controller);
+                int exitCode=this.speechmaticsObject.sendAudio(uploadAudioController);
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         if(exitCode==0){
                             System.out.println("nice");
-//                            chooseQualitesDialogController.getProgressMsg().setVisible(false);
                         }else{
-                            System.out.println("Something Went Wrong, Try again");
-//                            chooseQualitesDialogController.getProgressMsg().setLayoutX(115);
-//                            chooseQualitesDialogController.getProgressMsg().setText("Something Went Wrong , Try again");
+                            System.out.println("[SpeechmaticsTask] Something Went Wrong, Try again");
                         }
                     }
                 });
@@ -51,5 +48,9 @@ public class SpeechmaticsTask extends Task<Integer> {
             }
         }
         return 0;
+    }
+
+    public void sendCancelSignal(){
+        speechmaticsObject.setSignal(true);
     }
 }
