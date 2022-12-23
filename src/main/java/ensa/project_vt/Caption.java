@@ -1,5 +1,7 @@
 package ensa.project_vt;
 
+import java.util.Objects;
+
 public class Caption {
     private int id;
     private double start;
@@ -46,6 +48,19 @@ public class Caption {
                 ", end=" + end +
                 ", text='" + text + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Caption caption = (Caption) o;
+        return id == caption.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public Caption(int id) {

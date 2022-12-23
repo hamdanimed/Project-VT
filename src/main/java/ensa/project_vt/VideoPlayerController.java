@@ -16,6 +16,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -29,11 +31,9 @@ import javafx.util.Duration;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 
-public class HelloController implements Initializable {
+public class VideoPlayerController implements Initializable {
     @FXML
     private MediaPlayer mediaPlayer;
     @FXML
@@ -62,18 +62,25 @@ public class HelloController implements Initializable {
     private VBox editBox;
     @FXML
     private HBox editHBox;
+    @FXML
+    private ProgressBar timeProgress;
+    @FXML
+    private Label timeLabel,totalLabel;
+    private TextArea CaptionEditText;
 
 
     private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay;
     private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV;
     private boolean isPlaying,isMute,isOver,isEditMode;
     private double currentVolume;
+    private SrtParser sp;
 
     private int captionIndex;
     private Caption actualCaption,nextCaption,captionInit;
     private TranslateTransition translateEditBox,translateVideo;
     private ScaleTransition scaleVideo;
     private FadeTransition fadeIn,fadeOut;
+    private SimpleDateFormat sdf;
 
     @Override
     public void initialize(URL url,ResourceBundle resourceBundle)
@@ -82,9 +89,14 @@ public class HelloController implements Initializable {
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
 
-        SrtParser sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
-
-
+        sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
+        sdf = new SimpleDateFormat("HH:mm:ss:SSS");
+        mediaPlayer.setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                totalLabel.setText("/"+timeString(mediaVideo.getDuration().toMillis()));
+            }
+        });
         // Images
         imgPlay = new Image(new File("src/main/resources/ensa/project_vt/UI/play.png").toURI().toString());
         imgPause = new Image(new File("src/main/resources/ensa/project_vt/UI/pause.png").toURI().toString());
@@ -111,10 +123,9 @@ public class HelloController implements Initializable {
         captionIndex = -1;
         actualCaption = new Caption(-1);
         nextCaption = sp.getCaptions().get(0);
+        System.out.println("nextCaption = " + nextCaption);
         captionInit = new Caption(-1);
 
-        System.out.println("Search for time : 5400");
-        System.out.println(sp.search(9800,0,sp.getCaptions().size()));
 
         // Initialize animations
         translateEditBox = new TranslateTransition(Duration.millis(200),editBox);
@@ -127,6 +138,7 @@ public class HelloController implements Initializable {
         fadeOut.setFromValue(1);fadeOut.setToValue(0);
         editHBox.setClip(new Rectangle(320,700));
         editHBox.setTranslateX(250);
+
         videoPlayer.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -139,7 +151,6 @@ public class HelloController implements Initializable {
                 fadeOut.play();
             }
         });
-
 
         // volume
         Bindings.bindBidirectional(mediaPlayer.volumeProperty(),volumeSlider.valueProperty());
@@ -172,49 +183,29 @@ public class HelloController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
                 double currentTime = mediaPlayer.getCurrentTime().toMillis();
+                timeProgress.setProgress(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
-                    System.out.println("newValue = " + newValue.doubleValue());
-
-                    HashMap<Integer,Caption> result = sp.search(newValue.doubleValue(),0,sp.getCaptions().size());
-                    System.out.println("result = " + result);
-                    if(result==null)
-                    {
-                        closedCaptions.setText("");
-                    }
-                    else
-                    {
-                        if(result.containsKey(0))
-                        {
-
-                            closedCaptions.setText("");
-                            nextCaption=result.get(0);
-                            captionIndex = nextCaption.getId()-1;
-                            if(captionIndex==0) actualCaption = captionInit;
-                            else actualCaption = sp.getCaptions().get(captionIndex);
-                        }
-                        else {
-                            closedCaptions.setText(result.get(1).getText());
-                            actualCaption = result.get(1);
-                            captionIndex=actualCaption.getId();
-                            nextCaption = sp.getCaptions().get(captionIndex+1);
-                        }
-
-                    }
+                    findCaption();
                     loadCaption();
-                    System.out.println("event seek");
-
-
                 }
+                timeLabel.setText(timeString(timeSlider.getValue()));
 
 
+            }
+        });
+        captionEditText.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                System.out.println("event change");
             }
         });
 
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
             public void changed(ObservableValue<? extends Duration> observableValue, Duration oldTime, Duration newValue) {
+
                 if(!timeSlider.isValueChanging())
                 {
                     timeSlider.setValue(mediaPlayer.getCurrentTime().toMillis());
@@ -235,6 +226,8 @@ public class HelloController implements Initializable {
                 }
             }
         });
+
+
 
 
 
@@ -283,9 +276,8 @@ public class HelloController implements Initializable {
         loadCaption();
     }
     public void loadCaption() {
-        if(actualCaption!= null && actualCaption.getId()!=0)
+        if(actualCaption!= null && actualCaption.getId()!=-1 && nextCaption.getId()!=actualCaption.getId())
         {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss:SSS");
             captionEditText.setText(actualCaption.getText());
             String start = sdf.format(new Date((long)actualCaption.getStart()));
             String end = sdf.format(new Date((long)actualCaption.getEnd()));
@@ -324,6 +316,7 @@ public class HelloController implements Initializable {
         }
     }
 
+
     public ImageView makeIcon(ImageView iv,Image img)
     {
         iv = new ImageView(img);
@@ -331,6 +324,53 @@ public class HelloController implements Initializable {
         iv.setFitWidth(20);
         return iv;
     }
+    public void findCaption()
+    {
+        HashMap<Integer,Caption> result = sp.search(mediaPlayer.getCurrentTime().toMillis(),0,sp.getCaptions().size());
+        if(result==null)
+        {
+            closedCaptions.setText("");
+        }
+        else
+        {
+            if(result.containsKey(0))
+            {
 
+                closedCaptions.setText("");
+                nextCaption=result.get(0);
+                captionIndex = nextCaption.getId()-1;
+                if(captionIndex==0) actualCaption = captionInit;
+                else actualCaption = sp.getCaptions().get(captionIndex);
+            }
+            else {
+                closedCaptions.setText(result.get(1).getText());
+                actualCaption = result.get(1);
+                captionIndex=actualCaption.getId();
+                nextCaption = sp.getCaptions().get(captionIndex+1);
+            }
+
+        }
+    }
+
+    public void next()
+    {
+        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()+5000));
+        findCaption();
+        loadCaption();
+    }
+    public void prev()
+    {
+        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()-5000));
+        findCaption();
+        loadCaption();
+    }
+    public String timeString(double time)
+    {
+        String seconds = String.format("%02d",(int) (time/1000) %60);
+        String minutes = String.format("%02d",(int) ((time/(1000*60)) %60)) ;
+        String hours = String.format("%02d",(int) ((time/(1000*60*60)) %24)) ;
+        return ((hours.equals("00"))?"":hours+":")+minutes+":"+seconds;
+
+    }
 
 }

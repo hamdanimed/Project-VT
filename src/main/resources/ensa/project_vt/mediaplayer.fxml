@@ -4,6 +4,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.Blend?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #1E1E1E;" stylesheets="@stylesheet/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.HelloController">
+<StackPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #1E1E1E;" stylesheets="@stylesheet/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.VideoPlayerController">
    <children>
       <AnchorPane prefHeight="713.0" prefWidth="1641.0" style="-fx-background-color: #1F1F1F;" StackPane.alignment="CENTER_RIGHT">
          <children>
@@ -78,19 +79,24 @@
             <MediaView fx:id="mediaView" fitHeight="480.0" fitWidth="854.0" />
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="521.0" prefWidth="854.0" style="-fx-opacity: 70%;">
                <children>
-                  <VBox fx:id="controlBar" layoutY="470.0" prefHeight="51.0" prefWidth="854.0">
+                  <VBox fx:id="controlBar" layoutY="430.0" prefHeight="51.0" prefWidth="854.0">
                      <children>
-                        <Slider fx:id="timeSlider" max="1" opacity="0.98" prefHeight="5.0" prefWidth="640.0" style="-fx-background-color: black;" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <effect>
-                              <Blend />
-                           </effect>
-                        </Slider>
+                        <StackPane style="-fx-background-color: black;">
+                           <children>
+                              <ProgressBar fx:id="timeProgress" prefHeight="7.0" prefWidth="846.0" progress="0.0" style="-fx-background-insets: 0; -fx-background-radius: 0;" styleClass="timeProgressBar" />
+                              <Slider fx:id="timeSlider" max="1" prefHeight="5.0" prefWidth="640.0" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </Slider>
+                           </children>
+                        </StackPane>
                         <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="640.0" style="-fx-background-color: black; -fx-min-height: 29px; -fx-min-width: 20px;" styleClass="control-bar" stylesheets="@stylesheet/style.css">
                            <children>
                                <Button fx:id="playBtn" onAction="#playVideo" prefHeight="18.0" prefWidth="29.0" style="-fx-background-color: black;">
@@ -121,12 +127,31 @@
                                     </Slider>
                                  </children>
                               </HBox>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="614.0">
+                                 <children>
+                                    <Label fx:id="timeLabel" text="length" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="totalLabel" layoutX="518.0" layoutY="19.0" text="/total" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="30.0" text="Button">
+                                       <HBox.margin>
+                                          <Insets left="40.0" right="15.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
                      </children>
                   </VBox>
                   <Button fx:id="lockBtn" layoutX="11.0" layoutY="12.0" mnemonicParsing="false" onAction="#editMode" prefHeight="27.0" prefWidth="29.0" text="Button" />
-                  <VBox alignment="CENTER" layoutY="350.0" prefHeight="101.0" prefWidth="854.0">
+                  <VBox alignment="CENTER" layoutY="328.0" prefHeight="101.0" prefWidth="854.0">
                      <children>
                         <Label fx:id="closedCaptions" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#loadCaption" style="-fx-background-color: black; -fx-opacity: 65%;" text="" textAlignment="JUSTIFY" textFill="WHITE">
                            <font>
