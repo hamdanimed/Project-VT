@@ -51,10 +51,9 @@ public class ProgressUploadAudioController {
     @FXML
     public void start(ActionEvent event){
         this.dataObject= (DataObject) dialogPane.getScene().getWindow().getUserData();
-        this.youtubeDl=this.dataObject.youtubeDl;
-        this.speechmatics=this.dataObject.speechmatics;
-
-        task=new SpeechmaticsTask(this.youtubeDl,this.speechmatics,this,"sendAudio");
+//        this.youtubeDl=this.dataObject.youtubeDl;
+//        this.speechmatics=this.dataObject.speechmatics;
+        task=new SpeechmaticsTask(this.dataObject,this,"sendAudio");
         sendAudioThread=new Thread(task);
         sendAudioThread.setDaemon(true);
         sendAudioThread.start();
@@ -73,7 +72,7 @@ public class ProgressUploadAudioController {
     }
     @FXML
     public void cancel(ActionEvent event) throws IOException {
-        System.out.println("upload audio , cancel buttton clicked");
+//        System.out.println("upload audio , cancel buttton clicked");
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("You're about to Cancel t");

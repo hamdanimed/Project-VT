@@ -57,11 +57,13 @@ public class GenerateSubsTesting {
 
         DataFile data=new DataFile("C:\\Users\\hp\\PC\\project-vt-files\\");
         System.out.println(data.isVideoDownloaded("l086Ps61o1U","ytb"));
-        data.addVideo("l086Ps61o1U","NSIT","ytb");
+        data.addVideo("l086Ps61o1U","sdlkfjlksjdf","ytb");
+        data.addVideo("l086sds61o1U","NSIT","ytb");
         data.setJobId("l086Ps61o1U","dddddddttt","ytb");
         data.setSubtitled("l086Ps61o1U",true,"ytb");
         System.out.println(data.isSubtitled("l086Ps61o1U","ytb"));
         System.out.println(data.getJobId("l086Ps61o1U","ytb"));
+        data.deleteVideo("l086sds61o1U");
 
 //        JSONObject dataObject=new JSONObject();
 //        JSONObject content=new JSONObject();

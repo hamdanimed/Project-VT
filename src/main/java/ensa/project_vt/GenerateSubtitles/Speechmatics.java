@@ -47,7 +47,7 @@ public class Speechmatics {
                 if(signal){
                     proc.destroy();
                 }
-                System.out.println(line);
+//                System.out.println(line);
                 parseSendAudio(line,uploadAudioController);
                 lastLine[0] =line;
             });

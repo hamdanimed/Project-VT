@@ -137,6 +137,43 @@ public class DataFile {
 
         }
     }
+
+    public void deleteVideo(String id){
+        String data="{}";
+        //READ A FILE
+        try {
+            File myObj = new File(appFolderPath+"data.json");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                data = myReader.nextLine();
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("[DataFile] An error occurred.");
+            e.printStackTrace();
+        }
+
+        JSONObject dataObject=(JSONObject) JSONValue.parse(data);
+        if(!dataObject.containsKey(id)){
+            return ;
+        }
+
+        dataObject.remove(id);
+        System.out.println(dataObject);
+
+        //WRITE TO A FILE
+        try {
+            FileWriter myWriter = new FileWriter(appFolderPath+"data.json");
+            myWriter.write(dataObject.toJSONString());
+            myWriter.close();
+            //System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file.");
+            e.printStackTrace();
+        }
+    }
+
+
     public String getJobId(String id,String type){
         if(type.equals("ytb")){
             String data="{}";

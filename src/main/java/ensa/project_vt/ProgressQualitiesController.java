@@ -52,6 +52,7 @@ public class ProgressQualitiesController {
     private YoutubeDlTask task;
 
     public void setYoutubeDl(YoutubeDl youtubeDl) {
+
         this.youtubeDl = youtubeDl;
     }
     //    public ProgressQualitiesController(YoutubeDl d) {
@@ -78,8 +79,12 @@ public class ProgressQualitiesController {
 
     @FXML
     public void start(ActionEvent event){
-        System.out.println(youtubeDl.getYoutubelink());
+        //get data and initialize objects
+        this.dataObject=(DataObject) dialogPane.getScene().getWindow().getUserData();
+        this.youtubeDl=dataObject.youtubeDl;
+        //to only call the api once
         startBtn.setDisable(true);
+        //start the task
         this.task=new YoutubeDlTask(this.dataObject,this,"checkQuality");
         checkQualitiesThread=new Thread(task);
         checkQualitiesThread.setDaemon(true);
@@ -90,7 +95,6 @@ public class ProgressQualitiesController {
     public void next(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("progressDownload.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-//        stage.setUserData(this.youtubeDl);
         stage.setUserData(dataObject);
         scene = new Scene(root);
         stage.setScene(scene);
@@ -101,20 +105,25 @@ public class ProgressQualitiesController {
 //        System.out.println("check qualities , cancel buttton clicked");
 //        System.out.println(this.youtubeDl.getYoutubelink());
 
-        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation");
-        alert.setHeaderText("You're about to Cancel t");
-        alert.setContentText("Do really want to exit ?");
-        if(alert.showAndWait().get()== ButtonType.OK){
-            //first method for canceling (somehow works) , doesnt work for download dialog for some reason
-//            if(checkQualitiesThread!=null && checkQualitiesThread.isAlive()){
-//                checkQualitiesThread.interrupt();
-//            }
-            //second method for canceling (just to have a unified method with the download)
-            if(task!=null && task.isRunning()){
-                task.sendCancelSignal();
+        if(task!=null && task.isRunning()){
+            Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("You're about to Cancel t");
+            alert.setContentText("Do really want to exit ?");
+            if(alert.showAndWait().get()== ButtonType.OK){
+                //first method for canceling (somehow works) , doesnt work for download dialog for some reason
+    //            if(checkQualitiesThread!=null && checkQualitiesThread.isAlive()){
+    //                checkQualitiesThread.interrupt();
+    //            }
+                //second method for canceling (just to have a unified method with the download)
+                if(task!=null && task.isRunning()){
+                    task.sendCancelSignal();
 
+                }
+                stage=(Stage) dialogPane.getScene().getWindow();
+                stage.close();
             }
+        }else{
             stage=(Stage) dialogPane.getScene().getWindow();
             stage.close();
         }

@@ -8,14 +8,14 @@ import javafx.concurrent.Task;
 
 public class YoutubeDlTask extends Task<Integer> {
     private String action;
-    private YoutubeDl youtubeDlObject;
+    private YoutubeDl youtubeDl;
     private Object controller;
     private DataFile dataFile;
 
     public YoutubeDlTask(DataObject dataObject, Object controller, String action) {
         super();
         this.action=action;
-        this.youtubeDlObject=dataObject.youtubeDl;
+        this.youtubeDl =dataObject.youtubeDl;
         this.controller=controller;
         this.dataFile=dataObject.dataFile;
     }
@@ -26,7 +26,7 @@ public class YoutubeDlTask extends Task<Integer> {
                 case "checkQuality" -> {
                     System.out.println("Thread checkQuality");
                     ProgressQualitiesController chooseQualitesDialogController=(ProgressQualitiesController) this.controller;
-                    int exitCode=this.youtubeDlObject.checkAvailableQualities(chooseQualitesDialogController);
+                    int exitCode=this.youtubeDl.checkAvailableQualities(chooseQualitesDialogController);
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -44,12 +44,12 @@ public class YoutubeDlTask extends Task<Integer> {
                 case "downloadVideoAndAudio" -> {
                     System.out.println("Thread downloadVideoAndAudio");
                     ProgressDownloadController downloadVideoAndAudioController=(ProgressDownloadController) this.controller;
-                    int exitCode=this.youtubeDlObject.downloadVideoAndAudio(downloadVideoAndAudioController);
+                    int exitCode=this.youtubeDl.downloadVideoAndAudio(downloadVideoAndAudioController);
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             if(exitCode==0){
-                                dataFile.addVideo(youtubeDlObject.videoId,youtubeDlObject.videoPath,"ytb");
+                                dataFile.addVideo(youtubeDl.videoId, youtubeDl.videoTitle,"ytb");
                                 downloadVideoAndAudioController.getNextBtn().setDisable(false);
                             }else{
                                 System.out.println("[YoutubeDlTask] 'downloadVideoAndAudio' Something went wrong , Try Again");
@@ -75,7 +75,7 @@ public class YoutubeDlTask extends Task<Integer> {
     }
 
     public void sendCancelSignal(){
-        this.youtubeDlObject.setSignal(true);
+        this.youtubeDl.setSignal(true);
     }
 
 }

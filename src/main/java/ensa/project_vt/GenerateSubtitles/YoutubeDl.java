@@ -59,6 +59,11 @@ public class YoutubeDl {
                 if(this.signal){
                     proc.destroy();
                 }
+                //when the video is already downloaded
+                if(line.contains("has already been downloaded")){
+                    System.out.println("[YoutubeDl] the video has already been downloaded");
+                    proc.destroy();
+                }
 //                System.out.println(line);
                 this.parseDownloadVideoAndAudio(line,progressController);
             });
@@ -71,6 +76,7 @@ public class YoutubeDl {
             if(exitCode==1){
                 if(this.signal){
                     System.out.println("[YoutubeDl] 'downloadVideoAndAudio' was canceled");
+                    this.deleteDownload(new File(videoAndAudioRepository+this.videoId));
                     this.signal=false;
                 }else{
                     System.out.println("[YoutubeDl] An error accured with 'downloadVideoAndAudio'");
@@ -221,6 +227,16 @@ public class YoutubeDl {
             }
         }
 
+    }
+
+    private void deleteDownload(File folder){
+        for(File subfile:folder.listFiles()){
+            if(subfile.isDirectory()){
+                deleteDownload(subfile);
+            }
+            subfile.delete();
+        }
+        folder.delete();
     }
 
     public String getYoutubelink() {

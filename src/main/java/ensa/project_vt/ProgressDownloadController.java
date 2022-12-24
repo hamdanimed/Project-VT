@@ -81,16 +81,21 @@ public class ProgressDownloadController {
     }
     @FXML
     public void cancel(ActionEvent event) throws IOException {
-        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(videoIdLabel.getText());
-        alert.setHeaderText("You're about to Cancel t");
-        alert.setContentText("Do really want to exit ?");
-        if(alert.showAndWait().get()== ButtonType.OK){
-                if(task!=null && task.isRunning()){
-                    task.sendCancelSignal();
-                }
-                stage=(Stage) dialogPane.getScene().getWindow();
-                stage.close();
+        if(task.isRunning()){
+            Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle(videoIdLabel.getText());
+            alert.setHeaderText("You're about to Cancel t");
+            alert.setContentText("Do really want to exit ?");
+            if(alert.showAndWait().get()== ButtonType.OK){
+                    if(task!=null && task.isRunning()){
+                        task.sendCancelSignal();
+                    }
+                    stage=(Stage) dialogPane.getScene().getWindow();
+                    stage.close();
+            }
+        }else{
+            stage=(Stage) dialogPane.getScene().getWindow();
+            stage.close();
         }
     }
 

@@ -1,19 +1,14 @@
 package ensa.project_vt;
 
-import ensa.project_vt.GenerateSubtitles.DataFile;
-import ensa.project_vt.GenerateSubtitles.Speechmatics;
-import ensa.project_vt.GenerateSubtitles.YoutubeDl;
-import ensa.project_vt.GenerateSubtitles.YoutubeDlTask;
+import ensa.project_vt.GenerateSubtitles.*;
 import ensa.project_vt.YoutubeSearch.YoutubeApiThread;
 import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 
 import ensa.project_vt.localVideo.localVideo;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -26,13 +21,12 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
-import javafx.stage.WindowEvent;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 import java.util.regex.*;
+import org.apache.commons.io.FilenameUtils;
 
 public class SearchViewController {
     private Stage stage;
@@ -84,6 +78,7 @@ public class SearchViewController {
     private String appFolder;
     private YoutubeDl youtubeDl;
     private Speechmatics speechmatics;
+    private FFmpeg ffmpeg;
     private DataFile dataFile;
 
     public void initializeYoutubeDlandSpeechmaticsObjects(){
@@ -109,6 +104,7 @@ public class SearchViewController {
         this.appFolder="C:\\Users\\hp\\PC\\project-vt-files\\";
         this.youtubeDl=new YoutubeDl(appFolder,youtubeDlConfigFilePath,youtubeDlExePath) ;
         this.speechmatics=new Speechmatics(appFolder,speechmaticsConfigFilePath) ;
+        this.ffmpeg=new FFmpeg(appFolder);
         this.dataFile=new DataFile(appFolder);
         this.youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
     }
@@ -119,7 +115,7 @@ public class SearchViewController {
             listView.setVisible(true);
             textInfo.setText("Results");
         }else{
-            HandleDialogs();
+            HandleDialogsForVideoFromSearch();
         }
     }
 
@@ -148,72 +144,62 @@ public class SearchViewController {
             throw new RuntimeException(e);
         }
     }
-    public void launchProgressUpload(){
-
+    Dialog<Void> dialog = new Dialog<>();
+    public void launchProgressUpload(String audioPath,String videoPath){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("progressUploadAudio.fxml"));
             DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
+
             YoutubeDl uploadYoutubeDl=this.youtubeDl;
-            uploadYoutubeDl.audioPath="";
-            DataObject dataObject=new DataObject(uploadYoutubeDl,this.speechmatics,this.dataFile);
+            uploadYoutubeDl.audioPath=audioPath;
+            uploadYoutubeDl.videoPath=videoPath;
 
-            Dialog<Void> dialog = new Dialog<>();
-
-            dialog.getDialogPane().getScene().getWindow().setUserData(dataObject);
+            dialog = new Dialog<>();
+            System.out.println("whyasdlkfj;laksjdf;lkajsfd;lkasjdf;lkjasd;lkfjas;lkd");
             dialog.setDialogPane(dialogPane);
+            dialog.initStyle(StageStyle.UNDECORATED);
 
-            dialog.show();
+            DataObject dataObject=new DataObject(uploadYoutubeDl,this.speechmatics,this.dataFile);
+            dataObject.videoType="local";
+            dialog.getDialogPane().getScene().getWindow().setUserData(dataObject);
+            dialog.showAndWait();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void HandleDialogs(){
+    public void HandleDialogsForVideoFromSearch(){
         try {
-            // load the fxml for the dialog to track progress
-
-            if(dataFile.isVideoDownloaded(this.youtubeDl.videoId,"ytb") != "null"){
-                Alert alert=new Alert(Alert.AlertType.ERROR);
-                alert.showAndWait();
-                return ;
-            }
+            //check if the video is already downloaded ; in the database (data.json)
+//            if(dataFile.isVideoDownloaded(this.youtubeDl.videoId,"ytb") != "null"){
+//                Alert alert=new Alert(Alert.AlertType.ERROR);
+//                alert.showAndWait();
+//                return ;
+//            }
 
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
             DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
-            ProgressQualitiesController qualitiesController=fxmlLoader.getController();
-            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
-            qualitiesController.setYoutubeDl(this.youtubeDl);
-//            ProgressQualitiesController p=fxmlLoader.getController();
 
-            Dialog<Void> dialog = new Dialog<>();
+//            ProgressQualitiesController qualitiesController=fxmlLoader.getController();
+//            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
+//            qualitiesController.setYoutubeDl(this.youtubeDl);
+
+            dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
-//            dialog.getDialogPane().getScene().getWindow().setUserData("userData");
+            dialog.initStyle(StageStyle.UNDECORATED);
+
+            dialog.getDialogPane().getScene().getWindow().setUserData(new DataObject(this.youtubeDl,this.speechmatics,this.dataFile));
+
             dialog.show();
-
-//            dialog.setOnCloseRequest(e->{
-//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//                alert.setTitle("Confirmation");
-//                alert.setHeaderText("You're about to Cancel t");
-//                alert.setContentText("Do really want to exit ?");
-//                Optional<ButtonType> btn = alert.showAndWait();
-//                if (btn.get() == ButtonType.OK) {
-//                    System.out.println(";alksdfja;lksdjfl;kasjdf");
-//                    e.consume();
-//                }
-//            });
-
-
-
-
         }
         catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
     }
+
     public void displayInfo(YoutubeVideo video){
         Image image = new Image(video.getThumbnailUrl());
         imageView.setImage(image);
@@ -264,10 +250,9 @@ public class SearchViewController {
         });
     }
 
-
-
     public void setStage(Stage stage) {
         this.stage = stage;
+        this.stage.resizableProperty().setValue(false);
         browse.setOnMouseClicked(event -> {
             FileChooser fileChooser = new FileChooser();
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video Files", "*.mp4");
@@ -277,12 +262,17 @@ public class SearchViewController {
             if(file!=null) {
 
 
+                // create a new video object with the information from the file
                 createVideoInstance(file);
 
-                // create a new video object with the information from the file
-                String title = file.getName();
-                System.out.println(file);
+                //converting to audio
+                String fileNameWithOutExt = FilenameUtils.removeExtension(file.getName());
+                this.ffmpeg.setVideo(fileNameWithOutExt,file.getAbsolutePath());
 
+                FFmpegTask convertingTask=new FFmpegTask(ffmpeg,this.dataFile,this);
+                Thread convertingThread=new Thread(convertingTask);
+                convertingThread.setDaemon(true);
+                convertingThread.start();
             }else {
                 System.out.println("No file was selected.");
             }
@@ -385,160 +375,9 @@ public class SearchViewController {
     @FXML
     public void transcript() throws IOException {
         System.out.println("I transcript the video : " + selectedVideo.getVideoTitle()+" the link is : "+selectedVideo.getUrl());
-        //test loading a fxml on top of another for the popup
-        stepsPane=FXMLLoader.load(getClass().getResource("steps.fxml"));
         youtubeDl.setYoutubelink(selectedVideo.getUrl());
-//        System.out.println(youtubeDl.checkAvailableQualities());
-//        youtubeDl.downloadVideoAndAudio();
-//        YoutubeDlTask task=new YoutubeDlTask("");
-//        new Thread(task).start();
-//        Thread downloadVideoAndAudio = new Thread(new YoutubeDlTask(this.dataObject,new Object(),"downloadVideoAndAudio"));
-//        Thread checkQualityThread = new Thread(new YoutubeDlTask(this.dataObject,new Object(),"checkQuality"));
-//        checkQualityThread.start();
-        HandleDialogs();
-        //this doesnt invoke the downloadVideoAndAudioThread
-//        if(!checkQualityThread.isAlive()){
-//            downloadVideoAndAudio.start();
-//        }
+        youtubeDl.videoTitle=selectedVideo.getVideoTitle();
+        HandleDialogsForVideoFromSearch();
     }
 
 }
-
-//import javafx.application.Application;
-//        import javafx.concurrent.Task;
-//        import javafx.event.ActionEvent;
-//        import javafx.geometry.Pos;
-//        import javafx.scene.Scene;
-//        import javafx.scene.control.Alert;
-//        import javafx.scene.control.Button;
-//        import javafx.scene.control.ButtonBar.ButtonData;
-//        import javafx.scene.control.ButtonType;
-//        import javafx.scene.control.Dialog;
-//        import javafx.scene.control.ProgressIndicator;
-//        import javafx.scene.layout.GridPane;
-//        import javafx.scene.layout.Region;
-//        import javafx.scene.layout.StackPane;
-//        import javafx.scene.layout.VBox;
-//        import javafx.scene.text.Text;
-//        import javafx.stage.Stage;
-//        import javafx.stage.Window;
-//
-//public class DialogTest extends Application {
-//
-//    Region veil;
-//    ProgressIndicator indicator;
-//
-//    IntField startingNumber = new IntField(0, 999999, 0);
-//    IntField endingNumber = new IntField(startingNumber.getValue(), 999999, startingNumber.getValue() + 1);
-//    ButtonType printButtonType = new ButtonType("Print", ButtonData.OK_DONE);
-//    Stage stage;
-//
-//    @Override
-//    public void start(Stage primaryStage) {
-//        stage = primaryStage;
-//        Button button = new Button("Print Checks");
-//
-//        VBox box = new VBox(10, button);
-//        box.setAlignment(Pos.CENTER);
-//
-//        veil = new Region();
-//        veil.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3);");
-//        veil.setVisible(false);
-//
-//        indicator = new ProgressIndicator();
-//        indicator.setMaxHeight(60);
-//        indicator.setMinWidth(60);
-//        indicator.setVisible(false);
-//
-//        StackPane root = new StackPane(box, veil, indicator);
-//
-//        root.setAlignment(Pos.CENTER);
-//
-//        Scene scene = new Scene(root, 400, 400);
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-//
-//        button.setOnAction((event) -> {
-//            Dialog<ButtonType> dialog
-//                    = getCheckPrintDialog(primaryStage, "Enter starting check number");
-//            dialog.showAndWait()
-//                    .filter(result -> result == printButtonType)
-//                    .ifPresent(result -> {
-//                        // this is for this example only, normaly you already have this value
-//                        endingNumber.setValue(startingNumber.getValue() + 1);
-//                        printChecks(startingNumber.getValue(), endingNumber.getValue());
-//                    });
-//        });
-//    }
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
-//
-//    public <R extends ButtonType> Dialog getCheckPrintDialog(Window owner, String title) {
-//        Dialog<R> dialog = new Dialog<>();
-//        dialog.initOwner(owner);
-//        dialog.setTitle(title);
-//        dialog.getDialogPane().getButtonTypes().addAll(printButtonType, ButtonType.CANCEL);
-//
-//        Button btOk = (Button) dialog.getDialogPane().lookupButton(printButtonType);
-//        btOk.addEventFilter(ActionEvent.ACTION, event -> {
-//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Print Checks? Are you sure?", ButtonType.YES, ButtonType.NO);
-//            alert.showAndWait()
-//                    .filter(result -> result == ButtonType.NO)
-//                    .ifPresent(result -> event.consume());
-//        });
-//
-//        GridPane grid = new GridPane();
-//        grid.setHgap(10);
-//        grid.setVgap(10);
-//
-//        Text from = new Text("Starting Number:");
-//        grid.add(from, 0, 0);
-//
-//        grid.add(startingNumber, 1, 0);
-//
-//        dialog.getDialogPane().setContent(grid);
-//        return dialog;
-//    }
-//
-//    private void printChecks(int from, int to) {
-//
-//        Task<Void> task = new Task<Void>() {
-//            @Override
-//            protected Void call() throws Exception {
-//                Thread.sleep(5000);
-//                return null;
-//            }
-//        };
-//
-//        task.setOnSucceeded((event) -> {
-//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Has the last check, the number: " + endingNumber.getValue() + "?", ButtonType.YES, ButtonType.NO);
-//            alert.initOwner(stage);
-//            Button btnNo = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
-//            btnNo.addEventFilter(ActionEvent.ACTION, e -> {
-//                Dialog<ButtonType> newEndNum = new Dialog<>();
-//                newEndNum.setTitle("Enter the ending check number");
-//                newEndNum.initOwner(stage);
-//                newEndNum.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-//                GridPane grid = new GridPane();
-//                grid.setHgap(10);
-//                grid.setVgap(10);
-//
-//                Text toUser = new Text("Ending Number:");
-//                grid.add(toUser, 0, 0);
-//
-//                grid.add(endingNumber, 1, 0);
-//
-//                newEndNum.getDialogPane().setContent(grid);
-//                newEndNum.showAndWait().filter(result -> result == ButtonType.CANCEL)
-//                        .ifPresent(result -> e.consume());
-//            });
-//            alert.showAndWait();
-//        });
-//        veil.visibleProperty().bind(task.runningProperty());
-//        indicator.visibleProperty().bind(task.runningProperty());
-//        new Thread(task).start();
-//    }
-//
-//}
