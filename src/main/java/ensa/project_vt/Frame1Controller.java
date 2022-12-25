@@ -4,11 +4,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +36,16 @@ public class Frame1Controller implements Initializable {
     @FXML
     private VBox videoContainer;
 
-    @FXML
-    void pageNext(ActionEvent event) {
-        System.out.println("Action is done");
+    private Stage stage;
+    private Scene scene;
 
+    @FXML
+    void pageNext(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("SousFrame1-view.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        stage.show();
     }
 
 
@@ -67,12 +77,12 @@ public class Frame1Controller implements Initializable {
                 VideoInf videoInf = new VideoInf();
                 Path file = Paths.get(listOfFiles[i].getAbsolutePath());
                 BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
-                System.out.println("File name: " + listOfFiles[i].getName());
-                System.out.println("Date de dernier modification: "+ attr.lastModifiedTime());
-                System.out.println("File size: "+attr.size());
+                //System.out.println("File name: " + listOfFiles[i].getName());
+                //System.out.println("Date de dernier modification: "+ attr.lastModifiedTime());
+                //System.out.println("File size: "+attr.size());
                 videoInf.setTitle(listOfFiles[i].getName());
                 videoInf.setDate(String.valueOf(attr.lastModifiedTime()).substring(0,10));
-                videoInf.setSize(String.valueOf(attr.size()/1024)+"MB");
+                //videoInf.setSize(String.valueOf(attr.size()/1024)+"MB");
                 ls.add(videoInf);
             }
         }catch (IOException e){

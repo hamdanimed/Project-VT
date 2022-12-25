@@ -18,12 +18,12 @@
          </font>
       </Label>
       <ChoiceBox fx:id="myChoiceBox" layoutX="995.0" layoutY="99.0" opacity="0.4" prefHeight="26.0" prefWidth="130.0" />
-      <ScrollPane layoutX="41.0" layoutY="149.0" prefHeight="550.0" prefWidth="1144.0" style="-fx-background-color: #252525;">
+      <ScrollPane layoutX="41.0" layoutY="159.0" prefHeight="540.0" prefWidth="1144.0" style="-fx-background-color: #252525;">
          <content>
             <VBox fx:id="videoContainer" prefHeight="550.0" prefWidth="1128.0" spacing="10.0" style="-fx-background-color: #252525;" />
          </content>
       </ScrollPane>
-      <Button fx:id="nextIf" layoutX="285.0" layoutY="80.0" mnemonicParsing="false" onAction="#pageNext" prefHeight="64.0" prefWidth="130.0" style="-fx-background-color: #252525;" text="Next" textFill="WHITE">
+      <Button fx:id="nextIf" layoutX="285.0" layoutY="80.0" mnemonicParsing="false" onAction="#pageNext" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: #252525;" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
