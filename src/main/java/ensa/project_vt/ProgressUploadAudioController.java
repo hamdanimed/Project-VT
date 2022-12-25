@@ -51,8 +51,6 @@ public class ProgressUploadAudioController {
     @FXML
     public void start(ActionEvent event){
         this.dataObject= (DataObject) dialogPane.getScene().getWindow().getUserData();
-//        this.youtubeDl=this.dataObject.youtubeDl;
-//        this.speechmatics=this.dataObject.speechmatics;
         task=new SpeechmaticsTask(this.dataObject,this,"sendAudio");
         sendAudioThread=new Thread(task);
         sendAudioThread.setDaemon(true);

@@ -26,6 +26,7 @@ public class FFmpegTask extends Task<Integer> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+
                     searchViewController.launchProgressUpload(ffmpeg.audioPath,ffmpeg.videoPath);
                 }
             });
