@@ -74,17 +74,17 @@
             </HBox>
          </children>
       </AnchorPane>
-    <AnchorPane fx:id="videoPlayer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="521.0" prefWidth="927.0" style="-fx-max-width: 640px;">
+    <AnchorPane fx:id="videoPlayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="854.0" style="-fx-max-width: 640px;">
          <children>
-            <MediaView fx:id="mediaView" fitHeight="480.0" fitWidth="854.0" />
+            <MediaView fx:id="mediaView" fitHeight="481.0" fitWidth="854.0" />
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="521.0" prefWidth="854.0" style="-fx-opacity: 70%;">
                <children>
-                  <VBox fx:id="controlBar" layoutY="430.0" prefHeight="51.0" prefWidth="854.0">
+                  <VBox fx:id="controlBar" alignment="TOP_CENTER" layoutY="427.0" prefHeight="54.0" prefWidth="854.0">
                      <children>
-                        <StackPane style="-fx-background-color: black;">
+                        <StackPane maxHeight="-Infinity" prefHeight="20.0" style="-fx-background-color: black;">
                            <children>
                               <ProgressBar fx:id="timeProgress" prefHeight="7.0" prefWidth="846.0" progress="0.0" style="-fx-background-insets: 0; -fx-background-radius: 0;" styleClass="timeProgressBar" />
-                              <Slider fx:id="timeSlider" max="1" prefHeight="5.0" prefWidth="640.0" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
+                              <Slider fx:id="timeSlider" max="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="5.0" prefWidth="851.0" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -97,7 +97,7 @@
                               </Slider>
                            </children>
                         </StackPane>
-                        <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="640.0" style="-fx-background-color: black; -fx-min-height: 29px; -fx-min-width: 20px;" styleClass="control-bar" stylesheets="@stylesheet/style.css">
+                        <HBox alignment="CENTER" prefHeight="45.0" prefWidth="640.0" style="-fx-background-color: black; -fx-min-height: 29px; -fx-min-width: 20px;" styleClass="control-bar" stylesheets="@stylesheet/style.css">
                            <children>
                                <Button fx:id="playBtn" onAction="#playVideo" prefHeight="18.0" prefWidth="29.0" style="-fx-background-color: black;">
                                  <HBox.margin>
@@ -139,7 +139,7 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="30.0" text="Button">
+                                    <Button fx:id="fullScreenBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="30.0" text="Button">
                                        <HBox.margin>
                                           <Insets left="40.0" right="15.0" />
                                        </HBox.margin>
@@ -151,7 +151,7 @@
                      </children>
                   </VBox>
                   <Button fx:id="lockBtn" layoutX="11.0" layoutY="12.0" mnemonicParsing="false" onAction="#editMode" prefHeight="27.0" prefWidth="29.0" text="Button" />
-                  <VBox alignment="CENTER" layoutY="328.0" prefHeight="101.0" prefWidth="854.0">
+                  <VBox fx:id="captionBox" alignment="CENTER" layoutY="328.0" prefHeight="101.0" prefWidth="854.0">
                      <children>
                         <Label fx:id="closedCaptions" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#loadCaption" style="-fx-background-color: black; -fx-opacity: 65%;" text="" textAlignment="JUSTIFY" textFill="WHITE">
                            <font>

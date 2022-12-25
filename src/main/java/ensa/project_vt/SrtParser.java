@@ -78,6 +78,15 @@ public class SrtParser {
         }
 
     }
+    public void format()
+    {
+        for (int i = 0; i < captions.size(); i++) {
+            System.out.println(captions.get(i).getId()+1);
+            System.out.println(timeString(captions.get(i).getStart())+" --> "+timeString(captions.get(i).getEnd()));
+            System.out.println(captions.get(i).getText());
+            System.out.println();
+        }
+    }
     public Caption makeCaption(ArrayList<String> arr,SimpleDateFormat sdf) throws ParseException
     {
         Caption c = new Caption(0);
@@ -87,9 +96,10 @@ public class SrtParser {
         c.setStart(sdf.parse(startStamp).getTime());
         c.setEnd(sdf.parse(endStamp).getTime());
         String text="";
-        for (int i = 2; i < arr.size(); i++) {
+        for (int i = 2; i < arr.size()-1; i++) {
             text+=arr.get(i)+"\n";
         }
+        text+=arr.get(arr.size()-1);
         c.setText(text);
         return c;
     }
@@ -139,6 +149,15 @@ public class SrtParser {
         if(caption==null) result.put(0,nextCaption);
         else result.put(1,caption);
         return result;
+    }
+    public String timeString(double time)
+    {
+        String seconds = String.format("%02d",(int) (time/1000) %60);
+        String minutes = String.format("%02d",(int) ((time/(1000*60)) %60)) ;
+        String hours = String.format("%02d",(int) ((time/(1000*60*60)) %24)) ;
+        String millis = String.format("%03d",(int)time%1000);
+        return hours+":"+minutes+":"+seconds+","+millis;
+
     }
 
 }

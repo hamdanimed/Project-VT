@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,6 +27,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -51,7 +53,7 @@ public class VideoPlayerController implements Initializable {
     @FXML
     private Slider timeSlider;
     @FXML
-    private Button muteBtn;
+    private Button muteBtn,fullScreenBtn;
     @FXML
     private Label closedCaptions;
     @FXML
@@ -66,12 +68,15 @@ public class VideoPlayerController implements Initializable {
     private ProgressBar timeProgress;
     @FXML
     private Label timeLabel,totalLabel;
+    @FXML
     private TextArea CaptionEditText;
+    @FXML
+    private VBox captionBox;
 
 
     private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay;
     private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV;
-    private boolean isPlaying,isMute,isOver,isEditMode;
+    private boolean isPlaying,isMute,isOver,isEditMode,isFullScreen;
     private double currentVolume;
     private SrtParser sp;
 
@@ -116,6 +121,7 @@ public class VideoPlayerController implements Initializable {
         isMute=false;
         isOver=false;
         isEditMode=false;
+        isFullScreen=false;
         currentVolume=1;
         muteBtn.setGraphic(unmuteIV);
 
@@ -139,17 +145,14 @@ public class VideoPlayerController implements Initializable {
         editHBox.setClip(new Rectangle(320,700));
         editHBox.setTranslateX(250);
 
+        // Control Bar animations
         videoPlayer.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent mouseEvent) {
-                fadeIn.play();
-            }
+            public void handle(MouseEvent mouseEvent) {fadeIn.play();}
         });
         videoPlayer.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent mouseEvent){
-                fadeOut.play();
-            }
+            public void handle(MouseEvent mouseEvent){fadeOut.play();}
         });
 
         // volume
@@ -195,12 +198,14 @@ public class VideoPlayerController implements Initializable {
 
             }
         });
-        captionEditText.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                System.out.println("event change");
-            }
-        });
+
+        //TODO
+//        captionEditText.textProperty().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+//                System.out.println(t1);
+//            }
+//        });
 
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
@@ -224,6 +229,19 @@ public class VideoPlayerController implements Initializable {
                     }
 
                 }
+            }
+        });
+        fullScreenBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(isEditMode) editMode();
+                if(!isFullScreen) {
+                    enterFullScreen(mouseEvent);
+                }
+                else{
+                    exitFullScreen(mouseEvent);
+                }
+                isFullScreen = !isFullScreen;
             }
         });
 
@@ -271,6 +289,8 @@ public class VideoPlayerController implements Initializable {
     void saveCaptions(ActionEvent event) {
         System.out.println(captionEditText.getText());
     }
+
+
     @FXML
     void loadCaption(MouseEvent event) {
         loadCaption();
@@ -286,9 +306,24 @@ public class VideoPlayerController implements Initializable {
         }
 
     }
+
+
     @FXML
     public void editMode()
     {
+        if(isFullScreen)
+        {
+            Stage stage = (Stage) fullScreenBtn.getScene().getWindow();
+            stage.setFullScreen(false);
+            videoPlayer.setPrefHeight(481);
+            videoPlayer.setPrefWidth(854);
+            mediaView.setFitHeight(481);
+            mediaView.setFitWidth(854);
+            captionBox.setLayoutY(481-150);
+            captionBox.setPrefWidth(854);
+            controlBar.setLayoutY(481-51);
+            controlBar.setPrefWidth(854);
+        }
         if(!scaleVideo.getStatus().equals(Animation.Status.RUNNING))
         {
             if(!isEditMode)
@@ -312,8 +347,38 @@ public class VideoPlayerController implements Initializable {
                 translateEditBox.play();
             }
             isEditMode = !isEditMode;
+            sp.format();
 
         }
+    }
+    public void enterFullScreen(MouseEvent mouseEvent)
+    {
+        if (isEditMode) editMode();
+        Button btn = (Button) mouseEvent.getSource();
+        Stage stage = (Stage) btn.getScene().getWindow();
+        stage.setFullScreen(true);
+        videoPlayer.setPrefHeight(stage.getScene().getHeight());
+        videoPlayer.setPrefWidth(stage.getScene().getWidth());
+        mediaView.setFitHeight(stage.getScene().getHeight());
+        mediaView.setFitWidth(stage.getScene().getWidth());
+        captionBox.setLayoutY(stage.getScene().getHeight()-150);
+        captionBox.setPrefWidth(stage.getScene().getWidth());
+        controlBar.setLayoutY(stage.getScene().getHeight()-51);
+        controlBar.setPrefWidth(stage.getScene().getWidth());
+    }
+    public void exitFullScreen(MouseEvent mouseEvent)
+    {
+        Button btn = (Button) mouseEvent.getSource();
+        Stage stage = (Stage) btn.getScene().getWindow();
+        stage.setFullScreen(false);
+        videoPlayer.setPrefHeight(481);
+        videoPlayer.setPrefWidth(854);
+        mediaView.setFitHeight(481);
+        mediaView.setFitWidth(854);
+        captionBox.setLayoutY(481-150);
+        captionBox.setPrefWidth(854);
+        controlBar.setLayoutY(481-51);
+        controlBar.setPrefWidth(854);
     }
 
 
