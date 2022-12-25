@@ -199,13 +199,6 @@ public class VideoPlayerController implements Initializable {
             }
         });
 
-        //TODO
-//        captionEditText.textProperty().addListener(new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-//                System.out.println(t1);
-//            }
-//        });
 
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
@@ -232,8 +225,13 @@ public class VideoPlayerController implements Initializable {
             }
         });
         fullScreenBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
             @Override
             public void handle(MouseEvent mouseEvent) {
+                System.out.println("============ WHEN FS clicked");
+                System.out.println("isEditMode = " + isEditMode);
+                System.out.println("isFullScreen = " + isFullScreen);
+
                 if(isEditMode) editMode();
                 if(!isFullScreen) {
                     enterFullScreen(mouseEvent);
@@ -246,6 +244,13 @@ public class VideoPlayerController implements Initializable {
         });
 
 
+        //TODO
+//        captionEditText.textProperty().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+//                System.out.println(t1);
+//            }
+//        });
 
 
 
@@ -311,6 +316,9 @@ public class VideoPlayerController implements Initializable {
     @FXML
     public void editMode()
     {
+        System.out.println("=========================== WHEN EM clicked");
+        System.out.println("isEditMode = " + isEditMode);
+        System.out.println("isFullScreen = " + isFullScreen);
         if(isFullScreen)
         {
             Stage stage = (Stage) fullScreenBtn.getScene().getWindow();
@@ -323,6 +331,7 @@ public class VideoPlayerController implements Initializable {
             captionBox.setPrefWidth(854);
             controlBar.setLayoutY(481-51);
             controlBar.setPrefWidth(854);
+            isFullScreen = false;
         }
         if(!scaleVideo.getStatus().equals(Animation.Status.RUNNING))
         {
@@ -347,7 +356,6 @@ public class VideoPlayerController implements Initializable {
                 translateEditBox.play();
             }
             isEditMode = !isEditMode;
-            sp.format();
 
         }
     }

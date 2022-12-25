@@ -32,6 +32,7 @@ public class VideoPlayer extends Application {
 
         stage.setTitle("Media Player");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
