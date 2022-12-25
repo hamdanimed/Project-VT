@@ -144,7 +144,17 @@ public class SearchViewController {
             throw new RuntimeException(e);
         }
     }
-    Dialog<Void> dialog = new Dialog<>();
+
+    public void getSubtitles(ActionEvent e){
+        this.youtubeDl.videoPath="C:\\Users\\hp\\PC\\project-vt-files\\-EbzDqtZEh4\\-EbzDqtZEh4.mp4";
+        this.youtubeDl.videoTitle="-EbzDqtZEh4";
+        DataObject dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
+        dataObject.videoType="ytb";
+        SpeechmaticsTask task=new SpeechmaticsTask(dataObject,this,"getSubtitles");
+        Thread thread=new Thread(task);
+        thread.start();
+    }
+
     public void launchProgressUpload(String audioPath,String videoPath){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -155,8 +165,8 @@ public class SearchViewController {
             uploadYoutubeDl.audioPath=audioPath;
             uploadYoutubeDl.videoPath=videoPath;
 
-            dialog = new Dialog<>();
-            System.out.println("whyasdlkfj;laksjdf;lkajsfd;lkasjdf;lkjasd;lkfjas;lkd");
+//            dialog = new Dialog<>();
+            Dialog<Void> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             dialog.initStyle(StageStyle.UNDECORATED);
 
@@ -186,7 +196,8 @@ public class SearchViewController {
 //            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
 //            qualitiesController.setYoutubeDl(this.youtubeDl);
 
-            dialog = new Dialog<>();
+//            dialog = new Dialog<>();
+            Dialog<Void> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             dialog.initStyle(StageStyle.UNDECORATED);
 

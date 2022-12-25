@@ -116,30 +116,32 @@ public class Speechmatics {
 
     }
 
-    public void getSubstitles(String id,String youtubeId){
+    public int getSubstitles(String id,String destinationFolder,String videoTitle){
         if(id.length() == 0){
             System.out.println("[Speechmatics : getSubtitles] need a job id");
         }
-
+        System.out.println(id);
         this.checkOnJob(id);
 
         if(!this.jobStatus.equals("done")){
             System.out.println("[Speechmatics : getSubtitles] The job is "+this.jobStatus+".");
-            System.exit(1);
+//            System.exit(1);
+            return 1;
         }
         System.out.println("Speechmatics getSubtitiles()-------------------------------------------------------------------");
 
         //checking the existance of the srt file
-        File subsFile = new File(subtitlesRepository+youtubeId+"\\"+youtubeId+".srt");
+        File subsFile = new File(subtitlesRepository+destinationFolder+"\\"+videoTitle+".srt");
         subsFile.exists();
         if(subsFile.exists()){
-            System.out.println("File "+youtubeId+".srt already exists");
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Do you want to override the file ? (0:no,1:yes) :");
-            int choice = scanner.nextInt();
-            if(choice == 0) {
-                return ;
-            }
+            System.out.println("[Speechmatics : getSubtitles] File "+videoTitle+".srt already exists");
+            return 1;
+//            Scanner scanner = new Scanner(System.in);
+//            System.out.println("Do you want to override the file ? (0:no,1:yes) :");
+//            int choice = scanner.nextInt();
+//            if(choice == 0) {
+//                return ;
+//            }
         }
 
         //GET SUBTITLES
@@ -167,18 +169,18 @@ public class Speechmatics {
             if(proc.exitValue()==1){
                 System.out.println("[Speechmatics : getSubtitles] was canceled");
                 this.signal=false;
-                return ;
-//                return 1;
+                return 1;
             }
             //getting http code fo the request and writing the subtitles to a srt file
-            parseGetSubtitles(sb,youtubeId);
+            parseGetSubtitles(sb,destinationFolder,videoTitle);
         } catch (UnsupportedOperationException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
-        System.out.println( "File in "+subtitlesRepository+youtubeId+"\\"+youtubeId+".srt");
+        System.out.println( "[Speechmatics : getSubtitles] File in "+subtitlesRepository+destinationFolder+"\\"+videoTitle+".srt");
+        return 0;
     }
 
-    private void parseGetSubtitles(StringBuilder sb,String youtubeId){
+    private void parseGetSubtitles(StringBuilder sb,String destinationFolder,String videoTitle){
         this.httpCode= Integer.parseInt(sb.substring(sb.length()-4,sb.length()-1));
         sb.delete(sb.length()-4,sb.length());
 
@@ -190,7 +192,7 @@ public class Speechmatics {
 
         //CREATE FILE
         try {
-            File myObj = new File(subtitlesRepository+youtubeId+"\\"+youtubeId+".srt");
+            File myObj = new File(subtitlesRepository+destinationFolder+"\\"+videoTitle+".srt");
             if (myObj.createNewFile()) {
                 System.out.println("[Speechmatics : getSubtitles] File created: " + myObj.getName());
             }
@@ -198,18 +200,18 @@ public class Speechmatics {
 //                System.out.println("File "+myObj.getName()+" already exists.");
 //            }
         } catch (IOException e) {
-            System.out.println("[Speechmatics : getSubtitles] An error occurred while creating "+youtubeId+".srt .");
+            System.out.println("[Speechmatics : getSubtitles] An error occurred while creating "+videoTitle+".srt .");
             e.printStackTrace();
         }
 
         //WRITE TO THE FILE
         try {
-            FileWriter myWriter = new FileWriter(subtitlesRepository+youtubeId+"\\"+youtubeId+".srt");
+            FileWriter myWriter = new FileWriter(subtitlesRepository+destinationFolder+"\\"+videoTitle+".srt");
             myWriter.write(sb.toString());
             myWriter.close();
-            System.out.println("[Speechmatics : getSubtitles] Successfully wrote to "+youtubeId+".srt .");
+            System.out.println("[Speechmatics : getSubtitles] Successfully wrote to "+videoTitle+".srt .");
         } catch (IOException e) {
-            System.out.println("[Speechmatics : getSubtitles] An error occurred while writing to "+youtubeId+".srt .");
+            System.out.println("[Speechmatics : getSubtitles] An error occurred while writing to "+videoTitle+".srt .");
             e.printStackTrace();
         }
     }

@@ -2,6 +2,7 @@ package ensa.project_vt.GenerateSubtitles;
 
 import ensa.project_vt.DataObject;
 import ensa.project_vt.SearchViewController;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 
 public class FFmpegTask extends Task<Integer> {
@@ -21,8 +22,13 @@ public class FFmpegTask extends Task<Integer> {
         if(exitCode==1){
             System.out.println("[FFmpegTask] 'convertToAudio' Something Went Wrong , Try again");
         }else{
-            dataFile.addVideo(ffmpeg.videoPath, ffmpeg.videoTitle, "ytb");
-            searchViewController.launchProgressUpload(ffmpeg.audioPath,ffmpeg.videoPath);
+            dataFile.addVideo(ffmpeg.videoPath, ffmpeg.videoTitle);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    searchViewController.launchProgressUpload(ffmpeg.audioPath,ffmpeg.videoPath);
+                }
+            });
         }
         return 0;
     }

@@ -40,12 +40,39 @@ public class SpeechmaticsTask extends Task<Integer> {
                     public void run() {
                         if(exitCode==0){
                             if (videoType.equals("local")) {
-                                dataFile.setJobId(youtubeDl.videoPath,speechmatics.getJobId(),"ytb");
+                                dataFile.setJobId(youtubeDl.videoPath,speechmatics.getJobId());
                             }else{
 
-                                dataFile.setJobId(youtubeDl.videoId,speechmatics.getJobId(),"ytb");
+                                dataFile.setJobId(youtubeDl.videoId,speechmatics.getJobId());
                             }
 //                            System.out.println("nice");
+                        }else{
+                            System.out.println("[SpeechmaticsTask] Something Went Wrong, Try again");
+                        }
+                    }
+                });
+
+            }
+            case "getSubtitles" ->{
+                System.out.println("Thread getSubtitles");
+                int exitCode=1;
+
+                if(this.videoType.equals("local")){
+                    exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(this.youtubeDl.videoPath),"local",this.youtubeDl.videoTitle);
+                }else{
+                    exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(this.youtubeDl.videoId),this.youtubeDl.videoId,this.youtubeDl.videoId);
+                }
+
+                int finalExitCode = exitCode;
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(finalExitCode ==0){
+                            if (videoType.equals("local")) {
+                                dataFile.setSubtitled(youtubeDl.videoPath, true,"ytb");
+                            }else{
+                                dataFile.setSubtitled(youtubeDl.videoId, true,"ytb");
+                            }
                         }else{
                             System.out.println("[SpeechmaticsTask] Something Went Wrong, Try again");
                         }

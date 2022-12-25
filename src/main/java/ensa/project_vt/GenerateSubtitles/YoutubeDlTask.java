@@ -49,7 +49,7 @@ public class YoutubeDlTask extends Task<Integer> {
                         @Override
                         public void run() {
                             if(exitCode==0){
-                                dataFile.addVideo(youtubeDl.videoId, youtubeDl.videoTitle,"ytb");
+                                dataFile.addVideo(youtubeDl.videoId, youtubeDl.videoTitle);
                                 downloadVideoAndAudioController.getNextBtn().setDisable(false);
                             }else{
                                 System.out.println("[YoutubeDlTask] 'downloadVideoAndAudio' Something went wrong , Try Again");

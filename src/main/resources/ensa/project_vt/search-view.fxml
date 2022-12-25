@@ -16,7 +16,22 @@
 
 <AnchorPane fx:id="parent" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.SearchViewController">
    <children>
-      <Pane fx:id="stepsPane" layoutX="239.0" layoutY="40.0" prefHeight="513.0" prefWidth="693.0" />
+      <Pane fx:id="stepsPane" layoutX="239.0" layoutY="40.0" prefHeight="513.0" prefWidth="693.0">
+         <children>
+            <Pane fx:id="progressArea" layoutX="15.0" layoutY="-21.0" prefHeight="34.0" prefWidth="369.0">
+               <children>
+                  <HBox alignment="CENTER" layoutX="55.0" layoutY="4.0" mouseTransparent="true" prefHeight="27.0" prefWidth="263.0" spacing="10.0">
+                     <children>
+                        <Label fx:id="operation" text="operation">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
+         </children></Pane>
       <Button fx:id="browse" layoutX="64.0" layoutY="99.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="124.0" styleClass=".button" text="Browse" textAlignment="CENTER" />
       <TextField fx:id="searchField" alignment="CENTER" layoutX="215.0" layoutY="100.0" prefHeight="60.0" prefWidth="829.0" promptText="Link or keyword for video" style="-fx-background-color: #403D3D; -fx-text-fill: #fff;" styleClass=".input">
          <font>
@@ -129,18 +144,6 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Text>
-      <Pane fx:id="progressArea" layoutX="496.0" layoutY="18.0" prefHeight="34.0" prefWidth="369.0">
-         <children>
-            <HBox alignment="CENTER" layoutX="55.0" layoutY="4.0" mouseTransparent="true" prefHeight="27.0" prefWidth="263.0" spacing="10.0">
-               <children>
-                  <Label fx:id="operation" text="operation">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-         </children>
-      </Pane>
+      <Button fx:id="getSubtitlesBtn" layoutX="993.0" layoutY="28.0" mnemonicParsing="false" onAction="#getSubtitles" text="Get Subtitles" />
    </children>
 </AnchorPane>
