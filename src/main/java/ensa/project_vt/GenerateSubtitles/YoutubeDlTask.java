@@ -31,7 +31,8 @@ public class YoutubeDlTask extends Task<Integer> {
                         @Override
                         public void run() {
                             if(exitCode==0){
-                                chooseQualitesDialogController.getProgressMsg().setVisible(false);
+                                chooseQualitesDialogController.getloadingImage().setVisible(false);
+                                chooseQualitesDialogController.getStartBtn().setDisable(false);
                             }else{
 //                                chooseQualitesDialogController.getProgressMsg().setLayoutX(115);
 //                                chooseQualitesDialogController.getProgressMsg().setText("[YoutubeDlTask] 'checkQuality' Something Went Wrong , Try again");
@@ -53,6 +54,9 @@ public class YoutubeDlTask extends Task<Integer> {
                                 downloadVideoAndAudioController.getNextBtn().setDisable(false);
                             }else{
                                 System.out.println("[YoutubeDlTask] 'downloadVideoAndAudio' Something went wrong , Try Again");
+                                downloadVideoAndAudioController.getErrorMsgLabel().setText("Something went wrong , try again");
+                                downloadVideoAndAudioController.getErrorMsgLabel().setVisible(true);
+                                downloadVideoAndAudioController.getStartBtn().setDisable(false);
                             }
                         }
                     });

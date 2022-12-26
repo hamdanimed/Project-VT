@@ -25,6 +25,8 @@ public class ProgressDownloadController {
     @FXML
     private Label titleLabel;
     @FXML
+    private Label errorMsgLabel;
+    @FXML
     private Label sizeLabel;
     @FXML
     private ProgressBar progressBar;
@@ -57,12 +59,17 @@ public class ProgressDownloadController {
 //        closeButton.setVisible(false);
 
         nextBtn.setDisable(true);
+        errorMsgLabel.setVisible(false);
 
     }
 
     @FXML
     public void start(ActionEvent event){
         this.dataObject=(DataObject) dialogPane.getScene().getWindow().getUserData();
+
+        startBtn.setDisable(true);
+        errorMsgLabel.setVisible(false);
+        
         task=new YoutubeDlTask(this.dataObject,this,"downloadVideoAndAudio");
         downloadVideoAndAudioThread=new Thread(task);
         downloadVideoAndAudioThread.setDaemon(true);
@@ -79,7 +86,7 @@ public class ProgressDownloadController {
     }
     @FXML
     public void cancel(ActionEvent event) throws IOException {
-        if(task.isRunning()){
+        if(task!=null && task.isRunning()){
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle(videoIdLabel.getText());
             alert.setHeaderText("You're about to Cancel t");
@@ -108,7 +115,16 @@ public class ProgressDownloadController {
     }
 
     public Button getNextBtn() {
+
         return nextBtn;
+    }
+
+    public Button getStartBtn() {
+        return startBtn;
+    }
+
+    public Label getErrorMsgLabel() {
+        return errorMsgLabel;
     }
 
     public void setNextBtn(Button nextBtn) {

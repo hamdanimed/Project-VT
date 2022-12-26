@@ -45,9 +45,12 @@ public class SpeechmaticsTask extends Task<Integer> {
 
                                 dataFile.setJobId(youtubeDl.videoId,speechmatics.getJobId());
                             }
-//                            System.out.println("nice");
+                            uploadAudioController.getFinishBtn().setDisable(false);
                         }else{
                             System.out.println("[SpeechmaticsTask] Something Went Wrong, Try again");
+                            uploadAudioController.getErrorMsgLabel().setText("Something went wrong , try again");
+                            uploadAudioController.getErrorMsgLabel().setVisible(true);
+                            uploadAudioController.getStartBtn().setDisable(false);
                         }
                     }
                 });
@@ -75,6 +78,8 @@ public class SpeechmaticsTask extends Task<Integer> {
                             }
                         }else{
                             System.out.println("[SpeechmaticsTask] Something Went Wrong, Try again");
+
+
                         }
                     }
                 });

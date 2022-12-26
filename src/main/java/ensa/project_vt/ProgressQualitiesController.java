@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class ProgressQualitiesController {
     ComboBox audioQualityCombo;
 
     @FXML
-    Label progressMsg;
+    ImageView loadingImage;
 
     @FXML
     Button nextBtn;
@@ -65,6 +66,7 @@ public class ProgressQualitiesController {
 //        closeButton.managedProperty().bind(closeButton.visibleProperty());
 //        closeButton.setVisible(false);
         nextBtn.setDisable(true);
+        loadingImage.setVisible(false);
 //        System.out.println(this.youtubeDl.getYoutubelink());
 
 //        System.out.println(dialogPane.getUserData());
@@ -82,8 +84,10 @@ public class ProgressQualitiesController {
         //get data and initialize objects
         this.dataObject=(DataObject) dialogPane.getScene().getWindow().getUserData();
         this.youtubeDl=dataObject.youtubeDl;
-        //to only call the api once
+
         startBtn.setDisable(true);
+        loadingImage.setVisible(true);
+
         //start the task
         this.task=new YoutubeDlTask(this.dataObject,this,"checkQuality");
         checkQualitiesThread=new Thread(task);
@@ -152,13 +156,14 @@ public class ProgressQualitiesController {
         videoQualityCombo.getItems().addAll(VideoOptions);
         audioQualityCombo.getItems().addAll(AudioOptions);
     }
-    public Label getProgressMsg() {
-        return progressMsg;
+    public ImageView getloadingImage() {
+        return loadingImage;
     }
 
-    public void setProgressMsg(Label progressMsg) {
-        this.progressMsg = progressMsg;
+    public Button getStartBtn() {
+        return startBtn;
     }
+
     public boolean isVideoQualityChoosen() {
         return videoQualityCombo.getValue() != null;
     }

@@ -7,63 +7,71 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.ProgressDownloadController">
+<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="338.0" prefWidth="469.0" style="-fx-background-color: #252525;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.ProgressDownloadController">
    <header>
-      <AnchorPane fx:id="scenePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="430.0" style="-fx-background-color: #252525;">
+      <AnchorPane fx:id="scenePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="334.0" prefWidth="469.0" style="-fx-background-color: #252525;">
          <children>
-            <Label fx:id="titleLabel" layoutX="64.0" layoutY="29.0" text="Downloading" textFill="WHITE">
+            <Label fx:id="titleLabel" layoutX="39.0" layoutY="29.0" text="Download Video" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="25.0" />
+                  <Font name="System Bold" size="30.0" />
                </font>
             </Label>
-            <ProgressBar fx:id="progressBar" layoutX="52.0" layoutY="173.0" prefHeight="30.0" prefWidth="326.0" progress="0.0" style="-fx-accent: #00FFD1;" />
-            <Label layoutX="64.0" layoutY="81.0" text="Download speed :" textFill="WHITE">
+            <ProgressBar fx:id="progressBar" layoutX="57.0" layoutY="199.0" prefHeight="27.0" prefWidth="360.0" progress="0.0" style="-fx-accent: #00FFD1;" />
+            <Label layoutX="84.0" layoutY="94.0" text="Download speed      :" textFill="WHITE">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="65.0" layoutY="108.0" text="Time remaining :" textFill="WHITE">
+            <Label layoutX="84.0" layoutY="122.0" text="Time remaining        :" textFill="WHITE">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="percentageLabel" layoutX="350.0" layoutY="203.0" text="0 %" textFill="WHITE">
+            <Label fx:id="percentageLabel" blendMode="EXCLUSION" layoutX="370.0" layoutY="203.0" text="0 %" textFill="WHITE">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Label fx:id="sizeLabel" layoutX="133.0" layoutY="135.0" text="0MB" textFill="WHITE">
+            <Label fx:id="sizeLabel" alignment="CENTER_RIGHT" layoutX="273.0" layoutY="151.0" text="0MB" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP">
                <font>
-                  <Font size="14.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="speedLabel" layoutX="191.0" layoutY="82.0" text="0kps" textFill="WHITE">
+            <Label fx:id="speedLabel" alignment="CENTER_RIGHT" layoutX="273.0" layoutY="94.0" text="0kps" textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font size="14.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="timeLabel" layoutX="191.0" layoutY="109.0" text="00:00:00" textFill="WHITE">
+            <Label fx:id="timeLabel" alignment="CENTER_RIGHT" layoutX="273.0" layoutY="122.0" text="00:00" textAlignment="CENTER" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
                <font>
-                  <Font size="14.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="cancelBtn" layoutX="330.0" layoutY="249.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+            <Button fx:id="cancelBtn" layoutX="373.0" layoutY="277.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="nextBtn" layoutX="162.0" layoutY="249.0" mnemonicParsing="false" onAction="#next" text="Next : Upload Audio ">
+            <Button fx:id="nextBtn" layoutX="205.0" layoutY="277.0" mnemonicParsing="false" onAction="#next" text="Next : Upload Audio ">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Label layoutX="66.0" layoutY="132.0" text="File size :" textFill="WHITE">
+            <Label layoutX="86.0" layoutY="151.0" text="File size                    :" textFill="WHITE">
                <font>
-                  <Font size="15.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="videoIdLabel" layoutX="346.0" layoutY="52.0" text="video id" textFill="WHITE" visible="false" />
-            <Button fx:id="startBtn" layoutX="276.0" layoutY="36.0" mnemonicParsing="false" onAction="#start" text="Start downlaod" />
+            <Button fx:id="startBtn" layoutX="322.0" layoutY="38.0" mnemonicParsing="false" onAction="#start" text="Start downlaod">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Button>
+            <Label fx:id="errorMsgLabel" layoutX="75.0" layoutY="236.0" text="Error messages" textFill="WHITE">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </header>

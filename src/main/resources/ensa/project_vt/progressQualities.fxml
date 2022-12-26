@@ -4,46 +4,51 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="310.0" prefWidth="430.0" style="-fx-background-color: #252525;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.ProgressQualitiesController">
+<DialogPane fx:id="dialogPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="333.0" prefWidth="455.0" style="-fx-background-color: #252525;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.ProgressQualitiesController">
    <header>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="430.0">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="338.0" prefWidth="469.0">
          <children>
-            <Label layoutX="96.0" layoutY="14.0" text="Choose Quality : " textFill="WHITE">
+            <Label layoutX="94.0" layoutY="20.0" prefHeight="46.0" prefWidth="278.0" text="Choose Qualities : " textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="30.0" />
+                  <Font name="System Bold" size="31.0" />
                </font>
             </Label>
-            <Label layoutX="49.0" layoutY="125.0" text="Video Quality :" textFill="WHITE">
+            <Label layoutX="42.0" layoutY="150.0" text="Video Quality :" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="videoQualityCombo" layoutX="170.0" layoutY="122.0" maxWidth="224.0" minWidth="190.0" onAction="#selectVideoQuality" prefHeight="26.0" prefWidth="224.0" promptText="               ---------------------" />
-            <Label layoutX="50.0" layoutY="187.0" text="Audio Quality :" textFill="WHITE">
+            <ComboBox fx:id="videoQualityCombo" layoutX="167.0" layoutY="146.0" maxWidth="230.0" minWidth="190.0" onAction="#selectVideoQuality" prefHeight="26.0" prefWidth="230.0" promptText="               ------------------------" />
+            <Label layoutX="43.0" layoutY="211.0" text="Audio Quality :" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <ComboBox fx:id="audioQualityCombo" layoutX="169.0" layoutY="184.0" maxWidth="228.0" minWidth="190.0" onAction="#selectAudioQuality" prefHeight="26.0" prefWidth="228.0" promptText="               ---------------------" />
-            <Label fx:id="progressMsg" layoutX="235.0" layoutY="71.0" text="Getting Qualities ..." textFill="WHITE">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-            <Button fx:id="nextBtn" layoutX="158.0" layoutY="257.0" mnemonicParsing="false" onAction="#next" text="Next : Download video">
+            <ComboBox fx:id="audioQualityCombo" layoutX="167.0" layoutY="208.0" maxWidth="231.0" minWidth="190.0" onAction="#selectAudioQuality" prefHeight="26.0" prefWidth="231.0" promptText="               ------------------------" />
+            <Button fx:id="nextBtn" layoutX="205.0" layoutY="275.0" mnemonicParsing="false" onAction="#next" prefHeight="31.0" prefWidth="140.0" text="Next : Download ">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="cancelBtn" layoutX="342.0" layoutY="257.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+            <Button fx:id="cancelBtn" layoutX="362.0" layoutY="275.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="startBtn" layoutX="67.0" layoutY="68.0" mnemonicParsing="false" onAction="#start" text="Get available qualities" />
+            <Button fx:id="startBtn" layoutX="153.0" layoutY="81.0" mnemonicParsing="false" onAction="#start" prefHeight="30.0" prefWidth="164.0" text="Get available qualities">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Button>
+            <ImageView fx:id="loadingImage" blendMode="EXCLUSION" fitHeight="32.0" fitWidth="32.0" layoutX="110.0" layoutY="80.0" preserveRatio="true">
+               <image>
+                  <Image url="@assets/loading.gif" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </header>

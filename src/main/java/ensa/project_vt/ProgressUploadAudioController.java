@@ -30,6 +30,14 @@ public class ProgressUploadAudioController {
     private Label percentageLabel;
     @FXML
     private ProgressBar progressBar;
+    @FXML
+    private Button startBtn;
+    @FXML
+    private Button finishBtn;
+    @FXML
+    private Button cancelBtn;
+    @FXML
+    private Label errorMsgLabel;
 
     private Stage stage;
     private Scene scene;
@@ -45,12 +53,16 @@ public class ProgressUploadAudioController {
 //        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
 //        closeButton.managedProperty().bind(closeButton.visibleProperty());
 //        closeButton.setVisible(false);
-
+        finishBtn.setDisable(true);
+        errorMsgLabel.setVisible(false);
     }
 
     @FXML
     public void start(ActionEvent event){
         this.dataObject= (DataObject) dialogPane.getScene().getWindow().getUserData();
+
+        startBtn.setDisable(true);
+
         task=new SpeechmaticsTask(this.dataObject,this,"sendAudio");
         sendAudioThread=new Thread(task);
         sendAudioThread.setDaemon(true);
@@ -70,12 +82,14 @@ public class ProgressUploadAudioController {
     }
     @FXML
     public void cancel(ActionEvent event) throws IOException {
-//        System.out.println("upload audio , cancel buttton clicked");
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("You're about to Cancel t");
         alert.setContentText("Do really want to exit ?");
         if(alert.showAndWait().get()== ButtonType.OK){
+            if(task!=null && task.isRunning()){
+                task.sendCancelSignal();
+            }
             stage=(Stage) dialogPane.getScene().getWindow();
             stage.close();
         }
@@ -91,5 +105,17 @@ public class ProgressUploadAudioController {
         double value=Double.valueOf(percentage.substring(0,percentage.length()-1));
 //        double value=Double.valueOf(percentage);
         this.progressBar.setProgress(value/100.0);
+    }
+
+    public Button getStartBtn() {
+        return startBtn;
+    }
+
+    public Button getFinishBtn() {
+        return finishBtn;
+    }
+
+    public Label getErrorMsgLabel() {
+        return errorMsgLabel;
     }
 }
