@@ -41,11 +41,21 @@ public class Frame1Controller implements Initializable {
 
     @FXML
     void pageNext(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("SousFrame1-view.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("search-view.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(fxmlLoader.load());
+//        scene = new Scene(fxmlLoader.load());
+//        stage.setScene(scene);
+//        stage.show();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("search-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        stage.setTitle("Search");
         stage.setScene(scene);
+        SearchViewController searchViewController = fxmlLoader.getController();
+        searchViewController.setStage(stage);
         stage.show();
+
     }
 
 
@@ -70,7 +80,8 @@ public class Frame1Controller implements Initializable {
     private List<VideoInf> videoInfs(){
         List<VideoInf> ls = new ArrayList<>();
         try{
-            File folder = new File("C:\\Users\\Mohamed Ben Arrouch\\OneDrive\\Desktop\\project-vt-files");
+//            File folder = new File("C:\\Users\\Mohamed Ben Arrouch\\OneDrive\\Desktop\\project-vt-files");
+            File folder = new File("C:\\Users\\hp\\PC\\project-vt-files");
             File[] listOfFiles = folder.listFiles();
 
             for (int i = 0; i < listOfFiles.length; i++) {
