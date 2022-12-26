@@ -96,6 +96,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>ensa.project_vt/ensa.project_vt.VideoPlayer</mainClass>
+                            <mainClass>ensa.project_vt/ensa.project_vt.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
