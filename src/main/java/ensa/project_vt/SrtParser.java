@@ -45,7 +45,8 @@ public class SrtParser {
         }
         catch (Exception e)
         {
-            throw new RuntimeException();
+            System.out.println("can't read file");
+            captions = new HashMap<>();
         }
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss,SSS");
         String line;
@@ -71,30 +72,45 @@ public class SrtParser {
         }
         catch (Exception e)
         {
-            throw new RuntimeException();
-        }
-        for (int i = 0; i < captions1.size(); i++) {
-            System.out.println(captions1.get(i));
+            System.out.println("file format is erroneous");
+            captions = new HashMap<>();
         }
 
     }
-    public void format()
+    public String format()
     {
+        String content="";
         for (int i = 0; i < captions.size(); i++) {
-            System.out.println(captions.get(i).getId()+1);
-            System.out.println(timeString(captions.get(i).getStart())+" --> "+timeString(captions.get(i).getEnd()));
-            System.out.println(captions.get(i).getText());
-            System.out.println();
+            content+=captions.get(i).getId()+1+"\n";
+            content+=timeString(captions.get(i).getStart())+" --> "+timeString(captions.get(i).getEnd())+"\n";
+            content+=captions.get(i).getText()+"\n";
+            if(i!=captions.size()-1) content+="\n";
         }
+        return content;
     }
-    public Caption makeCaption(ArrayList<String> arr,SimpleDateFormat sdf) throws ParseException
+    public void editCaption(String text,int i)
+    {
+        System.out.println("i :" +i);
+        captions.get(i).setText(text);
+    }
+    public Caption makeCaption(ArrayList<String> arr,SimpleDateFormat sdf)
     {
         Caption c = new Caption(0);
         String startStamp = arr.get(1).substring(0,12);
         String endStamp = arr.get(1).substring(17,29);
+
         c.setId(Integer.parseInt(arr.get(0))-1);
-        c.setStart(sdf.parse(startStamp).getTime());
-        c.setEnd(sdf.parse(endStamp).getTime());
+
+        try {
+            c.setStart(sdf.parse(startStamp).getTime());
+        } catch (ParseException e) {
+            System.out.println("can't format start");
+        }
+        try {
+            c.setEnd(sdf.parse(endStamp).getTime());
+        } catch (ParseException e) {
+            System.out.println("can't format end");
+        }
         String text="";
         for (int i = 2; i < arr.size()-1; i++) {
             text+=arr.get(i)+"\n";

@@ -15,18 +15,25 @@ public class VideoPlayer extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
         VideoPlayerController controller = fxmlLoader.getController();
         scene.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) ->{
-            switch(event.getCode())
+            if(controller.isVPFocused())
             {
-                case SPACE:
-                    controller.playVideo();
-                    break;
-                case L:
-                    controller.next();
-                    break;
-                case J:
-                    controller.prev();
+                switch(event.getCode())
+                {
+                    case SPACE:
+                        controller.playVideo();
+                        break;
+                    case L:
+                        controller.next();
+                        break;
+                    case J:
+                        controller.prev();
 
-                    break;
+                        break;
+                    case ESCAPE:
+                        controller.exitFullScreenSC();
+                        break;
+                }
+
             }
         });
 

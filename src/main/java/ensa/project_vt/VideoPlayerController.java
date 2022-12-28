@@ -31,7 +31,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -94,7 +98,7 @@ public class VideoPlayerController implements Initializable {
         mediaVideo = new Media(new File("C:\\Users\\HP\\Desktop\\Java\\java-project\\Project-VT\\src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
-        sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
+        sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs2.srt",mediaVideo.getDuration().toMillis());
         sdf = new SimpleDateFormat("HH:mm:ss:SSS");
         mediaPlayer.setOnReady(new Runnable() {
             @Override
@@ -102,6 +106,7 @@ public class VideoPlayerController implements Initializable {
                 totalLabel.setText("/"+timeString(mediaVideo.getDuration().toMillis()));
             }
         });
+
         // Images
         imgPlay = new Image(new File("src/main/resources/ensa/project_vt/UI/play.png").toURI().toString());
         imgPause = new Image(new File("src/main/resources/ensa/project_vt/UI/pause.png").toURI().toString());
@@ -133,7 +138,7 @@ public class VideoPlayerController implements Initializable {
         translateEditBox = new TranslateTransition(Duration.millis(200),editBox);
         translateVideo = new TranslateTransition(Duration.millis(200),videoPlayer);
         scaleVideo = new ScaleTransition(Duration.millis(200),videoPlayer);
-            //Animation of control bar
+        //Animation of control bar
         fadeIn = new FadeTransition(Duration.millis(200),controlBar);
         fadeOut = new FadeTransition(Duration.millis(200),controlBar);
         fadeIn.setFromValue(0);fadeIn.setToValue(1);
@@ -150,7 +155,7 @@ public class VideoPlayerController implements Initializable {
             @Override
             public void handle(MouseEvent mouseEvent){fadeOut.play();}
         });
-
+//        Bindings.bindBidirectional(closedCaptions.textProperty(), captionEditText.textProperty());
         // volume
         Bindings.bindBidirectional(mediaPlayer.volumeProperty(),volumeSlider.valueProperty());
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -170,6 +175,7 @@ public class VideoPlayerController implements Initializable {
                 playBtn.setGraphic(replayIV);
                 mediaPlayer.seek(Duration.millis(0));
                 mediaPlayer.pause();
+                initCaption();
 
             }
         });
@@ -188,8 +194,6 @@ public class VideoPlayerController implements Initializable {
                     mediaPlayer.seek(new Duration(timeSlider.getValue()));
             }
         });
-
-
         timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
@@ -203,8 +207,6 @@ public class VideoPlayerController implements Initializable {
                     loadCaption();
                 }
                 timeLabel.setText(timeString(timeSlider.getValue()));
-
-
             }
         });
 
@@ -217,10 +219,11 @@ public class VideoPlayerController implements Initializable {
                 {
                     isOver=false;
                     timeSlider.setValue(mediaPlayer.getCurrentTime().toMillis());
-                    if(newValue.toMillis()>nextCaption.getStart())
+                    if(newValue.toMillis()>nextCaption.getStart() && nextCaption.getId()!=actualCaption.getId())
                     {
 
                         captionIndex++;
+                        System.out.println("captionIndex: "+captionIndex);
                         closedCaptions.setText(nextCaption.getText());
                         actualCaption = nextCaption;
                         if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
@@ -309,7 +312,14 @@ public class VideoPlayerController implements Initializable {
     }
     @FXML
     void saveCaptions(ActionEvent event) {
-        System.out.println(captionEditText.getText());
+        sp.editCaption(captionEditText.getText(),captionIndex);
+        try {
+            Files.writeString(Paths.get("src\\main\\resources\\ensa\\project_vt\\subs2.srt"),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            System.out.println("can't save file");
+        }
+        closedCaptions.setText(captionEditText.getText());
+        System.out.println("Saved");
     }
 
 
@@ -318,7 +328,7 @@ public class VideoPlayerController implements Initializable {
         loadCaption();
     }
     public void loadCaption() {
-        if(actualCaption!= null && actualCaption.getId()!=-1 && nextCaption.getId()!=actualCaption.getId())
+        if(actualCaption!= null && actualCaption.getId()!=-1)
         {
             captionEditText.setText(actualCaption.getText());
             String start = sdf.format(new Date((long)actualCaption.getStart()));
@@ -444,7 +454,34 @@ public class VideoPlayerController implements Initializable {
 
         }
     }
+    public String timeString(double time)
+    {
+        String seconds = String.format("%02d",(int) (time/1000) %60);
+        String minutes = String.format("%02d",(int) ((time/(1000*60)) %60)) ;
+        String hours = String.format("%02d",(int) ((time/(1000*60*60)) %24)) ;
+        return ((hours.equals("00"))?"":hours+":")+minutes+":"+seconds;
 
+    }
+    public Boolean isVPFocused()
+    {
+        return videoPlayer.isFocused();
+    }
+
+    // Keyboard Shortcuts
+    public void exitFullScreenSC()
+    {
+        Stage stage = (Stage) fullScreenBtn.getScene().getWindow();
+        stage.setFullScreen(false);
+        videoPlayer.setPrefHeight(481);
+        videoPlayer.setPrefWidth(854);
+        mediaView.setFitHeight(481);
+        mediaView.setFitWidth(854);
+        captionBox.setLayoutY(481-150);
+        captionBox.setPrefWidth(854);
+        controlBar.setLayoutY(481-51);
+        controlBar.setPrefWidth(854);
+        isFullScreen = false;
+    }
     public void next()
     {
         mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()+5000));
@@ -457,13 +494,4 @@ public class VideoPlayerController implements Initializable {
         findCaption();
         loadCaption();
     }
-    public String timeString(double time)
-    {
-        String seconds = String.format("%02d",(int) (time/1000) %60);
-        String minutes = String.format("%02d",(int) ((time/(1000*60)) %60)) ;
-        String hours = String.format("%02d",(int) ((time/(1000*60*60)) %24)) ;
-        return ((hours.equals("00"))?"":hours+":")+minutes+":"+seconds;
-
-    }
-
 }
