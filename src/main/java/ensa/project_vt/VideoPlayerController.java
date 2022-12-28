@@ -90,11 +90,10 @@ public class VideoPlayerController implements Initializable {
     @Override
     public void initialize(URL url,ResourceBundle resourceBundle)
     {
-        mediaVideo = new Media(new File("C:\\Users\\hp\\PC\\project-vt-files\\-EbzDqtZEh4\\-EbzDqtZEh4.mp4").toURI().toString());
-//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
+//        mediaVideo = new Media(new File("D:\\Series\\Emily In Paris S3\\[EgyBest].Emily.In.Paris.S03E02.WEB-DL.720p.x264.mp4").toURI().toString());
+        mediaVideo = new Media(new File("C:\\Users\\HP\\Desktop\\Java\\java-project\\Project-VT\\src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
-
         sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
         sdf = new SimpleDateFormat("HH:mm:ss:SSS");
         mediaPlayer.setOnReady(new Runnable() {
@@ -126,12 +125,8 @@ public class VideoPlayerController implements Initializable {
         currentVolume=1;
         muteBtn.setGraphic(unmuteIV);
 
-        //Initialize captions
-        captionIndex = -1;
-        actualCaption = new Caption(-1);
-        nextCaption = sp.getCaptions().get(0);
-        System.out.println("nextCaption = " + nextCaption);
-        captionInit = new Caption(-1);
+
+        initCaption();
 
 
         // Initialize animations
@@ -167,6 +162,18 @@ public class VideoPlayerController implements Initializable {
             }
         });
 
+        mediaPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                isOver=true;
+                isPlaying=false;
+                playBtn.setGraphic(replayIV);
+                mediaPlayer.seek(Duration.millis(0));
+                mediaPlayer.pause();
+
+            }
+        });
+
 
         // Progress bar slider
         mediaPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
@@ -190,6 +197,7 @@ public class VideoPlayerController implements Initializable {
                 timeProgress.setProgress(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
+                    if(playBtn.getGraphic().equals(replayIV)) playBtn.setGraphic(playIV);
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
                     findCaption();
                     loadCaption();
@@ -207,6 +215,7 @@ public class VideoPlayerController implements Initializable {
 
                 if(!timeSlider.isValueChanging())
                 {
+                    isOver=false;
                     timeSlider.setValue(mediaPlayer.getCurrentTime().toMillis());
                     if(newValue.toMillis()>nextCaption.getStart())
                     {
@@ -229,9 +238,6 @@ public class VideoPlayerController implements Initializable {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("============ WHEN FS clicked");
-                System.out.println("isEditMode = " + isEditMode);
-                System.out.println("isFullScreen = " + isFullScreen);
 
                 if(isEditMode) editMode();
                 if(!isFullScreen) {
@@ -262,15 +268,25 @@ public class VideoPlayerController implements Initializable {
     @FXML
     protected void playVideo()
     {
-        if(!isPlaying)
+        if(isOver)
         {
             mediaPlayer.play();
             playBtn.setGraphic(pauseIV);
+            isPlaying=true;
+            isOver=false;
+            initCaption();
         }
         else {
-            mediaPlayer.pause();
-            playBtn.setGraphic(playIV);
+            if(!isPlaying)
+            {
+                mediaPlayer.play();
+                playBtn.setGraphic(pauseIV);
+            }
+            else {
+                mediaPlayer.pause();
+                playBtn.setGraphic(playIV);
 
+            }
         }
         isPlaying = !isPlaying;
     }
@@ -308,7 +324,6 @@ public class VideoPlayerController implements Initializable {
             String start = sdf.format(new Date((long)actualCaption.getStart()));
             String end = sdf.format(new Date((long)actualCaption.getEnd()));
             captionEditLabel.setText(start+" -> "+end);
-            System.out.println("event load caption");
         }
 
     }
@@ -317,9 +332,6 @@ public class VideoPlayerController implements Initializable {
     @FXML
     public void editMode()
     {
-        System.out.println("=========================== WHEN EM clicked");
-        System.out.println("isEditMode = " + isEditMode);
-        System.out.println("isFullScreen = " + isFullScreen);
         if(isFullScreen)
         {
             Stage stage = (Stage) fullScreenBtn.getScene().getWindow();
@@ -388,6 +400,13 @@ public class VideoPlayerController implements Initializable {
         captionBox.setPrefWidth(854);
         controlBar.setLayoutY(481-51);
         controlBar.setPrefWidth(854);
+    }
+    public void initCaption()
+    {
+        captionIndex = -1;
+        actualCaption = new Caption(-1);
+        nextCaption = sp.getCaptions().get(0);
+        captionInit = new Caption(-1);
     }
 
 
