@@ -31,7 +31,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -53,7 +57,7 @@ public class VideoPlayerController implements Initializable {
     @FXML
     private Slider timeSlider;
     @FXML
-    private Button muteBtn,fullScreenBtn;
+    private Button muteBtn,fullScreenBtn,editBtn;
     @FXML
     private Label closedCaptions;
     @FXML
@@ -74,8 +78,8 @@ public class VideoPlayerController implements Initializable {
     private VBox captionBox;
 
 
-    private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay;
-    private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV;
+    private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay,imgFullScreen,imgEditMode;
+    private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV,fullScreenIV,editModeIV;
     private boolean isPlaying,isMute,isOver,isEditMode,isFullScreen;
     private double currentVolume;
     private SrtParser sp;
@@ -104,18 +108,30 @@ public class VideoPlayerController implements Initializable {
                 totalLabel.setText("/"+timeString(mediaVideo.getDuration().toMillis()));
             }
         });
+
         // Images
         imgPlay = new Image(new File("src/main/resources/ensa/project_vt/UI/play.png").toURI().toString());
         imgPause = new Image(new File("src/main/resources/ensa/project_vt/UI/pause.png").toURI().toString());
         imgMute = new Image(new File("src/main/resources/ensa/project_vt/UI/mute.png").toURI().toString());
         imgUnmute = new Image(new File("src/main/resources/ensa/project_vt/UI/unmute.png").toURI().toString());
         imgReplay = new Image(new File("src/main/resources/ensa/project_vt/UI/replay.png").toURI().toString());
+        imgFullScreen = new Image(new File("src/main/resources/ensa/project_vt/UI/full-screen.png").toURI().toString());
+        imgEditMode = new Image(new File("src/main/resources/ensa/project_vt/UI/edit-captions.png").toURI().toString());
         // ImageView's
         playIV = makeIcon(playIV,imgPlay);
         pauseIV = makeIcon(pauseIV,imgPause);
         muteIV = makeIcon(muteIV,imgMute);
         unmuteIV = makeIcon(unmuteIV,imgUnmute);
         replayIV = makeIcon(replayIV,imgReplay);
+        fullScreenIV = makeIcon(fullScreenIV,imgFullScreen);
+        editModeIV = makeIcon(editModeIV,imgEditMode);
+        fullScreenBtn.setGraphic(fullScreenIV);
+        editBtn.setGraphic(editModeIV);
+        playBtn.setFocusTraversable(false);
+        fullScreenBtn.setFocusTraversable(false);
+        editBtn.setFocusTraversable(false);
+        muteBtn.setFocusTraversable(false);
+
 
         playBtn.setGraphic(pauseIV);
         mediaPlayer.play();
@@ -127,19 +143,15 @@ public class VideoPlayerController implements Initializable {
         currentVolume=1;
         muteBtn.setGraphic(unmuteIV);
 
-        //Initialize captions
-        captionIndex = -1;
-        actualCaption = new Caption(-1);
-        nextCaption = sp.getCaptions().get(0);
-        System.out.println("nextCaption = " + nextCaption);
-        captionInit = new Caption(-1);
+
+        initCaption();
 
 
         // Initialize animations
         translateEditBox = new TranslateTransition(Duration.millis(200),editBox);
         translateVideo = new TranslateTransition(Duration.millis(200),videoPlayer);
         scaleVideo = new ScaleTransition(Duration.millis(200),videoPlayer);
-            //Animation of control bar
+        //Animation of control bar
         fadeIn = new FadeTransition(Duration.millis(200),controlBar);
         fadeOut = new FadeTransition(Duration.millis(200),controlBar);
         fadeIn.setFromValue(0);fadeIn.setToValue(1);
@@ -156,7 +168,7 @@ public class VideoPlayerController implements Initializable {
             @Override
             public void handle(MouseEvent mouseEvent){fadeOut.play();}
         });
-
+//        Bindings.bindBidirectional(closedCaptions.textProperty(), captionEditText.textProperty());
         // volume
         Bindings.bindBidirectional(mediaPlayer.volumeProperty(),volumeSlider.valueProperty());
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -164,6 +176,19 @@ public class VideoPlayerController implements Initializable {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 if(volumeSlider.getValue()==0){muteBtn.setGraphic(muteIV);}
                 else {muteBtn.setGraphic(unmuteIV);}
+
+            }
+        });
+
+        mediaPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                isOver=true;
+                isPlaying=false;
+                playBtn.setGraphic(replayIV);
+                mediaPlayer.seek(Duration.millis(0));
+                mediaPlayer.pause();
+                initCaption();
 
             }
         });
@@ -182,8 +207,6 @@ public class VideoPlayerController implements Initializable {
                     mediaPlayer.seek(new Duration(timeSlider.getValue()));
             }
         });
-
-
         timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
@@ -191,13 +214,12 @@ public class VideoPlayerController implements Initializable {
                 timeProgress.setProgress(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
+                    if(playBtn.getGraphic().equals(replayIV)) playBtn.setGraphic(playIV);
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
                     findCaption();
                     loadCaption();
                 }
                 timeLabel.setText(timeString(timeSlider.getValue()));
-
-
             }
         });
 
@@ -208,11 +230,13 @@ public class VideoPlayerController implements Initializable {
 
                 if(!timeSlider.isValueChanging())
                 {
+                    isOver=false;
                     timeSlider.setValue(mediaPlayer.getCurrentTime().toMillis());
-                    if(newValue.toMillis()>nextCaption.getStart())
+                    if(newValue.toMillis()>nextCaption.getStart() && nextCaption.getId()!=actualCaption.getId())
                     {
 
                         captionIndex++;
+                        System.out.println("captionIndex: "+captionIndex);
                         closedCaptions.setText(nextCaption.getText());
                         actualCaption = nextCaption;
                         if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
@@ -230,9 +254,6 @@ public class VideoPlayerController implements Initializable {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("============ WHEN FS clicked");
-                System.out.println("isEditMode = " + isEditMode);
-                System.out.println("isFullScreen = " + isFullScreen);
 
                 if(isEditMode) editMode();
                 if(!isFullScreen) {
@@ -263,15 +284,25 @@ public class VideoPlayerController implements Initializable {
     @FXML
     protected void playVideo()
     {
-        if(!isPlaying)
+        if(isOver)
         {
             mediaPlayer.play();
             playBtn.setGraphic(pauseIV);
+            isPlaying=true;
+            isOver=false;
+            initCaption();
         }
         else {
-            mediaPlayer.pause();
-            playBtn.setGraphic(playIV);
+            if(!isPlaying)
+            {
+                mediaPlayer.play();
+                playBtn.setGraphic(pauseIV);
+            }
+            else {
+                mediaPlayer.pause();
+                playBtn.setGraphic(playIV);
 
+            }
         }
         isPlaying = !isPlaying;
     }
@@ -294,7 +325,14 @@ public class VideoPlayerController implements Initializable {
     }
     @FXML
     void saveCaptions(ActionEvent event) {
-        System.out.println(captionEditText.getText());
+        sp.editCaption(captionEditText.getText(),captionIndex);
+        try {
+            Files.writeString(Paths.get("src\\main\\resources\\ensa\\project_vt\\subs2.srt"),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            System.out.println("can't save file");
+        }
+        closedCaptions.setText(captionEditText.getText());
+        System.out.println("Saved");
     }
 
 
@@ -303,13 +341,12 @@ public class VideoPlayerController implements Initializable {
         loadCaption();
     }
     public void loadCaption() {
-        if(actualCaption!= null && actualCaption.getId()!=-1 && nextCaption.getId()!=actualCaption.getId())
+        if(actualCaption!= null && actualCaption.getId()!=-1)
         {
             captionEditText.setText(actualCaption.getText());
             String start = sdf.format(new Date((long)actualCaption.getStart()));
             String end = sdf.format(new Date((long)actualCaption.getEnd()));
             captionEditLabel.setText(start+" -> "+end);
-            System.out.println("event load caption");
         }
 
     }
@@ -318,9 +355,6 @@ public class VideoPlayerController implements Initializable {
     @FXML
     public void editMode()
     {
-        System.out.println("=========================== WHEN EM clicked");
-        System.out.println("isEditMode = " + isEditMode);
-        System.out.println("isFullScreen = " + isFullScreen);
         if(isFullScreen)
         {
             Stage stage = (Stage) fullScreenBtn.getScene().getWindow();
@@ -390,6 +424,13 @@ public class VideoPlayerController implements Initializable {
         controlBar.setLayoutY(481-51);
         controlBar.setPrefWidth(854);
     }
+    public void initCaption()
+    {
+        captionIndex = -1;
+        actualCaption = new Caption(-1);
+        nextCaption = sp.getCaptions().get(0);
+        captionInit = new Caption(-1);
+    }
 
 
     public ImageView makeIcon(ImageView iv,Image img)
@@ -426,19 +467,6 @@ public class VideoPlayerController implements Initializable {
 
         }
     }
-
-    public void next()
-    {
-        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()+5000));
-        findCaption();
-        loadCaption();
-    }
-    public void prev()
-    {
-        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()-5000));
-        findCaption();
-        loadCaption();
-    }
     public String timeString(double time)
     {
         String seconds = String.format("%02d",(int) (time/1000) %60);
@@ -447,5 +475,37 @@ public class VideoPlayerController implements Initializable {
         return ((hours.equals("00"))?"":hours+":")+minutes+":"+seconds;
 
     }
+    public Boolean isFieldFocused()
+    {
+        return captionEditText.isFocused();
+    }
 
+    // Keyboard Shortcuts
+    public void exitFullScreenSC()
+    {
+        Stage stage = (Stage) fullScreenBtn.getScene().getWindow();
+        stage.setFullScreen(false);
+        videoPlayer.setPrefHeight(481);
+        videoPlayer.setPrefWidth(854);
+        mediaView.setFitHeight(481);
+        mediaView.setFitWidth(854);
+        captionBox.setLayoutY(481-150);
+        captionBox.setPrefWidth(854);
+        controlBar.setLayoutY(481-51);
+        controlBar.setPrefWidth(854);
+        isFullScreen = false;
+    }
+    public void next()
+    {
+        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()+5000));
+        findCaption();
+        loadCaption();
+        System.out.println("next");
+    }
+    public void prev()
+    {
+        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()-5000));
+        findCaption();
+        loadCaption();
+    }
 }

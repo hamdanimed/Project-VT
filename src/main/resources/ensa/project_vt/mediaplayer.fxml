@@ -139,10 +139,13 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="fullScreenBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="30.0" text="Button">
+                                    <Button fx:id="fullScreenBtn" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="30.0" style="-fx-background-color: black;">
                                        <HBox.margin>
                                           <Insets left="40.0" right="15.0" />
                                        </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </Button>
                                  </children>
                               </HBox>
@@ -150,7 +153,10 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <Button fx:id="lockBtn" layoutX="11.0" layoutY="12.0" mnemonicParsing="false" onAction="#editMode" prefHeight="27.0" prefWidth="29.0" text="Button" />
+                  <Button fx:id="editBtn" contentDisplay="GRAPHIC_ONLY" layoutX="11.0" layoutY="12.0" mnemonicParsing="false" onAction="#editMode" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #00FFD1; -fx-background-radius: 50%; -fx-opacity: 66%;" styleClass="edit-btn">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
                   <VBox fx:id="captionBox" alignment="CENTER" layoutY="328.0" prefHeight="101.0" prefWidth="854.0">
                      <children>
                         <Label fx:id="closedCaptions" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#loadCaption" style="-fx-background-color: black; -fx-opacity: 65%;" text="" textAlignment="JUSTIFY" textFill="WHITE">
