@@ -123,8 +123,8 @@ public class SearchViewController {
 //            stage.setScene(scene);
 //            stage.show();
 
-            FXMLLoader fxmlLoader = new FXMLLoader(Frame1Controller.class.getResource("Frame1-view.fxml"));
-            root = FXMLLoader.load(getClass().getResource("Frame1-view.fxml"));
+//            FXMLLoader fxmlLoader = new FXMLLoader(Frame1Controller.class.getResource("Frame1-view.fxml"));
+//            root = FXMLLoader.load(getClass().getResource("Frame1-view.fxml"));
 //            Scene scene = null;
 //            try {
 //                scene = new Scene(fxmlLoader.load(), 1200, 700);
