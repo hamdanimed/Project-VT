@@ -54,11 +54,12 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></ListView>
-      <ImageView fx:id="Back" fitHeight="69.0" fitWidth="75.0" layoutX="26.0" layoutY="18.0" onMouseClicked="#Back" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="Back" fitHeight="70.0" fitWidth="42.0" layoutX="25.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@assets/back.png" />
          </image>
       </ImageView>
+      <Button fx:id="backBtn" layoutX="28.0" layoutY="24.0" mnemonicParsing="false" onAction="#Back" opacity="0.0" prefHeight="26.0" prefWidth="28.0" />
       <Pane fx:id="pane" layoutX="210.0" layoutY="259.0" prefHeight="383.0" prefWidth="798.0" style="-fx-border-radius: 30;">
          <children>
             <HBox alignment="CENTER" layoutX="31.0" layoutY="22.0" prefHeight="115.0" prefWidth="742.0" spacing="15.0">

@@ -45,12 +45,12 @@ public class Frame1Controller implements Initializable {
     @FXML
     void pageNext(ActionEvent event) throws IOException {
 //        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("search-view.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 //        scene = new Scene(fxmlLoader.load());
 //        stage.setScene(scene);
 //        stage.show();
 
         FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("search-view.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.setTitle("Search");
@@ -61,6 +61,9 @@ public class Frame1Controller implements Initializable {
 
     }
 
+//    public void setStage(Stage s){
+//        this.stage=s;
+//    }
 
 
     @Override

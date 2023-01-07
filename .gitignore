@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/main/resources/ensa/project_vt/video/
+src/main/resources/ensa/project_vt/project-vt-files/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

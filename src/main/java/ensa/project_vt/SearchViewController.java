@@ -102,7 +102,8 @@ public class SearchViewController {
             System.out.println("The youtube-dl.exe file does not exist.");
         }
 
-        this.appFolder="C:\\Users\\hp\\PC\\project-vt-files\\";
+//        this.appFolder="C:\\Users\\hp\\PC\\project-vt-files\\";
+        this.appFolder="src\\main\\resources\\ensa\\project_vt\\project-vt-files\\";
         this.youtubeDl=new YoutubeDl(appFolder,youtubeDlConfigFilePath,youtubeDlExePath) ;
         this.speechmatics=new Speechmatics(appFolder,speechmaticsConfigFilePath) ;
         this.ffmpeg=new FFmpeg(appFolder);
@@ -115,39 +116,23 @@ public class SearchViewController {
             pane.setVisible(false);
             listView.setVisible(true);
             textInfo.setText("Results");
-        }else{
-
-//            root = FXMLLoader.load(getClass().getResource("Frame1-view.fxml"));
-//            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-//            scene = new Scene(root);
-//            stage.setScene(scene);
-//            stage.show();
-
-//            FXMLLoader fxmlLoader = new FXMLLoader(Frame1Controller.class.getResource("Frame1-view.fxml"));
-//            root = FXMLLoader.load(getClass().getResource("Frame1-view.fxml"));
-//            Scene scene = null;
-//            try {
-//                scene = new Scene(fxmlLoader.load(), 1200, 700);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            stage.setTitle("Home");
-//            stage.setScene(scene);
-//            Frame1Controller frame1Controller = fxmlLoader.getController();
-//            frame1Controller.setStage(stage);
-//            stage.show();
         }
+        else{
+            Scene scene = null;
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("Frame1-view.fxml"));
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(fxmlLoader.load(), 1200, 700);
+                stage.setTitle("Home");
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-//        else{
 //            HandleDialogsForVideoFromSearch();
-//        }
+        }
     }
-
-
-//            youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=Pw-0pbY9JeU");
-//            ProgressQualitiesController menuDialogController = fxmlLoader.getController(); // load the controller for the dialog
-//    Thread checkQualityThread = new Thread(new YoutubeDlTask(youtubeDl,ProgressQualitiesController,"checkQuality"));
-//    Thread downloadVideoAndAudioThread=new Thread(new YoutubeDlTask(youtubeDl,progressController,"downloadVideoAndAudio"));
 
     public void launchProgressQualities(){
 
@@ -169,14 +154,30 @@ public class SearchViewController {
         }
     }
 
-    public void getSubtitles(ActionEvent e){
-        this.youtubeDl.videoPath="C:\\Users\\hp\\PC\\project-vt-files\\-EbzDqtZEh4\\-EbzDqtZEh4.mp4";
-        this.youtubeDl.videoTitle="-EbzDqtZEh4";
-        DataObject dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
-        dataObject.videoType="ytb";
-        SpeechmaticsTask task=new SpeechmaticsTask(dataObject,this,"getSubtitles");
-        Thread thread=new Thread(task);
-        thread.start();
+    public void getSubtitles(ActionEvent event){
+//        this.youtubeDl.videoPath="C:\\Users\\hp\\PC\\project-vt-files\\-EbzDqtZEh4\\-EbzDqtZEh4.mp4";
+//        this.youtubeDl.videoTitle="-EbzDqtZEh4";
+//        DataObject dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
+//        dataObject.videoType="ytb";
+//        SpeechmaticsTask task=new SpeechmaticsTask(dataObject,this,"getSubtitles");
+//        Thread thread=new Thread(task);
+//        thread.start();
+
+        Scene scene = null;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(fxmlLoader.load(), 1200, 700);
+            stage.setTitle("Media Player");
+            stage.setScene(scene);
+            VideoPlayerController videoPlayerController = fxmlLoader.getController();
+//            videoPlayerController.setVideoPath("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
+            stage.show();
+            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void launchProgressUpload(String audioPath,String videoPath){

@@ -12,7 +12,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -39,7 +41,8 @@ import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class VideoPlayerController implements Initializable {
+//public class VideoPlayerController implements Initializable {
+public class VideoPlayerController {
     @FXML
     private MediaPlayer mediaPlayer;
     @FXML
@@ -92,12 +95,22 @@ public class VideoPlayerController implements Initializable {
     private ScaleTransition scaleVideo;
     private FadeTransition fadeIn,fadeOut;
     private SimpleDateFormat sdf;
+    private String videoPath;
+    private String srtPath;
 
-    @Override
-    public void initialize(URL url,ResourceBundle resourceBundle)
+
+    public void intermediateFunction(String videoPath){
+        setVideoPath(videoPath);
+        initializeFunction();
+    }
+
+//    @Override
+//    public void initialize(URL url,ResourceBundle resourceBundle){}
+    public void initializeFunction()
     {
-//        mediaVideo = new Media(new File("C:\\Users\\hp\\PC\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4").toURI().toString());
-        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
+        mediaVideo = new Media(new File(videoPath).toURI().toString());
+//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4").toURI().toString());
+//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
         System.out.println(mediaView.getMediaPlayer().getMedia().toString());
@@ -108,6 +121,7 @@ public class VideoPlayerController implements Initializable {
             @Override
             public void run() {
                 totalLabel.setText("/"+timeString(mediaVideo.getDuration().toMillis()));
+                setShortcuts();
             }
         });
 
@@ -280,7 +294,23 @@ public class VideoPlayerController implements Initializable {
         backBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+
                 System.out.println("back pressed");
+                Stage stage=null;
+                Scene scene = null;
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("search-view.fxml"));
+                    stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+                    scene = new Scene(fxmlLoader.load(), 1200, 700);
+                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                    stage.setTitle("Search");
+                    stage.setScene(scene);
+                    SearchViewController searchViewController = fxmlLoader.getController();
+                    searchViewController.setStage(stage);
+                    stage.show();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -288,6 +318,33 @@ public class VideoPlayerController implements Initializable {
 
     }
 
+
+    public void setShortcuts(){
+        videoPlayer.getScene().addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) ->{
+            if(!isFieldFocused())
+                System.out.println("key pressed");
+            {
+                switch(event.getCode())
+                {
+                    case SPACE:
+                        playVideo();
+                        break;
+                    case L:
+                        next();
+                        System.out.println("next");
+                        break;
+                    case J:
+                        prev();
+
+                        break;
+                    case ESCAPE:
+                        exitFullScreenSC();
+                        break;
+                }
+
+            }
+        });
+    }
     @FXML
     protected void playVideo()
     {
@@ -514,5 +571,13 @@ public class VideoPlayerController implements Initializable {
         mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()-5000));
         findCaption();
         loadCaption();
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+    public void setSrtPath(String srtPath) {
+        this.srtPath = srtPath;
     }
 }
