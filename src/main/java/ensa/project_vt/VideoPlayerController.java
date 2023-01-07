@@ -76,6 +76,8 @@ public class VideoPlayerController implements Initializable {
     private TextArea CaptionEditText;
     @FXML
     private VBox captionBox;
+    @FXML
+    private ImageView backBtn;
 
 
     private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay,imgFullScreen,imgEditMode;
@@ -94,8 +96,8 @@ public class VideoPlayerController implements Initializable {
     @Override
     public void initialize(URL url,ResourceBundle resourceBundle)
     {
-        mediaVideo = new Media(new File("C:\\Users\\hp\\PC\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4").toURI().toString());
-//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
+//        mediaVideo = new Media(new File("C:\\Users\\hp\\PC\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4").toURI().toString());
+        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
         System.out.println(mediaView.getMediaPlayer().getMedia().toString());
@@ -275,7 +277,12 @@ public class VideoPlayerController implements Initializable {
 //            }
 //        });
 
-
+        backBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("back pressed");
+            }
+        });
 
 
 
