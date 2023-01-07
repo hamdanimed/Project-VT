@@ -9,6 +9,7 @@ import ensa.project_vt.localVideo.localVideo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -109,14 +110,37 @@ public class SearchViewController {
         this.youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
     }
 
-    public void Back(){
+    public void Back(ActionEvent event) {
         if(pane.isVisible()){
             pane.setVisible(false);
             listView.setVisible(true);
             textInfo.setText("Results");
         }else{
-            HandleDialogsForVideoFromSearch();
+
+//            root = FXMLLoader.load(getClass().getResource("Frame1-view.fxml"));
+//            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//            scene = new Scene(root);
+//            stage.setScene(scene);
+//            stage.show();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(Frame1Controller.class.getResource("Frame1-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("Frame1-view.fxml"));
+//            Scene scene = null;
+//            try {
+//                scene = new Scene(fxmlLoader.load(), 1200, 700);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            stage.setTitle("Home");
+//            stage.setScene(scene);
+//            Frame1Controller frame1Controller = fxmlLoader.getController();
+//            frame1Controller.setStage(stage);
+//            stage.show();
         }
+
+//        else{
+//            HandleDialogsForVideoFromSearch();
+//        }
     }
 
 
