@@ -15,7 +15,8 @@ public class VideoPlayer extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
         VideoPlayerController controller = fxmlLoader.getController();
         scene.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) ->{
-            if(controller.isVPFocused())
+            if(!controller.isFieldFocused())
+                System.out.println("key pressed");
             {
                 switch(event.getCode())
                 {
@@ -24,6 +25,7 @@ public class VideoPlayer extends Application {
                         break;
                     case L:
                         controller.next();
+                        System.out.println("next");
                         break;
                     case J:
                         controller.prev();

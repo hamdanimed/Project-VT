@@ -125,6 +125,10 @@ public class VideoPlayerController implements Initializable {
         editModeIV = makeIcon(editModeIV,imgEditMode);
         fullScreenBtn.setGraphic(fullScreenIV);
         editBtn.setGraphic(editModeIV);
+        playBtn.setFocusTraversable(false);
+        fullScreenBtn.setFocusTraversable(false);
+        editBtn.setFocusTraversable(false);
+        muteBtn.setFocusTraversable(false);
 
 
         playBtn.setGraphic(pauseIV);
@@ -469,9 +473,9 @@ public class VideoPlayerController implements Initializable {
         return ((hours.equals("00"))?"":hours+":")+minutes+":"+seconds;
 
     }
-    public Boolean isVPFocused()
+    public Boolean isFieldFocused()
     {
-        return videoPlayer.isFocused();
+        return captionEditText.isFocused();
     }
 
     // Keyboard Shortcuts
@@ -494,6 +498,7 @@ public class VideoPlayerController implements Initializable {
         mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()+5000));
         findCaption();
         loadCaption();
+        System.out.println("next");
     }
     public void prev()
     {
