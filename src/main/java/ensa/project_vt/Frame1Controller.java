@@ -1,5 +1,6 @@
 package ensa.project_vt;
 
+import ensa.project_vt.GenerateSubtitles.DataFile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,6 +39,8 @@ public class Frame1Controller implements Initializable {
 
     private Stage stage;
     private Scene scene;
+
+    DataFile dataFile=new DataFile("C:\\Users\\hp\\PC\\project-vt-files\\");
 
     @FXML
     void pageNext(ActionEvent event) throws IOException {

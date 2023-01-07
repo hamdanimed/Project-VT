@@ -90,10 +90,11 @@ public class VideoPlayerController implements Initializable {
     @Override
     public void initialize(URL url,ResourceBundle resourceBundle)
     {
-        mediaVideo = new Media(new File("C:\\Users\\hp\\PC\\project-vt-files\\-EbzDqtZEh4\\-EbzDqtZEh4.mp4").toURI().toString());
+        mediaVideo = new Media(new File("C:\\Users\\hp\\PC\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4").toURI().toString());
 //        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
+        System.out.println(mediaView.getMediaPlayer().getMedia().toString());
 
         sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
         sdf = new SimpleDateFormat("HH:mm:ss:SSS");
