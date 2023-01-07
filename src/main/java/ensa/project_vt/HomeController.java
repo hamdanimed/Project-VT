@@ -9,11 +9,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,11 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Frame1Controller implements Initializable {
-
-    @FXML
-    private ChoiceBox<?> myChoiceBox;
-
+public class HomeController implements Initializable {
     @FXML
     private Button nextIf;
 
@@ -39,8 +33,8 @@ public class Frame1Controller implements Initializable {
 
     private Stage stage;
     private Scene scene;
-
-    DataFile dataFile=new DataFile("C:\\Users\\hp\\PC\\project-vt-files\\");
+    private String appFolderPath="src\\main\\resources/ensa\\project_vt\\project-vt-files\\";
+    DataFile dataFile=new DataFile(appFolderPath);
 
     @FXML
     void pageNext(ActionEvent event) throws IOException {
@@ -60,11 +54,6 @@ public class Frame1Controller implements Initializable {
         stage.show();
 
     }
-
-//    public void setStage(Stage s){
-//        this.stage=s;
-//    }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -87,17 +76,26 @@ public class Frame1Controller implements Initializable {
         List<VideoInf> ls = new ArrayList<>();
         try{
 //            File folder = new File("C:\\Users\\Mohamed Ben Arrouch\\OneDrive\\Desktop\\project-vt-files");
-            File folder = new File("C:\\Users\\hp\\PC\\project-vt-files");
+            File folder = new File(appFolderPath);
             File[] listOfFiles = folder.listFiles();
 
             for (int i = 0; i < listOfFiles.length; i++) {
                 VideoInf videoInf = new VideoInf();
                 Path file = Paths.get(listOfFiles[i].getAbsolutePath());
                 BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+                if(listOfFiles[i].getName().contains(".json")) continue;
+                if(listOfFiles[i].getName().equals("local")) continue;
                 //System.out.println("File name: " + listOfFiles[i].getName());
                 //System.out.println("Date de dernier modification: "+ attr.lastModifiedTime());
                 //System.out.println("File size: "+attr.size());
-                videoInf.setTitle(listOfFiles[i].getName());
+//                videoInf.setTitle(listOfFiles[i].getName());
+                videoInf.setId(listOfFiles[i].getName());
+                videoInf.setTitle(dataFile.getTitle(listOfFiles[i].getName()));
+                if(!dataFile.isSubtitled(listOfFiles[i].getName()).equals("null")){
+                    videoInf.setSubnotsub("Subtitled");
+                }else{
+                    videoInf.setSubnotsub("Not Subtitled");
+                }
                 videoInf.setDate(String.valueOf(attr.lastModifiedTime()).substring(0,10));
                 //videoInf.setSize(String.valueOf(attr.size()/1024)+"MB");
                 ls.add(videoInf);
@@ -106,14 +104,6 @@ public class Frame1Controller implements Initializable {
             e.printStackTrace();
         }
 
-
-//        for (int i=0;i<10;i++){
-//            videoInf.setTitle("mimid video not for kids");
-//            videoInf.setDate("11/04/2022");
-//            videoInf.setSubnotsub("subbed");
-//            videoInf.setSize("7 MB");
-//            ls.add(videoInf);
-//        }
 
         return ls;
     }

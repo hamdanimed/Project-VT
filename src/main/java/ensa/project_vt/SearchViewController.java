@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -60,7 +61,9 @@ public class SearchViewController {
     @FXML
     Text textInfo;
     @FXML
-    ImageView Back;
+    ImageView back;
+    @FXML
+    VBox playArea;
     @FXML
     Pane progressArea;
     @FXML
@@ -111,7 +114,7 @@ public class SearchViewController {
         this.youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
     }
 
-    public void Back(ActionEvent event) {
+    public void back(ActionEvent event) {
         if(pane.isVisible()){
             pane.setVisible(false);
             listView.setVisible(true);
@@ -120,7 +123,7 @@ public class SearchViewController {
         else{
             Scene scene = null;
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("Frame1-view.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("home.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(fxmlLoader.load(), 1200, 700);
                 stage.setTitle("Home");
@@ -162,7 +165,6 @@ public class SearchViewController {
 //        SpeechmaticsTask task=new SpeechmaticsTask(dataObject,this,"getSubtitles");
 //        Thread thread=new Thread(task);
 //        thread.start();
-
         Scene scene = null;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
@@ -173,7 +175,7 @@ public class SearchViewController {
             VideoPlayerController videoPlayerController = fxmlLoader.getController();
 //            videoPlayerController.setVideoPath("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
             stage.show();
-            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
+            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","search-view.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -402,8 +404,23 @@ public class SearchViewController {
     public ListView<YoutubeVideo> getListView() {
         return listView;
     }
-    public void play(){
+
+    public void play(ActionEvent event){
         System.out.println("I play the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
+        Scene scene = null;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(fxmlLoader.load(), 1200, 700);
+            stage.setTitle("Media Player");
+            stage.setScene(scene);
+            VideoPlayerController videoPlayerController = fxmlLoader.getController();
+//            videoPlayerController.setVideoPath("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
+            stage.show();
+            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","search-view.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void save(){
         System.out.println("I save the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());

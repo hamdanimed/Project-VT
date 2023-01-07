@@ -97,10 +97,12 @@ public class VideoPlayerController {
     private SimpleDateFormat sdf;
     private String videoPath;
     private String srtPath;
+    private String previousInterface;
 
 
-    public void intermediateFunction(String videoPath){
+    public void intermediateFunction(String videoPath,String interfaceFxmlName){
         setVideoPath(videoPath);
+        setPreviousInterface(interfaceFxmlName);
         initializeFunction();
     }
 
@@ -299,18 +301,25 @@ public class VideoPlayerController {
                 Stage stage=null;
                 Scene scene = null;
                 try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("search-view.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource(previousInterface));
                     stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
                     scene = new Scene(fxmlLoader.load(), 1200, 700);
-                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-                    stage.setTitle("Search");
-                    stage.setScene(scene);
-                    SearchViewController searchViewController = fxmlLoader.getController();
-                    searchViewController.setStage(stage);
+                    stage.setTitle("Project VT");
+                    if(previousInterface.equals("search-view.fxml")){
+                        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                        stage.setScene(scene);
+                        SearchViewController searchViewController = fxmlLoader.getController();
+                        searchViewController.setStage(stage);
+                        stage.show();
+                    }else{
+                        stage.setScene(scene);
+                    }
                     stage.show();
+                    mediaPlayer.dispose();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
             }
         });
 
@@ -579,5 +588,13 @@ public class VideoPlayerController {
 
     public void setSrtPath(String srtPath) {
         this.srtPath = srtPath;
+    }
+
+    public String getPreviousInterface() {
+        return previousInterface;
+    }
+
+    public void setPreviousInterface(String previousInterface) {
+        this.previousInterface = previousInterface;
     }
 }

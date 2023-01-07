@@ -174,6 +174,36 @@ public class DataFile {
             e.printStackTrace();
         }
     }
+
+    public String getTitle(String id){
+        String data="{}";
+        //READ A FILE
+        try {
+            File myObj = new File(appFolderPath+"data.json");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                data = myReader.nextLine();
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        JSONObject dataObject=(JSONObject) JSONValue.parse(data);
+        if(dataObject.containsKey(id)){
+            JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get(id).toString());
+            if(contentObject.containsKey("title")){
+                //check if the jobId is not equal to ""
+                if(((String)contentObject.get("title")).length() !=0 ){
+                    return (String)contentObject.get("title");
+                }
+            }
+        }
+
+        return id;
+    }
+
     public String isSubtitled(String id){
 
         String data="{}";
@@ -193,7 +223,8 @@ public class DataFile {
         JSONObject dataObject=(JSONObject) JSONValue.parse(data);
         if(dataObject.containsKey(id)){
             JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get(id).toString());
-            if((boolean)contentObject.get("status")){
+            System.out.println(contentObject.get("status"));
+            if(contentObject.get("status")!=null && (boolean)contentObject.get("status")){
                 return appFolderPath+""+id+"\\"+id+".srt";
             }else {
                 return "null";

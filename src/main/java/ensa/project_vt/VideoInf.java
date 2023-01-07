@@ -2,9 +2,18 @@ package ensa.project_vt;
 
 public class VideoInf {
     private String title;
+    private String id;
     private String subnotsub;
     private String date;
     private String size;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getSize() {
         return size;
