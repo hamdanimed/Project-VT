@@ -57,7 +57,7 @@ public class VideoPlayerController implements Initializable {
     @FXML
     private Slider timeSlider;
     @FXML
-    private Button muteBtn,fullScreenBtn;
+    private Button muteBtn,fullScreenBtn,editBtn;
     @FXML
     private Label closedCaptions;
     @FXML
@@ -78,8 +78,8 @@ public class VideoPlayerController implements Initializable {
     private VBox captionBox;
 
 
-    private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay;
-    private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV;
+    private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay,imgFullScreen,imgEditMode;
+    private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV,fullScreenIV,editModeIV;
     private boolean isPlaying,isMute,isOver,isEditMode,isFullScreen;
     private double currentVolume;
     private SrtParser sp;
@@ -95,7 +95,7 @@ public class VideoPlayerController implements Initializable {
     public void initialize(URL url,ResourceBundle resourceBundle)
     {
 //        mediaVideo = new Media(new File("D:\\Series\\Emily In Paris S3\\[EgyBest].Emily.In.Paris.S03E02.WEB-DL.720p.x264.mp4").toURI().toString());
-        mediaVideo = new Media(new File("C:\\Users\\HP\\Desktop\\Java\\java-project\\Project-VT\\src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
+        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
         sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs2.srt",mediaVideo.getDuration().toMillis());
@@ -113,12 +113,19 @@ public class VideoPlayerController implements Initializable {
         imgMute = new Image(new File("src/main/resources/ensa/project_vt/UI/mute.png").toURI().toString());
         imgUnmute = new Image(new File("src/main/resources/ensa/project_vt/UI/unmute.png").toURI().toString());
         imgReplay = new Image(new File("src/main/resources/ensa/project_vt/UI/replay.png").toURI().toString());
+        imgFullScreen = new Image(new File("src/main/resources/ensa/project_vt/UI/full-screen.png").toURI().toString());
+        imgEditMode = new Image(new File("src/main/resources/ensa/project_vt/UI/edit-captions.png").toURI().toString());
         // ImageView's
         playIV = makeIcon(playIV,imgPlay);
         pauseIV = makeIcon(pauseIV,imgPause);
         muteIV = makeIcon(muteIV,imgMute);
         unmuteIV = makeIcon(unmuteIV,imgUnmute);
         replayIV = makeIcon(replayIV,imgReplay);
+        fullScreenIV = makeIcon(fullScreenIV,imgFullScreen);
+        editModeIV = makeIcon(editModeIV,imgEditMode);
+        fullScreenBtn.setGraphic(fullScreenIV);
+        editBtn.setGraphic(editModeIV);
+
 
         playBtn.setGraphic(pauseIV);
         mediaPlayer.play();
