@@ -44,6 +44,7 @@ public class SousFrame1Controller {
     @FXML
     void DeleteVideo(ActionEvent event) throws IOException {
         String button_ID = deleteV.getId();
+        System.out.println("btn id : "+button_ID);
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("You're about to delete the video ");
@@ -94,23 +95,33 @@ public class SousFrame1Controller {
     public void delfile(String id){
         try {
             // create a new file object
-            File directory = new File(appFolderPath+id);
+            System.out.println(appFolderPath+id);
+            if(id.contains("local")){
+                File file=new File(appFolderPath+id);
+                if(file.exists() && file.delete()){
+                    System.out.println(id.substring(6,id.length()-4));
+                    dataFile.deleteVideo(id.substring(6,id.length()-4));
+                    System.out.println("File was deleted");
+                }else{
+                    System.out.println("File not Found");
+                }
+            }else{
+                File directory = new File(appFolderPath+id);
+                File[] files = directory.listFiles();
+                // delete each file from the directory
+                for(File file : files) {
+                    System.out.println(file + " deleted.");
+                    file.delete();
+                }
+                // delete the directory
+                if(directory.delete()) {
+                    System.out.println("Directory Deleted");
+                    dataFile.deleteVideo(id);
+                }
+                else {
+                    System.out.println("Directory not Found");
+                }
 
-            // list all the files in an array
-            File[] files = directory.listFiles();
-
-            // delete each file from the directory
-            for(File file : files) {
-                System.out.println(file + " deleted.");
-                file.delete();
-            }
-
-            // delete the directory
-            if(directory.delete()) {
-                System.out.println("Directory Deleted");
-            }
-            else {
-                System.out.println("Directory not Found");
             }
 
         } catch (Exception e) {

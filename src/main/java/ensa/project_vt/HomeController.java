@@ -38,11 +38,6 @@ public class HomeController implements Initializable {
 
     @FXML
     void pageNext(ActionEvent event) throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("search-view.fxml"));
-//        scene = new Scene(fxmlLoader.load());
-//        stage.setScene(scene);
-//        stage.show();
-
         FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("search-view.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
@@ -57,7 +52,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        List<VideoInf> videoInfs = new ArrayList<>(videoInfs());
+        List<VideoInf> videoInfs = new ArrayList<>(videoInfs(new File(appFolderPath)));
         for (int i=0; i<videoInfs.size(); i++){
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("SousFrame1-view.fxml"));
@@ -72,11 +67,11 @@ public class HomeController implements Initializable {
 
         }
     }
-    private List<VideoInf> videoInfs(){
+    private List<VideoInf> videoInfs(File folder){
         List<VideoInf> ls = new ArrayList<>();
         try{
 //            File folder = new File("C:\\Users\\Mohamed Ben Arrouch\\OneDrive\\Desktop\\project-vt-files");
-            File folder = new File(appFolderPath);
+//            File folder = new File(appFolderPath);
             File[] listOfFiles = folder.listFiles();
 
             for (int i = 0; i < listOfFiles.length; i++) {
@@ -84,7 +79,10 @@ public class HomeController implements Initializable {
                 Path file = Paths.get(listOfFiles[i].getAbsolutePath());
                 BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
                 if(listOfFiles[i].getName().contains(".json")) continue;
-                if(listOfFiles[i].getName().equals("local")) continue;
+                if(listOfFiles[i].getName().equals("local")){
+                    ls.addAll(videoInfsForLocal(listOfFiles[i]));
+                    continue;
+                }
                 //System.out.println("File name: " + listOfFiles[i].getName());
                 //System.out.println("Date de dernier modification: "+ attr.lastModifiedTime());
                 //System.out.println("File size: "+attr.size());
@@ -103,8 +101,34 @@ public class HomeController implements Initializable {
         }catch (IOException e){
             e.printStackTrace();
         }
+        return ls;
+    }
+    private List<VideoInf> videoInfsForLocal(File folder){
+        List<VideoInf> ls = new ArrayList<>();
+        try{
+//            File folder = new File("C:\\Users\\Mohamed Ben Arrouch\\OneDrive\\Desktop\\project-vt-files");
+//            File folder = new File(appFolderPath);
+            File[] listOfFiles = folder.listFiles();
 
-
+            for (int i = 0; i < listOfFiles.length; i++) {
+                VideoInf videoInf = new VideoInf();
+                Path file = Paths.get(listOfFiles[i].getAbsolutePath());
+                BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+                if(listOfFiles[i].getName().contains(".json")) continue;
+                videoInf.setId("local\\"+listOfFiles[i].getName());
+                videoInf.setTitle(dataFile.getTitle(listOfFiles[i].getName()));
+                if(!dataFile.isSubtitled(listOfFiles[i].getName()).equals("null")){
+                    videoInf.setSubnotsub("Subtitled");
+                }else{
+                    videoInf.setSubnotsub("Not Subtitled");
+                }
+                videoInf.setDate(String.valueOf(attr.lastModifiedTime()).substring(0,10));
+                //videoInf.setSize(String.valueOf(attr.size()/1024)+"MB");
+                ls.add(videoInf);
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         return ls;
     }
 

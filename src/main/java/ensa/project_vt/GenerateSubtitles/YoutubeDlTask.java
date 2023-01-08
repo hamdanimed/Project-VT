@@ -11,6 +11,7 @@ public class YoutubeDlTask extends Task<Integer> {
     private YoutubeDl youtubeDl;
     private Object controller;
     private DataFile dataFile;
+    private FFmpeg ffmpeg;
 
     public YoutubeDlTask(DataObject dataObject, Object controller, String action) {
         super();
@@ -18,6 +19,7 @@ public class YoutubeDlTask extends Task<Integer> {
         this.youtubeDl =dataObject.youtubeDl;
         this.controller=controller;
         this.dataFile=dataObject.dataFile;
+        this.ffmpeg=dataObject.ffmpeg;
     }
 
     @Override
@@ -50,7 +52,19 @@ public class YoutubeDlTask extends Task<Integer> {
                         @Override
                         public void run() {
                             if(exitCode==0){
-                                dataFile.addVideo(youtubeDl.videoId, youtubeDl.videoTitle);
+                                ffmpeg.videoPath= youtubeDl.videoPath;
+                                ffmpeg.videoType="ytb";
+                                ffmpeg.videoTitle= youtubeDl.videoId;
+                                int ffmpegExitCode=ffmpeg.changeCodec();
+                                if(ffmpegExitCode==1){
+                                    System.out.println("[YoutubeDlTask] 'ffmpeg.changeCodec()' Something went wrong , Try Again");
+                                    downloadVideoAndAudioController.getErrorMsgLabel().setText("Something went wrong , try again");
+                                    downloadVideoAndAudioController.getErrorMsgLabel().setVisible(true);
+                                    downloadVideoAndAudioController.getStartBtn().setDisable(false);
+                                    return ;
+                                }
+                                youtubeDl.videoPath= ffmpeg.videoPath;
+                                dataFile.addVideo(youtubeDl.videoId, youtubeDl.videoTitle,youtubeDl.videoPath);
                                 downloadVideoAndAudioController.getNextBtn().setDisable(false);
                             }else{
                                 System.out.println("[YoutubeDlTask] 'downloadVideoAndAudio' Something went wrong , Try Again");
@@ -77,6 +91,7 @@ public class YoutubeDlTask extends Task<Integer> {
 
         return 0;
     }
+
 
     public void sendCancelSignal(){
         this.youtubeDl.setSignal(true);

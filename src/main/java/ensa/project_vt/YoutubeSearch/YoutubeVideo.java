@@ -14,7 +14,8 @@ import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
 public class YoutubeVideo {
 
 
-    private String id;
+    private String id="";
+    public String videoType;
     private String videoTitle;
     private String duration;
     private String url;
@@ -100,5 +101,22 @@ public class YoutubeVideo {
 
     public String getYtAudioQuality() {
         return audioQuality;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "YoutubeVideo{" +
+                "id='" + id + '\'' +
+                ", videoTitle='" + videoTitle + '\'' +
+                ", duration='" + duration + '\'' +
+                ", url='" + url + '\'' +
+                ", thumbnailUrl='" + thumbnailUrl + '\'' +
+                ", videoQuality='" + videoQuality + '\'' +
+                ", audioQuality='" + audioQuality + '\'' +
+                '}';
     }
 }

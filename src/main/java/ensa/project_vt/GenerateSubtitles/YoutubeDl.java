@@ -46,7 +46,7 @@ public class YoutubeDl {
         try {
 //            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+this.videoId+"\\"+"%(id)s.%(ext)s","-f","(webm)[height<360]+bestaudio","--config-location",configurationFilePath);
             System.out.println(audioQuality+" "+videoQuality);
-            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+this.videoId+"\\"+"%(id)s.%(ext)s","-f",videoQuality+"+"+audioQuality,"--config-location",configurationFilePath);
+            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+"tmp"+"\\"+"%(id)s.%(ext)s","-f",videoQuality+"+"+audioQuality,"--config-location",configurationFilePath);
 
 
             pb.redirectErrorStream(true); // errorstream of the process will be redirected to standard output
@@ -76,7 +76,7 @@ public class YoutubeDl {
             if(exitCode==1){
                 if(this.signal){
                     System.out.println("[YoutubeDl] 'downloadVideoAndAudio' was canceled");
-                    this.deleteDownload(new File(videoAndAudioRepository+this.videoId));
+                    this.deleteDownload(new File(videoAndAudioRepository+"tmp"));
                     this.signal=false;
                 }else{
                     System.out.println("[YoutubeDl] An error accured with 'downloadVideoAndAudio'");
@@ -101,7 +101,8 @@ public class YoutubeDl {
         if(outputLineAsArray[0].equals("[download]")){
 
             //getting video path
-            this.videoPath=videoAndAudioRepository+this.videoId+"\\"+this.videoId+".mp4";
+            this.videoPath=videoAndAudioRepository+"tmp"+"\\"+this.videoId+".mp4";
+//            this.videoPath=videoAndAudioRepository+this.videoId+"\\"+this.videoId+".mp4";
 //            if(outputLineAsArray[1].equals("Destination:")){
 //                //getting video path
 //                System.out.println(outputLineAsArray[2]);
