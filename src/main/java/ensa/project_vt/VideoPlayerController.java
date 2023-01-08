@@ -244,25 +244,22 @@ public class VideoPlayerController {
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
                 double currentTime = mediaPlayer.getCurrentTime().toMillis();
                 timeProgress.setProgress(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
-                if(Math.abs(currentTime-newValue.doubleValue())>500)
+                if(Math.abs(currentTime-newValue.doubleValue())>500 && !isCaptionLoading)
                 {
+                    if (isPlaying) playVideo();
                     System.out.println("event seek");
                     if(playBtn.getGraphic().equals(replayIV)) playBtn.setGraphic(playIV);
                     System.out.println("newValue.doubleValue() = " + newValue.doubleValue());
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
                     findCaption(newValue.doubleValue());
+                    System.out.println("math.abs setText ");
                     loadCaption();
+                    if(!isPlaying) playVideo();
                 }
                 timeLabel.setText(timeString(timeSlider.getValue()));
             }
         });
 
-        timeSlider.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                if(!isPlaying) playVideo();
-            }
-        });
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
             public void changed(ObservableValue<? extends Duration> observableValue, Duration oldTime, Duration newValue) {
@@ -275,9 +272,10 @@ public class VideoPlayerController {
                     {
 
                         captionIndex++;
-                        closedCaptions.setText(nextCaption.getText());
                         actualCaption = nextCaption;
                         if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
+                        closedCaptions.setText(actualCaption.getText());
+                        System.out.println("isValueChanging setText");
                         loadCaption();
                     }
                     if(newValue.toMillis()>actualCaption.getEnd() && newValue.toMillis()< nextCaption.getStart())
@@ -288,6 +286,7 @@ public class VideoPlayerController {
                 }
             }
         });
+
         fullScreenBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
@@ -604,13 +603,17 @@ public class VideoPlayerController {
     }
     public void next()
     {
+        if(isPlaying) playVideo();
         Double newValue = timeSlider.getValue()+5000;
         timeSlider.setValue(newValue);
+        if(!isPlaying) playVideo();
     }
     public void prev()
     {
+        if (isPlaying) playVideo();
         Double newValue = timeSlider.getValue()-5000;
         timeSlider.setValue(newValue);
+        if (!isPlaying) playVideo();
     }
 
 
