@@ -244,7 +244,7 @@ public class VideoPlayerController {
             public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
                 double currentTime = mediaPlayer.getCurrentTime().toMillis();
                 timeProgress.setProgress(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
-                if(Math.abs(currentTime-newValue.doubleValue())>500 && !isCaptionLoading)
+                if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
                     if (isPlaying) playVideo();
                     System.out.println("event seek");
