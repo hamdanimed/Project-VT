@@ -1,6 +1,8 @@
 package ensa.project_vt;
 
 import ensa.project_vt.GenerateSubtitles.DataFile;
+import ensa.project_vt.GenerateSubtitles.Speechmatics;
+import ensa.project_vt.GenerateSubtitles.SpeechmaticsTask;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +33,8 @@ public class SousFrame1Controller {
 
     @FXML
     private Button playV;
+    @FXML
+    private Button subtitlesV;
 
     @FXML
     private Label subNotsub;
@@ -81,6 +85,63 @@ public class SousFrame1Controller {
             throw new RuntimeException(e);
         }
     }
+    @FXML
+    void getSubtitles(ActionEvent event) {
+        String button_ID = subtitlesV.getId();
+        String videoType="ytb";
+        if(button_ID.contains("local")){
+            button_ID=button_ID.substring(6,button_ID.length()-4);
+            videoType="local";
+        }
+
+
+        if(dataFile.getJobId(button_ID).equals("null")){
+            String audioPath= dataFile.getPath(button_ID)+"\\"+button_ID+".wav";
+            String videoPath= dataFile.getPath(button_ID)+"\\"+button_ID+".mp4";
+
+            Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("You need to upload the audio to speechmatics");
+            alert.setContentText("Do really want to upload the audio ?");
+            if(alert.showAndWait().get()== ButtonType.OK){
+                Stage stage=null;
+                Scene scene = null;
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("search-view.fxml"));
+                    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    scene = new Scene(fxmlLoader.load(), 1200, 700);
+                    scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                    stage.setTitle("Search");
+                    stage.setScene(scene);
+                    SearchViewController searchViewController = fxmlLoader.getController();
+                    searchViewController.setStage(stage);
+                    stage.show();
+                    searchViewController.launchProgressUpload(audioPath,videoPath);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }else {
+            String configFilePath=new File("src/main/resources/ensa/project_vt/generate_subtitles/speechmatics-config-standard.json").getAbsolutePath();
+            Speechmatics speechmatics=new Speechmatics(appFolderPath,configFilePath);
+
+            int exitCode=speechmatics.getSubstitles(dataFile.getJobId(button_ID),button_ID,button_ID);
+            if(exitCode==1){
+                System.out.println("Error accured with getting subititles");
+            }else{
+                dataFile.setSubtitled(button_ID,true);
+            }
+//            SpeechmaticsTask task=new SpeechmaticsTask(speechmatics,button_ID,videoType,"getSubtitles");
+//            Thread thread=new Thread(task);
+//            thread.setDaemon(true);
+//            thread.start();
+        }
+
+        System.out.println(button_ID);
+        System.out.println(videoTitle+"   "+date);
+
+
+    }
 
     public void setData(VideoInf videoInf){
         //Image img = new Image(getClass().getResourceAsStream(videoInf.))
@@ -89,6 +150,7 @@ public class SousFrame1Controller {
         subNotsub.setText(videoInf.getSubnotsub());
         playV.setId(videoInf.getId());
         deleteV.setId(videoInf.getId());
+        subtitlesV.setId(videoInf.getId());
         //Size.setText(videoInf.getSize());
     }
 
@@ -99,7 +161,7 @@ public class SousFrame1Controller {
             if(id.contains("local")){
                 File file=new File(appFolderPath+id);
                 if(file.exists() && file.delete()){
-                    System.out.println(id.substring(6,id.length()-4));
+//                    System.out.println(id.substring(6,id.length()-4));
                     dataFile.deleteVideo(id.substring(6,id.length()-4));
                     System.out.println("File was deleted");
                 }else{

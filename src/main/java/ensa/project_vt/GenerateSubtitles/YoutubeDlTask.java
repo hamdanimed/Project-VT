@@ -13,13 +13,20 @@ public class YoutubeDlTask extends Task<Integer> {
     private DataFile dataFile;
     private FFmpeg ffmpeg;
 
+    private DataObject dataObject;
+
     public YoutubeDlTask(DataObject dataObject, Object controller, String action) {
         super();
+        this.dataObject=dataObject;
         this.action=action;
         this.youtubeDl =dataObject.youtubeDl;
         this.controller=controller;
         this.dataFile=dataObject.dataFile;
         this.ffmpeg=dataObject.ffmpeg;
+    }
+
+    public DataObject getDataObject() {
+        return dataObject;
     }
 
     @Override
@@ -33,6 +40,7 @@ public class YoutubeDlTask extends Task<Integer> {
                         @Override
                         public void run() {
                             if(exitCode==0){
+                                dataObject.youtubeDl=youtubeDl;
                                 chooseQualitesDialogController.getloadingImage().setVisible(false);
                                 chooseQualitesDialogController.getStartBtn().setDisable(false);
                             }else{
@@ -64,7 +72,9 @@ public class YoutubeDlTask extends Task<Integer> {
                                     return ;
                                 }
                                 youtubeDl.videoPath= ffmpeg.videoPath;
-                                dataFile.addVideo(youtubeDl.videoId, youtubeDl.videoTitle,youtubeDl.videoPath);
+                                dataFile.addVideo(youtubeDl.videoId, youtubeDl.videoTitle, ffmpeg.destinationFolder);
+                                dataObject.youtubeDl=youtubeDl;
+                                dataObject.ffmpeg=ffmpeg;
                                 downloadVideoAndAudioController.getNextBtn().setDisable(false);
                             }else{
                                 System.out.println("[YoutubeDlTask] 'downloadVideoAndAudio' Something went wrong , Try Again");

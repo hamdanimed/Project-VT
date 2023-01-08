@@ -15,7 +15,7 @@ public class YoutubeVideo {
 
 
     private String id="";
-    public String videoType;
+    public String videoType="";
     private String videoTitle;
     private String duration;
     private String url;

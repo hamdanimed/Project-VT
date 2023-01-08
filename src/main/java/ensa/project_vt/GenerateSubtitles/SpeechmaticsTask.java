@@ -25,12 +25,21 @@ public class SpeechmaticsTask extends Task<Integer> {
         }
     }
 
+    private String dataFileId;
+    public SpeechmaticsTask(Speechmatics speechmatics,String dataFileId,String videoType,String action){
+        this.dataFileId=dataFileId;
+        this.speechmatics=speechmatics;
+        this.videoType=videoType;
+        this.action=action;
+    }
+
     @Override
     protected Integer call(){
 
         switch (this.action) {
             case "sendAudio" -> {
                 System.out.println("Thread sendAudio");
+                System.out.println(this.youtubeDl.audioPath);
                 ProgressUploadAudioController uploadAudioController= (ProgressUploadAudioController) this.controller;
                 this.speechmatics.setAudioPath(this.youtubeDl.audioPath);
 
@@ -58,24 +67,29 @@ public class SpeechmaticsTask extends Task<Integer> {
             }
             case "getSubtitles" ->{
                 System.out.println("Thread getSubtitles");
-                int exitCode=1;
+                int exitCode;
 
                 if(this.videoType.equals("local")){
-                    exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(this.youtubeDl.videoPath),"local",this.youtubeDl.videoPath);
+                    System.out.println("something local");
+                    exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(dataFileId),"local",dataFile.getTitle(dataFileId));
                 }else{
-                    exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(this.youtubeDl.videoId),this.youtubeDl.videoId,this.youtubeDl.videoId);
+                    System.out.println("somehitn ytb");
+                    System.out.println(this.speechmatics.checkOnJob(dataFile.getJobId(dataFileId)));
+                    exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(dataFileId),dataFileId,dataFileId);
                 }
+                System.out.println("somehitn"+exitCode);
 
                 int finalExitCode = exitCode;
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         if(finalExitCode ==0){
-                            if (videoType.equals("local")) {
-                                dataFile.setSubtitled(youtubeDl.videoPath, true,"ytb");
-                            }else{
-                                dataFile.setSubtitled(youtubeDl.videoId, true,"ytb");
-                            }
+                            dataFile.setSubtitled(dataFileId, true);
+//                            if (videoType.equals("local")) {
+//                                dataFile.setSubtitled(dataFileId, true,"ytb");
+//                            }else{
+//                                dataFile.setSubtitled(dataFileId, true,"ytb");
+//                            }
                         }else{
                             System.out.println("[SpeechmaticsTask] Something Went Wrong, Try again");
 

@@ -102,6 +102,7 @@ public class YoutubeDl {
 
             //getting video path
             this.videoPath=videoAndAudioRepository+"tmp"+"\\"+this.videoId+".mp4";
+            this.audioPath=videoAndAudioRepository+this.videoId+"\\"+this.videoId+".wav";
 //            this.videoPath=videoAndAudioRepository+this.videoId+"\\"+this.videoId+".mp4";
 //            if(outputLineAsArray[1].equals("Destination:")){
 //                //getting video path
@@ -125,13 +126,13 @@ public class YoutubeDl {
             }
         }
 
-        if(outputLineAsArray[0].equals("[ffmpeg]")){
-
-            if(outputLineAsArray[1].equals("Destination:")){
-                //getting audio path
-                this.audioPath=outputLineAsArray[2];
-            }
-        }
+//        if(outputLineAsArray[0].equals("[ffmpeg]")){
+//
+//            if(outputLineAsArray[1].equals("Destination:")){
+//                //getting audio path
+//                this.audioPath=outputLineAsArray[2];
+//            }
+//        }
 //        System.out.println(Arrays.toString(outputLineAsArray));
     }
 

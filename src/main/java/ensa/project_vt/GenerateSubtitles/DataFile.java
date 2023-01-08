@@ -262,8 +262,7 @@ public class DataFile {
 
         return "null";
     }
-    public void setSubtitled(String id,boolean status,String type){
-        if(type.equals("ytb")){
+    public void setSubtitled(String id,boolean status){
             String data="{}";
             //READ A FILE
             try {
@@ -297,9 +296,6 @@ public class DataFile {
                 e.printStackTrace();
             }
 
-        }else if(type.equals("local")){
-
-        }
     }
 
     private void setAppFolderPath(String appFolderPath){

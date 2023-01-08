@@ -11,6 +11,7 @@ public class FFmpeg {
 
     public String videoTitle;
     public String videoPath;
+    public String destinationFolder;
     public String tmpFolder;
     public String audioPath="";
     private String appFolder;
@@ -29,6 +30,7 @@ public class FFmpeg {
         int exitCode=1;
         System.out.println("FFmpeg convertToAudio()-------------------------------------------------------------------");
         String destination=appFolder+"local\\"+videoTitle+".wav";
+        destinationFolder=appFolder+"local";
         if(!videoType.equals("local")){
             System.out.println("[FFmpeg] the video type isn't 'local' , this function isn't available for downloaded videos");
             return 1;
@@ -42,7 +44,7 @@ public class FFmpeg {
         }
         try {
             // C:\ffmpeg\bin\ffmpeg.exe -i videoPath C:\Users\hp\PC\project-vt-files\local\videoTitle.wav
-            this.audioPath=this.appFolder+"\\local\\"+this.videoPath+".wav";
+            this.audioPath=this.appFolder+"\\local\\"+this.videoTitle+".wav";
             ProcessBuilder pb = new ProcessBuilder(executableLocation,"-i",videoPath,destination);
 
             pb.redirectErrorStream(true); // errorstream of the process will be redirected to standard output
@@ -84,6 +86,7 @@ public class FFmpeg {
 //            destination=this.appFolder+"\\"+"local"+"\\"+this.videoPath+".mp4";
         }else{
             destination=this.appFolder+videoTitle+"\\"+this.videoTitle+".mp4";
+            destinationFolder=this.appFolder+videoTitle;
         }
 
         File folder = new File(this.appFolder+"\\"+videoTitle);
@@ -133,6 +136,10 @@ public class FFmpeg {
         for(File subfile:folder.listFiles()){
             if(subfile.isDirectory()){
                 deleteDownload(subfile);
+            }
+            if(subfile.getName().contains(".wav")){
+                File targetDirectory=new File(this.appFolder+videoTitle);
+                subfile.renameTo(new File(targetDirectory.getAbsolutePath()+"\\"+subfile.getName()));
             }
             subfile.delete();
         }
