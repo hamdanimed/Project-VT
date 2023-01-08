@@ -413,8 +413,10 @@ public class VideoPlayerController {
         String[] parts = captionEditText.getText().split("\n");
         String validText = "";
         for (int i = 0; i < parts.length; i++) {
-            if(!parts[i].equals("")) validText+=parts[i];
-            if(i != parts.length-1) validText+="\n";
+            if(!parts[i].equals("")) {
+                validText+=parts[i];
+                if(i != parts.length-1) validText+="\n";
+            }
         }
 
         captionEditText.setText(validText);
