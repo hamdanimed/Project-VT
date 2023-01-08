@@ -81,11 +81,13 @@ public class VideoPlayerController {
     private VBox captionBox;
     @FXML
     private ImageView backBtn;
+    @FXML
+    private Button saveCaptionBtn;
 
 
     private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay,imgFullScreen,imgEditMode;
     private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV,fullScreenIV,editModeIV;
-    private boolean isPlaying,isMute,isOver,isEditMode,isFullScreen;
+    private boolean isPlaying,isMute,isOver,isEditMode,isFullScreen,isCaptionLoading;
     private double currentVolume;
     private SrtParser sp;
 
@@ -115,7 +117,6 @@ public class VideoPlayerController {
 //        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
-        System.out.println(mediaView.getMediaPlayer().getMedia().toString());
 
         sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
         sdf = new SimpleDateFormat("HH:mm:ss:SSS");
@@ -150,6 +151,7 @@ public class VideoPlayerController {
         editBtn.setFocusTraversable(false);
         muteBtn.setFocusTraversable(false);
         captionEditText.setFocusTraversable(false);
+        saveCaptionBtn.setFocusTraversable(false);
 
 
         playBtn.setGraphic(pauseIV);
@@ -159,6 +161,7 @@ public class VideoPlayerController {
         isOver=false;
         isEditMode=false;
         isFullScreen=false;
+        isCaptionLoading = false;
         currentVolume=1;
         muteBtn.setGraphic(unmuteIV);
 
@@ -242,10 +245,11 @@ public class VideoPlayerController {
                 timeProgress.setProgress(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
+                    System.out.println("event seek");
                     if(playBtn.getGraphic().equals(replayIV)) playBtn.setGraphic(playIV);
                     System.out.println("newValue.doubleValue() = " + newValue.doubleValue());
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
-                    findCaption(newValue.doubleValue());
+                    findCaption(timeSlider.getValue());
                     loadCaption();
                 }
                 timeLabel.setText(timeString(timeSlider.getValue()));
@@ -265,7 +269,6 @@ public class VideoPlayerController {
                     {
 
                         captionIndex++;
-                        System.out.println("captionIndex: "+captionIndex);
                         closedCaptions.setText(nextCaption.getText());
                         actualCaption = nextCaption;
                         if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
@@ -350,7 +353,6 @@ public class VideoPlayerController {
                         break;
                     case L:
                         next();
-                        System.out.println("next");
                         break;
                     case J:
                         prev();
@@ -528,16 +530,8 @@ public class VideoPlayerController {
     }
 
 
-    public ImageView makeIcon(ImageView iv,Image img)
-    {
-        iv = new ImageView(img);
-        iv.setFitHeight(20);
-        iv.setFitWidth(20);
-        return iv;
-    }
     public void findCaption(Double time)
     {
-        System.out.println(mediaPlayer.getCurrentTime().toMillis());
         HashMap<Integer,Caption> result = sp.search(time,0,sp.getCaptions().size());
         System.out.println(result);
         if(result==null)
@@ -550,16 +544,31 @@ public class VideoPlayerController {
             {
 
                 closedCaptions.setText("");
-                nextCaption=result.get(0);
-                captionIndex = nextCaption.getId()-1;
-                if(captionIndex==0) actualCaption = captionInit;
-                else actualCaption = sp.getCaptions().get(captionIndex);
+                if(result.get(0)==null)
+                {
+                    captionIndex = sp.getCaptions().size()-1;
+                    actualCaption = sp.getCaptions().get(captionIndex);
+                    nextCaption = actualCaption;
+                }
+                else
+                {
+                    nextCaption = result.get(0);
+                    captionIndex = nextCaption.getId()-1;
+                    if(captionIndex==-1){
+                        actualCaption = captionInit;
+                    }
+                    else actualCaption = sp.getCaptions().get(captionIndex);
+
+                }
             }
             else {
-                closedCaptions.setText(result.get(1).getText());
                 actualCaption = result.get(1);
                 captionIndex=actualCaption.getId();
-                nextCaption = sp.getCaptions().get(captionIndex+1);
+                if(sp.getCaptions().containsKey(captionIndex+1))
+                    nextCaption = sp.getCaptions().get(captionIndex+1);
+                else
+                    nextCaption = actualCaption;
+                closedCaptions.setText(actualCaption.getText());
             }
 
         }
@@ -594,18 +603,22 @@ public class VideoPlayerController {
     }
     public void next()
     {
-        Double newValue = mediaPlayer.getCurrentTime().toMillis()+5000;
-        mediaPlayer.seek(Duration.millis(newValue));
-        findCaption(newValue);
-        loadCaption();
-        System.out.println("next");
+        Double newValue = timeSlider.getValue()+5000;
+        timeSlider.setValue(newValue);
     }
     public void prev()
     {
-        Double newValue = mediaPlayer.getCurrentTime().toMillis()-5000;
-        mediaPlayer.seek(Duration.millis(newValue));
-        findCaption(newValue);
-        loadCaption();
+        Double newValue = timeSlider.getValue()-5000;
+        timeSlider.setValue(newValue);
+    }
+
+
+    public ImageView makeIcon(ImageView iv,Image img)
+    {
+        iv = new ImageView(img);
+        iv.setFitHeight(20);
+        iv.setFitWidth(20);
+        return iv;
     }
 
     public void setVideoPath(String videoPath) {

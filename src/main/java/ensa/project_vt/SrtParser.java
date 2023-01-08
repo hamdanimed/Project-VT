@@ -133,10 +133,14 @@ public class SrtParser {
             int m=(start+end)/2;
             c = captions.get(m);
             if(captions.containsKey(m+1)) nc=captions.get(m+1);
-            if(nc==null) return null;
             if(c.getStart()<=time && c.getEnd()>=time)
             {
                 result.put(1,c);
+                return result;
+            }
+            if(nc==null)
+            {
+                result.put(0,null);
                 return result;
             }
             if(c.getEnd()<time && nc.getStart()>time)
