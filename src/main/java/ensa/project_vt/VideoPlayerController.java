@@ -149,6 +149,7 @@ public class VideoPlayerController {
         fullScreenBtn.setFocusTraversable(false);
         editBtn.setFocusTraversable(false);
         muteBtn.setFocusTraversable(false);
+        captionEditText.setFocusTraversable(false);
 
 
         playBtn.setGraphic(pauseIV);
@@ -186,7 +187,7 @@ public class VideoPlayerController {
             @Override
             public void handle(MouseEvent mouseEvent){fadeOut.play();}
         });
-//        Bindings.bindBidirectional(closedCaptions.textProperty(), captionEditText.textProperty());
+
         // volume
         Bindings.bindBidirectional(mediaPlayer.volumeProperty(),volumeSlider.valueProperty());
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -197,6 +198,8 @@ public class VideoPlayerController {
 
             }
         });
+
+
 
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             @Override
@@ -211,6 +214,13 @@ public class VideoPlayerController {
             }
         });
 
+        //Feature: video paused automatically after clicking on field to edit
+        captionEditText.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if(t1 && isPlaying) playVideo();
+            }
+        });
 
         // Progress bar slider
         mediaPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
@@ -331,7 +341,6 @@ public class VideoPlayerController {
     public void setShortcuts(){
         videoPlayer.getScene().addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) ->{
             if(!isFieldFocused())
-                System.out.println("key pressed");
             {
                 switch(event.getCode())
                 {
@@ -398,7 +407,17 @@ public class VideoPlayerController {
     }
     @FXML
     void saveCaptions(ActionEvent event) {
-        sp.editCaption(captionEditText.getText(),captionIndex);
+
+        //Validation
+        String[] parts = captionEditText.getText().split("\n");
+        String validText = "";
+        for (int i = 0; i < parts.length; i++) {
+            if(!parts[i].equals("")) validText+=parts[i];
+            if(i != parts.length-1) validText+="\n";
+        }
+
+        captionEditText.setText(validText);
+        sp.editCaption(validText,captionIndex);
         try {
             Files.writeString(Paths.get("src\\main\\resources\\ensa\\project_vt\\subs2.srt"),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
