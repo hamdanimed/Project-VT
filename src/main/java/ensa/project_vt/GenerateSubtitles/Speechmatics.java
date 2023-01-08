@@ -33,6 +33,7 @@ public class Speechmatics {
     public int sendAudio(ProgressUploadAudioController uploadAudioController){
         System.out.println("Speechmatics sendAudio()-------------------------------------------------------------------");
         try {
+            System.out.println(audioPath);
             //POST AN AUDIO ,RECIEVE AND ID FOR THE JOB
             ProcessBuilder pb = new ProcessBuilder("curl","-L","-X","POST","https://asr.api.speechmatics.com/v2/jobs/","-H","Authorization: Bearer "+this.key,"-F",audioPath,"-F",configFilePath,"-w","%{http_code}");
 
@@ -117,10 +118,12 @@ public class Speechmatics {
     }
 
     public int getSubstitles(String id,String destinationFolder,String title){
+        System.out.println("a;lsdkfja;lksdjf");
         if(id.length() == 0){
             System.out.println("[Speechmatics : getSubtitles] need a job id");
+            return 1;
         }
-        System.out.println(id);
+        System.out.println("Starting :"+id);
         this.checkOnJob(id);
 
         if(!this.jobStatus.equals("done")){
@@ -216,7 +219,7 @@ public class Speechmatics {
         }
     }
 
-    public void checkOnJob(String id){
+    public String checkOnJob(String id){
         System.out.println("Speechmatics checkOnJob()-------------------------------------------------------------------");
         try {
             //CHECK ON A JOB
@@ -240,6 +243,7 @@ public class Speechmatics {
         } catch (UnsupportedOperationException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
+        return jobStatus;
     }
 
     private void parseCheckOnJob(String line){

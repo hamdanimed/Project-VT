@@ -162,7 +162,7 @@ public class SearchViewController {
     public void getSubtitles(ActionEvent event){
 //        this.youtubeDl.videoPath="C:\\Users\\hp\\PC\\project-vt-files\\-EbzDqtZEh4\\-EbzDqtZEh4.mp4";
 //        this.youtubeDl.videoTitle="-EbzDqtZEh4";
-//        DataObject dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
+//        DataObject dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile,this.ffmpeg);
 //        dataObject.videoType="ytb";
 //        SpeechmaticsTask task=new SpeechmaticsTask(dataObject,this,"getSubtitles");
 //        Thread thread=new Thread(task);

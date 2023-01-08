@@ -79,6 +79,7 @@ public class ProgressDownloadController {
     public void next(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("progressUploadAudio.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        dataObject=task.getDataObject();
         stage.setUserData(dataObject);
         scene = new Scene(root);
         stage.setScene(scene);

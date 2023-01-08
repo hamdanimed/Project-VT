@@ -31,7 +31,7 @@ public class FFmpegTask extends Task<Integer> {
                 if(exitCode==1){
                     System.out.println("[FFmpegTask] 'convertToAudio' Something Went Wrong , Try again");
                 }else{
-                    dataFile.addVideo(ffmpeg.videoTitle, ffmpeg.videoTitle, ffmpeg.videoPath);
+                    dataFile.addVideo(ffmpeg.videoTitle, ffmpeg.videoTitle, ffmpeg.destinationFolder);
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {

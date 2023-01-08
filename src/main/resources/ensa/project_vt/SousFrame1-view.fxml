@@ -38,7 +38,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="879.0" layoutY="27.0" mnemonicParsing="false" style="-fx-background-color: #323232;">
+      <Button fx:id="subtitlesV" layoutX="879.0" layoutY="27.0" mnemonicParsing="false" onAction="#getSubtitles" style="-fx-background-color: #323232;">
          <graphic>
             <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                <image>
