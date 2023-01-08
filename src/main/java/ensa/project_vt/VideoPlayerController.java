@@ -243,8 +243,9 @@ public class VideoPlayerController {
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
                     if(playBtn.getGraphic().equals(replayIV)) playBtn.setGraphic(playIV);
+                    System.out.println("newValue.doubleValue() = " + newValue.doubleValue());
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
-                    findCaption();
+                    findCaption(newValue.doubleValue());
                     loadCaption();
                 }
                 timeLabel.setText(timeString(timeSlider.getValue()));
@@ -340,7 +341,7 @@ public class VideoPlayerController {
 
     public void setShortcuts(){
         videoPlayer.getScene().addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) ->{
-            if(!isFieldFocused())
+            if(!isEditMode)
             {
                 switch(event.getCode())
                 {
@@ -532,9 +533,11 @@ public class VideoPlayerController {
         iv.setFitWidth(20);
         return iv;
     }
-    public void findCaption()
+    public void findCaption(Double time)
     {
-        HashMap<Integer,Caption> result = sp.search(mediaPlayer.getCurrentTime().toMillis(),0,sp.getCaptions().size());
+        System.out.println(mediaPlayer.getCurrentTime().toMillis());
+        HashMap<Integer,Caption> result = sp.search(time,0,sp.getCaptions().size());
+        System.out.println(result);
         if(result==null)
         {
             closedCaptions.setText("");
@@ -589,15 +592,17 @@ public class VideoPlayerController {
     }
     public void next()
     {
-        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()+5000));
-        findCaption();
+        Double newValue = mediaPlayer.getCurrentTime().toMillis()+5000;
+        mediaPlayer.seek(Duration.millis(newValue));
+        findCaption(newValue);
         loadCaption();
         System.out.println("next");
     }
     public void prev()
     {
-        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()-5000));
-        findCaption();
+        Double newValue = mediaPlayer.getCurrentTime().toMillis()-5000;
+        mediaPlayer.seek(Duration.millis(newValue));
+        findCaption(newValue);
         loadCaption();
     }
 
