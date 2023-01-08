@@ -88,6 +88,18 @@ public class SearchViewController {
     private FFmpeg ffmpeg;
     private DataFile dataFile;
 
+    private YoutubeVideo videoDisplayedOnPane=null;
+
+    @FXML
+    private void initialize() {
+        initializeYoutubeDlandSpeechmaticsObjects();
+        textInfo.setVisible(false);
+        pane.setVisible(false);
+        listView.setVisible(false);
+        progressArea.setVisible(false);
+        listView.setCellFactory(resultListView -> new ResultCell());
+
+    }
     public void initializeYoutubeDlandSpeechmaticsObjects(){
         File myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/speechmatics-config-standard.json");
         if (myObjForInfo.exists()) {
@@ -116,49 +128,36 @@ public class SearchViewController {
         this.dataFile=new DataFile(appFolder);
         this.youtubeDl.setYoutubelink("https://www.youtube.com/watch?v=-EbzDqtZEh4");
     }
+    //handel Click on Browse
+    public void setStage(Stage stage) {
+        this.stage = stage;
+        this.stage.resizableProperty().setValue(false);
+        browse.setOnMouseClicked(event -> {
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video Files", "*.mp4");
+            fileChooser.getExtensionFilters().add(extFilter);
+            // get the file selected
+            File file = fileChooser.showOpenDialog(stage);
+            if(file!=null) {
 
-    public void back(ActionEvent event) {
-        if(pane.isVisible()){
-            pane.setVisible(false);
-            listView.setVisible(true);
-            textInfo.setText("Results");
-        }
-        else{
-            Scene scene = null;
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("home.fxml"));
-                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                scene = new Scene(fxmlLoader.load(), 1200, 700);
-                stage.setTitle("Home");
-                stage.setScene(scene);
-                stage.show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+
+                // create a new video object with the information from the file
+                createVideoInstance(file);
+
+                //converting to audio
+                String fileNameWithOutExt = FilenameUtils.removeExtension(file.getName());
+                this.ffmpeg.setVideo(fileNameWithOutExt,file.getAbsolutePath());
+//
+//                FFmpegTask convertingTask=new FFmpegTask(ffmpeg,this.dataFile,this,"convertToAudio");
+//                Thread convertingThread=new Thread(convertingTask);
+//                convertingThread.setDaemon(true);
+//                convertingThread.start();
+            }else {
+                System.out.println("No file was selected.");
             }
-
-//            HandleDialogsForVideoFromSearch();
-        }
+        });
     }
 
-    public void launchProgressQualities(){
-
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
-            DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
-            ProgressQualitiesController qualitiesController=fxmlLoader.getController();
-            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
-            qualitiesController.setYoutubeDl(this.youtubeDl);
-//            ProgressQualitiesController p=fxmlLoader.getController();
-
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setDialogPane(dialogPane);
-//            dialog.getDialogPane().getScene().getWindow().setUserData("userData");
-            dialog.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void getSubtitles(ActionEvent event){
 //        this.youtubeDl.videoPath="C:\\Users\\hp\\PC\\project-vt-files\\-EbzDqtZEh4\\-EbzDqtZEh4.mp4";
@@ -185,160 +184,6 @@ public class SearchViewController {
 
     }
 
-    public void launchProgressUpload(String audioPath,String videoPath){
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("progressUploadAudio.fxml"));
-            DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
-
-            YoutubeDl uploadYoutubeDl=this.youtubeDl;
-            uploadYoutubeDl.audioPath=audioPath;
-            uploadYoutubeDl.videoPath=videoPath;
-
-//            dialog = new Dialog<>();
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setDialogPane(dialogPane);
-            dialog.initStyle(StageStyle.UNDECORATED);
-
-            DataObject dataObject=new DataObject(uploadYoutubeDl,this.speechmatics,this.dataFile);
-            dataObject.videoType="local";
-            dialog.getDialogPane().getScene().getWindow().setUserData(dataObject);
-            dialog.showAndWait();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void HandleDialogsForVideoFromSearch(){
-        try {
-            //check if the video is already downloaded ; in the database (data.json)
-//            if(dataFile.isVideoDownloaded(this.youtubeDl.videoId,"ytb") != "null"){
-//                Alert alert=new Alert(Alert.AlertType.ERROR);
-//                alert.showAndWait();
-//                return ;
-//            }
-
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
-            DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
-
-//            ProgressQualitiesController qualitiesController=fxmlLoader.getController();
-//            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
-//            qualitiesController.setYoutubeDl(this.youtubeDl);
-
-//            dialog = new Dialog<>();
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setDialogPane(dialogPane);
-            dialog.initStyle(StageStyle.UNDECORATED);
-
-            dialog.getDialogPane().getScene().getWindow().setUserData(new DataObject(this.youtubeDl,this.speechmatics,this.dataFile));
-
-            dialog.show();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void displayInfo(YoutubeVideo video){
-        if(video.getThumbnailUrl()!=null) {
-            Image image = new Image(video.getThumbnailUrl());
-            imageView.setImage(image);
-        }
-        videoTitleLabel.setText(video.getVideoTitle());
-        videoDurationLabel.setText(video.getDuration());
-        videoLinkLabel.setText(video.getUrl());
-        textInfo.setVisible(true);
-        textInfo.setText("Your Video");
-    }
-    public void handleMouseClick(MouseEvent e) throws IOException {
-        if(listView.getSelectionModel().getSelectedItem() != null){
-            selectedVideo = listView.getSelectionModel().getSelectedItem();
-            System.out.println("clicked on " + selectedVideo.getVideoTitle());
-            System.out.println(selectedVideo.getYtVideoQuality());
-            System.out.println(selectedVideo.getDuration());
-            System.out.println(selectedVideo.getUrl());
-            listView.setVisible(false);
-            displayInfo(selectedVideo);
-            pane.setVisible(true);
-        }
-
-    }
-
-    @FXML
-    private void initialize() {
-        initializeYoutubeDlandSpeechmaticsObjects();
-        textInfo.setVisible(false);
-        pane.setVisible(false);
-        listView.setVisible(false);
-        progressArea.setVisible(false);
-        listView.setCellFactory(resultListView -> new ResultCell());
-
-    }
-    private void createVideoInstance(File file){
-        Media mediaFile = new Media(file.toURI().toString());
-
-        MediaPlayer mediaPlayer = new MediaPlayer(mediaFile);
-
-        mediaPlayer.setOnReady(new Runnable() {
-            // had to create the video instance here and render it becasue it's the only way to get the video duration
-
-            @Override
-            public void run() {
-
-
-                String title = file.getName();
-                //String duration = String.valueOf(mediaFile.getDuration().toSeconds());
-                Duration duration = Duration.ofMillis((long)mediaFile.getDuration().toMillis());
-                // Get the number of hours, minutes, and seconds in the duration
-                long hours = duration.toHours();
-                long minutes = duration.toMinutes() % 60;
-                long seconds = duration.getSeconds() % 60;
-                String formattedDuration = String.format("%dh %dm %ds", hours, minutes, seconds);
-                String path = file.getPath();
-                selectedVideo = new YoutubeVideo();
-                selectedVideo.setVideoTitle(title);
-                selectedVideo.setDuration(formattedDuration);
-                selectedVideo.setUrl(path);
-                linkLabel.setText("Path :");
-                displayInfo(selectedVideo);
-                pane.setVisible(true);
-
-
-            }
-        });
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-        this.stage.resizableProperty().setValue(false);
-        browse.setOnMouseClicked(event -> {
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video Files", "*.mp4");
-            fileChooser.getExtensionFilters().add(extFilter);
-            // get the file selected
-            File file = fileChooser.showOpenDialog(stage);
-            if(file!=null) {
-
-
-                // create a new video object with the information from the file
-                createVideoInstance(file);
-
-                //converting to audio
-                String fileNameWithOutExt = FilenameUtils.removeExtension(file.getName());
-                this.ffmpeg.setVideo(fileNameWithOutExt,file.getAbsolutePath());
-
-                FFmpegTask convertingTask=new FFmpegTask(ffmpeg,this.dataFile,this);
-                Thread convertingThread=new Thread(convertingTask);
-                convertingThread.setDaemon(true);
-                convertingThread.start();
-            }else {
-                System.out.println("No file was selected.");
-            }
-        });
-    }
-    // set an event handler for ENTER key in search bar
 
     //method to be called when search button is clicked
     public void search(ActionEvent a) throws Exception {
@@ -378,7 +223,183 @@ public class SearchViewController {
             default -> System.out.println("Invalid input");
         }
     }
+    public void play(ActionEvent event){
+        System.out.println("I play the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
+        //need a check of exitance
+        Scene scene = null;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(fxmlLoader.load(), 1200, 700);
+            stage.setTitle("Media Player");
+            stage.setScene(scene);
+            VideoPlayerController videoPlayerController = fxmlLoader.getController();
+            stage.show();
 
+            String srtPath="";
+            String videoPath="";
+            //check if subtitled or not
+            if(videoDisplayedOnPane.getId().length()!=0){
+                srtPath=dataFile.isSubtitled(videoDisplayedOnPane.getId());
+                videoPath=dataFile.getPath(videoDisplayedOnPane.getId());
+            }else{
+                srtPath=dataFile.isSubtitled(videoDisplayedOnPane.getUrl());
+                videoPath=dataFile.getPath(videoDisplayedOnPane.getUrl());
+            }
+            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","search-view.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void transcript() throws IOException {
+//        System.out.println("I transcript the video : " + selectedVideo.getVideoTitle()+" the link is : "+selectedVideo.getUrl());
+        if(videoDisplayedOnPane.videoType.equals("local")){
+            FFmpegTask convertingTask=new FFmpegTask(ffmpeg,this.dataFile,this,"convertToAudio");
+            Thread convertingThread=new Thread(convertingTask);
+            convertingThread.setDaemon(true);
+            convertingThread.start();
+        }else{
+            youtubeDl.setYoutubelink(selectedVideo.getUrl());
+            youtubeDl.videoTitle=selectedVideo.getVideoTitle();
+            launchProgressQualities();
+        }
+    }
+    public void back(ActionEvent event) {
+        if(pane.isVisible()){
+            pane.setVisible(false);
+            listView.setVisible(true);
+            textInfo.setText("Results");
+        }
+        else{
+            Scene scene = null;
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("home.fxml"));
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(fxmlLoader.load(), 1200, 700);
+                stage.setTitle("Home");
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+//            HandleDialogsForVideoFromSearch();
+        }
+    }
+    public void handleMouseClickOnListItem(MouseEvent e) throws IOException {
+        if(listView.getSelectionModel().getSelectedItem() != null){
+            selectedVideo = listView.getSelectionModel().getSelectedItem();
+            System.out.println("clicked on " + selectedVideo.getVideoTitle());
+            System.out.println(selectedVideo.getYtVideoQuality());
+            System.out.println(selectedVideo.getDuration());
+            System.out.println(selectedVideo.getUrl());
+            listView.setVisible(false);
+            displayInfo(selectedVideo);
+            pane.setVisible(true);
+        }
+
+    }
+    public void launchProgressQualities(){
+        try {
+            //check if the video is already downloaded ; in the database (data.json)
+//            if(dataFile.isVideoDownloaded(this.youtubeDl.videoId,"ytb") != "null"){
+//                Alert alert=new Alert(Alert.AlertType.ERROR);
+//                alert.showAndWait();
+//                return ;
+//            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
+            DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
+
+//            ProgressQualitiesController qualitiesController=fxmlLoader.getController();
+//            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
+//            qualitiesController.setYoutubeDl(this.youtubeDl);
+
+//            dialog = new Dialog<>();
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setDialogPane(dialogPane);
+            dialog.initStyle(StageStyle.UNDECORATED);
+
+            dialog.getDialogPane().getScene().getWindow().setUserData(new DataObject(this.youtubeDl,this.speechmatics,this.dataFile,this.ffmpeg));
+
+            dialog.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+    public void launchProgressUpload(String audioPath,String videoPath){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("progressUploadAudio.fxml"));
+            DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
+
+            YoutubeDl uploadYoutubeDl=this.youtubeDl;
+            uploadYoutubeDl.audioPath=audioPath;
+            uploadYoutubeDl.videoPath=videoPath;
+
+//            dialog = new Dialog<>();
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setDialogPane(dialogPane);
+            dialog.initStyle(StageStyle.UNDECORATED);
+
+            DataObject dataObject=new DataObject(uploadYoutubeDl,this.speechmatics,this.dataFile,this.ffmpeg);
+            dataObject.videoType="local";
+            dialog.getDialogPane().getScene().getWindow().setUserData(dataObject);
+            dialog.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void displayInfo(YoutubeVideo video){
+        videoDisplayedOnPane=video;
+        System.out.println(videoDisplayedOnPane.toString());
+        if(video.getThumbnailUrl()!=null) {
+            Image image = new Image(video.getThumbnailUrl());
+            imageView.setImage(image);
+        }
+        videoTitleLabel.setText(video.getVideoTitle());
+        videoDurationLabel.setText(video.getDuration());
+        videoLinkLabel.setText(video.getUrl());
+        textInfo.setVisible(true);
+        textInfo.setText("Your Video");
+    }
+    private void createVideoInstance(File file){
+        Media mediaFile = new Media(file.toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(mediaFile);
+
+        mediaPlayer.setOnReady(new Runnable() {
+            // had to create the video instance here and render it becasue it's the only way to get the video duration
+
+            @Override
+            public void run() {
+
+                System.out.println("happens");
+                String title = file.getName();
+                //String duration = String.valueOf(mediaFile.getDuration().toSeconds());
+                Duration duration = Duration.ofMillis((long)mediaFile.getDuration().toMillis());
+                // Get the number of hours, minutes, and seconds in the duration
+                long hours = duration.toHours();
+                long minutes = duration.toMinutes() % 60;
+                long seconds = duration.getSeconds() % 60;
+                String formattedDuration = String.format("%dh %dm %ds", hours, minutes, seconds);
+                String path = file.getPath();
+                selectedVideo = new YoutubeVideo();
+                selectedVideo.setVideoTitle(title);
+                selectedVideo.setDuration(formattedDuration);
+                selectedVideo.setUrl(path);
+                linkLabel.setText("Path :");
+                selectedVideo.videoType="local";
+                displayInfo(selectedVideo);
+                pane.setVisible(true);
+
+
+            }
+        });
+    }
     public String getInputType(String input){
         // check if input is a valid url
         if(isValidURL(input)){
@@ -415,44 +436,19 @@ public class SearchViewController {
         Matcher m = p.matcher(url);
         return m.matches();
     }
+    public void save(){
+        System.out.println("I save the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
+    }
     public String getSearchInput(){
         return this.searchInput;
     }
-
     public Text getMainText() {
         return mainText;
     }
-
     public ListView<YoutubeVideo> getListView() {
         return listView;
     }
 
-    public void play(ActionEvent event){
-        System.out.println("I play the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
-        Scene scene = null;
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(fxmlLoader.load(), 1200, 700);
-            stage.setTitle("Media Player");
-            stage.setScene(scene);
-            VideoPlayerController videoPlayerController = fxmlLoader.getController();
-//            videoPlayerController.setVideoPath("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
-            stage.show();
-            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","search-view.fxml");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void save(){
-        System.out.println("I save the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
-    }
-    @FXML
-    public void transcript() throws IOException {
-        System.out.println("I transcript the video : " + selectedVideo.getVideoTitle()+" the link is : "+selectedVideo.getUrl());
-        youtubeDl.setYoutubelink(selectedVideo.getUrl());
-        youtubeDl.videoTitle=selectedVideo.getVideoTitle();
-        HandleDialogsForVideoFromSearch();
-    }
+
 
 }

@@ -61,7 +61,7 @@ public class SpeechmaticsTask extends Task<Integer> {
                 int exitCode=1;
 
                 if(this.videoType.equals("local")){
-                    exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(this.youtubeDl.videoPath),"local",this.youtubeDl.videoTitle);
+                    exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(this.youtubeDl.videoPath),"local",this.youtubeDl.videoPath);
                 }else{
                     exitCode=this.speechmatics.getSubstitles(dataFile.getJobId(this.youtubeDl.videoId),this.youtubeDl.videoId,this.youtubeDl.videoId);
                 }

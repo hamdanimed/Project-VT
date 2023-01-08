@@ -1,6 +1,7 @@
 package ensa.project_vt;
 
 import ensa.project_vt.GenerateSubtitles.DataFile;
+import ensa.project_vt.GenerateSubtitles.FFmpeg;
 import ensa.project_vt.GenerateSubtitles.Speechmatics;
 import ensa.project_vt.GenerateSubtitles.YoutubeDl;
 
@@ -9,9 +10,11 @@ public class DataObject {
     public Speechmatics speechmatics;
     public DataFile dataFile;
     public String videoType;
-    public DataObject(YoutubeDl y,Speechmatics s,DataFile d){
+    public FFmpeg ffmpeg;
+    public DataObject(YoutubeDl y,Speechmatics s,DataFile d,FFmpeg f){
         this.youtubeDl=y;
         this.speechmatics=s;
         this.dataFile=d;
+        this.ffmpeg=f;
     }
 }

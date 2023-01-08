@@ -57,8 +57,8 @@ public class GenerateSubsTesting {
 
         DataFile data=new DataFile("C:\\Users\\hp\\PC\\project-vt-files\\");
         System.out.println(data.isVideoDownloaded("l086Ps61o1U"));
-        data.addVideo("l086Ps61o1U","sdlkfjlksjdf");
-        data.addVideo("l086sds61o1U","NSIT");
+        data.addVideo("l086Ps61o1U","sdlkfjlksjdf","path");
+        data.addVideo("l086sds61o1U","NSIT","path");
         data.setJobId("l086Ps61o1U","dddddddttt");
         data.setSubtitled("l086Ps61o1U",true,"ytb");
         System.out.println(data.isSubtitled("l086Ps61o1U"));

@@ -38,7 +38,7 @@ public class DataFile {
             return "null";
         }
     }
-    public void addVideo(String id,String title){
+    public void addVideo(String id,String title,String path){
         String data="{}";
         //READ A FILE
         try {
@@ -59,6 +59,7 @@ public class DataFile {
 //        }
         JSONObject content=new JSONObject();
         content.put("title",title);
+        content.put("path",path);
 
         dataObject.put(id,content);
         System.out.println(dataObject);
@@ -197,6 +198,34 @@ public class DataFile {
                 //check if the jobId is not equal to ""
                 if(((String)contentObject.get("title")).length() !=0 ){
                     return (String)contentObject.get("title");
+                }
+            }
+        }
+
+        return id;
+    }
+    public String getPath(String id){
+        String data="{}";
+        //READ A FILE
+        try {
+            File myObj = new File(appFolderPath+"data.json");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                data = myReader.nextLine();
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        JSONObject dataObject=(JSONObject) JSONValue.parse(data);
+        if(dataObject.containsKey(id)){
+            JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get(id).toString());
+            if(contentObject.containsKey("path")){
+                //check if the jobId is not equal to ""
+                if(((String)contentObject.get("path")).length() !=0 ){
+                    return (String)contentObject.get("path");
                 }
             }
         }
