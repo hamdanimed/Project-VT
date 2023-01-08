@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -81,11 +82,13 @@ public class VideoPlayerController {
     private VBox captionBox;
     @FXML
     private ImageView backBtn;
+    @FXML
+    private Button saveCaptionBtn;
 
 
     private Image imgPlay,imgPause,imgMute,imgUnmute,imgReplay,imgFullScreen,imgEditMode;
     private ImageView playIV,pauseIV,muteIV,unmuteIV,replayIV,fullScreenIV,editModeIV;
-    private boolean isPlaying,isMute,isOver,isEditMode,isFullScreen;
+    private boolean isPlaying,isMute,isOver,isEditMode,isFullScreen,isCaptionLoading;
     private double currentVolume;
     private SrtParser sp;
 
@@ -115,7 +118,6 @@ public class VideoPlayerController {
 //        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
-        System.out.println(mediaView.getMediaPlayer().getMedia().toString());
 
         sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
         sdf = new SimpleDateFormat("HH:mm:ss:SSS");
@@ -149,6 +151,8 @@ public class VideoPlayerController {
         fullScreenBtn.setFocusTraversable(false);
         editBtn.setFocusTraversable(false);
         muteBtn.setFocusTraversable(false);
+        captionEditText.setFocusTraversable(false);
+        saveCaptionBtn.setFocusTraversable(false);
 
 
         playBtn.setGraphic(pauseIV);
@@ -158,6 +162,7 @@ public class VideoPlayerController {
         isOver=false;
         isEditMode=false;
         isFullScreen=false;
+        isCaptionLoading = false;
         currentVolume=1;
         muteBtn.setGraphic(unmuteIV);
 
@@ -186,7 +191,7 @@ public class VideoPlayerController {
             @Override
             public void handle(MouseEvent mouseEvent){fadeOut.play();}
         });
-//        Bindings.bindBidirectional(closedCaptions.textProperty(), captionEditText.textProperty());
+
         // volume
         Bindings.bindBidirectional(mediaPlayer.volumeProperty(),volumeSlider.valueProperty());
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -197,6 +202,8 @@ public class VideoPlayerController {
 
             }
         });
+
+
 
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             @Override
@@ -211,6 +218,13 @@ public class VideoPlayerController {
             }
         });
 
+        //Feature: video paused automatically after clicking on field to edit
+        captionEditText.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                if(t1 && isPlaying) playVideo();
+            }
+        });
 
         // Progress bar slider
         mediaPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
@@ -232,16 +246,23 @@ public class VideoPlayerController {
                 timeProgress.setProgress(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
+                    System.out.println("event seek");
                     if(playBtn.getGraphic().equals(replayIV)) playBtn.setGraphic(playIV);
+                    System.out.println("newValue.doubleValue() = " + newValue.doubleValue());
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
-                    findCaption();
+                    findCaption(newValue.doubleValue());
                     loadCaption();
                 }
                 timeLabel.setText(timeString(timeSlider.getValue()));
             }
         });
 
-
+        timeSlider.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if(!isPlaying) playVideo();
+            }
+        });
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
             public void changed(ObservableValue<? extends Duration> observableValue, Duration oldTime, Duration newValue) {
@@ -254,13 +275,12 @@ public class VideoPlayerController {
                     {
 
                         captionIndex++;
-                        System.out.println("captionIndex: "+captionIndex);
                         closedCaptions.setText(nextCaption.getText());
                         actualCaption = nextCaption;
                         if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
                         loadCaption();
                     }
-                    if(newValue.toMillis()>actualCaption.getEnd())
+                    if(newValue.toMillis()>actualCaption.getEnd() && newValue.toMillis()< nextCaption.getStart())
                     {
                         closedCaptions.setText("");
                     }
@@ -330,8 +350,7 @@ public class VideoPlayerController {
 
     public void setShortcuts(){
         videoPlayer.getScene().addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) ->{
-            if(!isFieldFocused())
-                System.out.println("key pressed");
+            if(!isEditMode)
             {
                 switch(event.getCode())
                 {
@@ -340,7 +359,6 @@ public class VideoPlayerController {
                         break;
                     case L:
                         next();
-                        System.out.println("next");
                         break;
                     case J:
                         prev();
@@ -398,7 +416,19 @@ public class VideoPlayerController {
     }
     @FXML
     void saveCaptions(ActionEvent event) {
-        sp.editCaption(captionEditText.getText(),captionIndex);
+
+        //Validation
+        String[] parts = captionEditText.getText().split("\n");
+        String validText = "";
+        for (int i = 0; i < parts.length; i++) {
+            if(!parts[i].equals("")) {
+                validText+=parts[i];
+                if(i != parts.length-1) validText+="\n";
+            }
+        }
+
+        captionEditText.setText(validText);
+        sp.editCaption(validText,captionIndex);
         try {
             Files.writeString(Paths.get("src\\main\\resources\\ensa\\project_vt\\subs2.srt"),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
@@ -506,16 +536,10 @@ public class VideoPlayerController {
     }
 
 
-    public ImageView makeIcon(ImageView iv,Image img)
+    public void findCaption(Double time)
     {
-        iv = new ImageView(img);
-        iv.setFitHeight(20);
-        iv.setFitWidth(20);
-        return iv;
-    }
-    public void findCaption()
-    {
-        HashMap<Integer,Caption> result = sp.search(mediaPlayer.getCurrentTime().toMillis(),0,sp.getCaptions().size());
+        HashMap<Integer,Caption> result = sp.search(time,0,sp.getCaptions().size());
+        System.out.println(result);
         if(result==null)
         {
             closedCaptions.setText("");
@@ -524,18 +548,32 @@ public class VideoPlayerController {
         {
             if(result.containsKey(0))
             {
-
                 closedCaptions.setText("");
-                nextCaption=result.get(0);
-                captionIndex = nextCaption.getId()-1;
-                if(captionIndex==0) actualCaption = captionInit;
-                else actualCaption = sp.getCaptions().get(captionIndex);
+                if(result.get(0)==null)
+                {
+                    captionIndex = sp.getCaptions().size()-1;
+                    actualCaption = sp.getCaptions().get(captionIndex);
+                    nextCaption = actualCaption;
+                }
+                else
+                {
+                    nextCaption = result.get(0);
+                    captionIndex = nextCaption.getId()-1;
+                    if(captionIndex==-1){
+                        actualCaption = captionInit;
+                    }
+                    else actualCaption = sp.getCaptions().get(captionIndex);
+
+                }
             }
             else {
-                closedCaptions.setText(result.get(1).getText());
                 actualCaption = result.get(1);
                 captionIndex=actualCaption.getId();
-                nextCaption = sp.getCaptions().get(captionIndex+1);
+                if(sp.getCaptions().containsKey(captionIndex+1))
+                    nextCaption = sp.getCaptions().get(captionIndex+1);
+                else
+                    nextCaption = actualCaption;
+                closedCaptions.setText(actualCaption.getText());
             }
 
         }
@@ -547,10 +585,6 @@ public class VideoPlayerController {
         String hours = String.format("%02d",(int) ((time/(1000*60*60)) %24)) ;
         return ((hours.equals("00"))?"":hours+":")+minutes+":"+seconds;
 
-    }
-    public Boolean isFieldFocused()
-    {
-        return captionEditText.isFocused();
     }
 
     // Keyboard Shortcuts
@@ -570,16 +604,22 @@ public class VideoPlayerController {
     }
     public void next()
     {
-        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()+5000));
-        findCaption();
-        loadCaption();
-        System.out.println("next");
+        Double newValue = timeSlider.getValue()+5000;
+        timeSlider.setValue(newValue);
     }
     public void prev()
     {
-        mediaPlayer.seek(Duration.millis(mediaPlayer.getCurrentTime().toMillis()-5000));
-        findCaption();
-        loadCaption();
+        Double newValue = timeSlider.getValue()-5000;
+        timeSlider.setValue(newValue);
+    }
+
+
+    public ImageView makeIcon(ImageView iv,Image img)
+    {
+        iv = new ImageView(img);
+        iv.setFitHeight(20);
+        iv.setFitWidth(20);
+        return iv;
     }
 
     public void setVideoPath(String videoPath) {
