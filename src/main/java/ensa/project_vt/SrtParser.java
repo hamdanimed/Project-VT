@@ -68,6 +68,7 @@ public class SrtParser {
             Caption c = makeCaption(arr,sdf);
             captions1.put(c.getId(),c);
             setCaptions(captions1);
+            System.out.println(captions1);
 
         }
         catch (Exception e)

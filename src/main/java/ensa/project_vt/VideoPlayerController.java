@@ -19,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -249,14 +250,19 @@ public class VideoPlayerController {
                     if(playBtn.getGraphic().equals(replayIV)) playBtn.setGraphic(playIV);
                     System.out.println("newValue.doubleValue() = " + newValue.doubleValue());
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
-                    findCaption(timeSlider.getValue());
+                    findCaption(newValue.doubleValue());
                     loadCaption();
                 }
                 timeLabel.setText(timeString(timeSlider.getValue()));
             }
         });
-
-
+        
+        timeSlider.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if(!isPlaying) playVideo();
+            }
+        });
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
             public void changed(ObservableValue<? extends Duration> observableValue, Duration oldTime, Duration newValue) {
@@ -274,7 +280,7 @@ public class VideoPlayerController {
                         if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
                         loadCaption();
                     }
-                    if(newValue.toMillis()>actualCaption.getEnd())
+                    if(newValue.toMillis()>actualCaption.getEnd() && newValue.toMillis()< nextCaption.getStart())
                     {
                         closedCaptions.setText("");
                     }
@@ -542,7 +548,6 @@ public class VideoPlayerController {
         {
             if(result.containsKey(0))
             {
-
                 closedCaptions.setText("");
                 if(result.get(0)==null)
                 {
@@ -580,10 +585,6 @@ public class VideoPlayerController {
         String hours = String.format("%02d",(int) ((time/(1000*60*60)) %24)) ;
         return ((hours.equals("00"))?"":hours+":")+minutes+":"+seconds;
 
-    }
-    public Boolean isFieldFocused()
-    {
-        return captionEditText.isFocused();
     }
 
     // Keyboard Shortcuts
