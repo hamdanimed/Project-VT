@@ -82,7 +82,7 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <Text fill="#dbdbdb" layoutX="115.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Url :">
+            <Text fx:id="linkLabel" fill="#dbdbdb" layoutX="115.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Url :">
                <font>
                   <Font size="20.0" />
                </font>

@@ -30,6 +30,9 @@ public class YoutubeVideo {
         this.thumbnailUrl = thumbnailUrl;
         this.duration = duration;
     }
+    public YoutubeVideo(){
+        // for creating a local video
+    }
 
     public void setVideoQuality(String videoQuality) {
         this.videoQuality = videoQuality;

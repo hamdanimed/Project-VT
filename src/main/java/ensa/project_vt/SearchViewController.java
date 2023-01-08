@@ -27,6 +27,7 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.regex.*;
 import org.apache.commons.io.FilenameUtils;
 
@@ -40,6 +41,8 @@ public class SearchViewController {
     private TextField searchField;
     @FXML
     private Button search;
+    @FXML
+    private Text linkLabel;
     @FXML
     private Text mainText;
     @FXML
@@ -239,8 +242,10 @@ public class SearchViewController {
     }
 
     public void displayInfo(YoutubeVideo video){
-        Image image = new Image(video.getThumbnailUrl());
-        imageView.setImage(image);
+        if(video.getThumbnailUrl()!=null) {
+            Image image = new Image(video.getThumbnailUrl());
+            imageView.setImage(image);
+        }
         videoTitleLabel.setText(video.getVideoTitle());
         videoDurationLabel.setText(video.getDuration());
         videoLinkLabel.setText(video.getUrl());
@@ -277,13 +282,30 @@ public class SearchViewController {
         MediaPlayer mediaPlayer = new MediaPlayer(mediaFile);
 
         mediaPlayer.setOnReady(new Runnable() {
+            // had to create the video instance here and render it becasue it's the only way to get the video duration
 
             @Override
             public void run() {
 
-                System.out.println("Duration: "+mediaFile.getDuration().toSeconds());
-                localVideo localVideo = new localVideo("id"+file.getName(),file.getName(),String.valueOf(mediaFile.getDuration().toSeconds()),file.getPath());
-                // after creating an instance of localVideo , call the method to create the preview view
+
+                String title = file.getName();
+                //String duration = String.valueOf(mediaFile.getDuration().toSeconds());
+                Duration duration = Duration.ofMillis((long)mediaFile.getDuration().toMillis());
+                // Get the number of hours, minutes, and seconds in the duration
+                long hours = duration.toHours();
+                long minutes = duration.toMinutes() % 60;
+                long seconds = duration.getSeconds() % 60;
+                String formattedDuration = String.format("%dh %dm %ds", hours, minutes, seconds);
+                String path = file.getPath();
+                selectedVideo = new YoutubeVideo();
+                selectedVideo.setVideoTitle(title);
+                selectedVideo.setDuration(formattedDuration);
+                selectedVideo.setUrl(path);
+                linkLabel.setText("Path :");
+                displayInfo(selectedVideo);
+                pane.setVisible(true);
+
+
             }
         });
     }
