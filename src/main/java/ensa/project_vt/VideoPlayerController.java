@@ -256,7 +256,7 @@ public class VideoPlayerController {
                 timeLabel.setText(timeString(timeSlider.getValue()));
             }
         });
-        
+
         timeSlider.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent dragEvent) {
