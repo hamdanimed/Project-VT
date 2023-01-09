@@ -314,19 +314,23 @@ public class VideoPlayerController {
                 {
                     isOver=false;
                     timeSlider.setValue(mediaPlayer.getCurrentTime().toMillis());
-                    if(newValue.toMillis()>nextCaption.getStart() && nextCaption.getId()!=actualCaption.getId())
+                    if(!sp.getCaptions().isEmpty())
                     {
+                        if(newValue.toMillis()>nextCaption.getStart() && nextCaption.getId()!=actualCaption.getId())
+                        {
 
-                        captionIndex++;
-                        actualCaption = nextCaption;
-                        if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
-                        closedCaptions.setText(actualCaption.getText());
-                        System.out.println("isValueChanging setText");
-                        loadCaption();
-                    }
-                    if(newValue.toMillis()>actualCaption.getEnd() && newValue.toMillis()< nextCaption.getStart())
-                    {
-                        closedCaptions.setText("");
+                            captionIndex++;
+                            actualCaption = nextCaption;
+                            if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
+                            closedCaptions.setText(actualCaption.getText());
+                            System.out.println("isValueChanging setText");
+                            loadCaption();
+                        }
+                        if(newValue.toMillis()>actualCaption.getEnd() && newValue.toMillis()< nextCaption.getStart())
+                        {
+                            closedCaptions.setText("");
+                        }
+
                     }
 
                 }
@@ -563,44 +567,52 @@ public class VideoPlayerController {
 
     public void findCaption(Double time)
     {
-        HashMap<Integer,Caption> result = sp.search(time,0,sp.getCaptions().size());
-        System.out.println(result);
-        if(result==null)
+        if(sp.getCaptions().isEmpty())
         {
-            closedCaptions.setText("");
+            actualCaption = captionInit;
+            nextCaption = captionInit;
         }
-        else
-        {
-            if(result.containsKey(0))
+        else{
+
+            HashMap<Integer,Caption> result = sp.search(time,0,sp.getCaptions().size());
+            System.out.println(result);
+            if(result==null)
             {
                 closedCaptions.setText("");
-                if(result.get(0)==null)
+            }
+            else
+            {
+                if(result.containsKey(0))
                 {
-                    captionIndex = sp.getCaptions().size()-1;
-                    actualCaption = sp.getCaptions().get(captionIndex);
-                    nextCaption = actualCaption;
-                }
-                else
-                {
-                    nextCaption = result.get(0);
-                    captionIndex = nextCaption.getId()-1;
-                    if(captionIndex==-1){
-                        actualCaption = captionInit;
+                    closedCaptions.setText("");
+                    if(result.get(0)==null)
+                    {
+                        captionIndex = sp.getCaptions().size()-1;
+                        actualCaption = sp.getCaptions().get(captionIndex);
+                        nextCaption = actualCaption;
                     }
-                    else actualCaption = sp.getCaptions().get(captionIndex);
+                    else
+                    {
+                        nextCaption = result.get(0);
+                        captionIndex = nextCaption.getId()-1;
+                        if(captionIndex==-1){
+                            actualCaption = captionInit;
+                        }
+                        else actualCaption = sp.getCaptions().get(captionIndex);
 
+                    }
                 }
-            }
-            else {
-                actualCaption = result.get(1);
-                captionIndex=actualCaption.getId();
-                if(sp.getCaptions().containsKey(captionIndex+1))
-                    nextCaption = sp.getCaptions().get(captionIndex+1);
-                else
-                    nextCaption = actualCaption;
-                closedCaptions.setText(actualCaption.getText());
-            }
+                else {
+                    actualCaption = result.get(1);
+                    captionIndex=actualCaption.getId();
+                    if(sp.getCaptions().containsKey(captionIndex+1))
+                        nextCaption = sp.getCaptions().get(captionIndex+1);
+                    else
+                        nextCaption = actualCaption;
+                    closedCaptions.setText(actualCaption.getText());
+                }
 
+            }
         }
     }
     public String timeString(double time)
