@@ -219,6 +219,7 @@ public class VideoPlayerController {
         sp = new SrtParser(srtPath,mediaVideo.getDuration().toMillis());
         sdf = new SimpleDateFormat("HH:mm:ss:SSS");
         initCaption();
+        if(sp.getCaptions().isEmpty()) captionBox.setVisible(false);
         mediaPlayer.setOnReady(new Runnable() {
             @Override
             public void run() {
