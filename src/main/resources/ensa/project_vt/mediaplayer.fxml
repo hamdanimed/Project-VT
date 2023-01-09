@@ -20,7 +20,7 @@
 
 <StackPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #1E1E1E;" stylesheets="@stylesheet/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.VideoPlayerController">
    <children>
-      <AnchorPane prefHeight="713.0" prefWidth="1641.0" style="-fx-background-color: #1F1F1F;" StackPane.alignment="CENTER_RIGHT">
+      <AnchorPane prefHeight="713.0" prefWidth="1641.0" style="-fx-background-color: #1E1E1E;" StackPane.alignment="CENTER_RIGHT">
          <children>
             <HBox alignment="TOP_RIGHT" layoutX="8.0" prefHeight="700.0" prefWidth="1200.0">
                <children>
@@ -33,7 +33,7 @@
                                  <children>
                                     <Label fx:id="captionEditLabel1" layoutX="60.0" layoutY="234.0" style="-fx-font-family: &quot;Poppins&quot;;" text="Edit Subtitle" textFill="WHITE">
                                        <font>
-                                          <Font name="Poppins Black" size="26.0" />
+                                          <Font name="Poppins Black" size="29.0" />
                                        </font>
                                     </Label>
                                     <Label fx:id="captionEditLabel" textFill="WHITE">
@@ -44,12 +44,12 @@
                                           <Insets top="10.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <TextArea fx:id="captionEditText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="91.0" prefWidth="237.0" promptText="Subtitles content here" styleClass="editSubTextArea" stylesheets="@stylesheet/style.css" text="kldfjkfl">
+                                    <TextArea fx:id="captionEditText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="91.0" prefWidth="237.0" promptText="Subtitles content here" styleClass="editSubTextArea" stylesheets="@stylesheet/style.css">
                                        <VBox.margin>
                                           <Insets top="20.0" />
                                        </VBox.margin>
                                        <font>
-                                          <Font name="Poppins Black" size="13.0" />
+                                          <Font name="Arial Nova Light" size="13.0" />
                                        </font>
                                     </TextArea>
                                     <Button fx:id="saveCaptionBtn" mnemonicParsing="false" onAction="#saveCaptions" prefHeight="34.0" prefWidth="73.0" style="-fx-background-color: #00FFD1;;" text="SAVE">
@@ -74,7 +74,7 @@
                   </HBox>
                </children>
             </HBox>
-            <ImageView fx:id="backBtn" fitHeight="69.0" fitWidth="75.0" layoutX="36.0" layoutY="28.0"  pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="backBtn" fitHeight="69.0" fitWidth="75.0" layoutX="36.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@assets/back.png" />
                </image>
@@ -91,10 +91,10 @@
                <children>
                   <VBox fx:id="controlBar" alignment="TOP_CENTER" layoutY="427.0" prefHeight="54.0" prefWidth="854.0">
                      <children>
-                        <StackPane maxHeight="-Infinity" prefHeight="20.0" style="-fx-background-color: black;">
+                        <StackPane maxHeight="-Infinity" prefHeight="24.0" prefWidth="854.0" style="-fx-background-color: black;">
                            <children>
-                              <ProgressBar fx:id="timeProgress" prefHeight="7.0" prefWidth="846.0" progress="0.0" style="-fx-background-insets: 0; -fx-background-radius: 0;" styleClass="timeProgressBar" />
-                              <Slider fx:id="timeSlider" max="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="5.0" prefWidth="851.0" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
+                              <ProgressBar fx:id="timeProgress" prefHeight="7.0" prefWidth="846.0" progress="0.0" style="-fx-background-insets: 0; -fx-background-radius: 0; -fx-border-radius: 0;" styleClass="timeProgressBar" />
+                              <Slider fx:id="timeSlider" max="1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="5.0" prefWidth="851.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-insets: 0;" styleClass="timeSlider" stylesheets="@stylesheet/style.css">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -182,6 +182,11 @@
                         </Label>
                      </children>
                   </VBox>
+                  <Label fx:id="errorLabel" alignment="CENTER" layoutX="148.0" layoutY="178.0" prefHeight="114.0" prefWidth="557.0" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="57.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </children>

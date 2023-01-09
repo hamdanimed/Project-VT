@@ -79,6 +79,8 @@ public class VideoPlayerController {
     @FXML
     private TextArea CaptionEditText;
     @FXML
+    private Label errorLabel;
+    @FXML
     private VBox captionBox;
     @FXML
     private ImageView backBtn;
@@ -91,7 +93,7 @@ public class VideoPlayerController {
     private boolean isPlaying,isMute,isOver,isEditMode,isFullScreen,isCaptionLoading;
     private double currentVolume;
     private SrtParser sp;
-
+    private Boolean isVideoFound, isSRTFound;
     private int captionIndex;
     private Caption actualCaption,nextCaption,captionInit;
     private TranslateTransition translateEditBox,translateVideo;
@@ -113,19 +115,34 @@ public class VideoPlayerController {
 //    public void initialize(URL url,ResourceBundle resourceBundle){}
     public void initializeFunction()
     {
-        mediaVideo = new Media(new File(videoPath).toURI().toString());
-//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4").toURI().toString());
-//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
-        mediaPlayer = new MediaPlayer(mediaVideo);
-        mediaView.setMediaPlayer(mediaPlayer);
-
-        sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
-        sdf = new SimpleDateFormat("HH:mm:ss:SSS");
-        mediaPlayer.setOnReady(new Runnable() {
+        isVideoFound = false;
+        backBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void run() {
-                totalLabel.setText("/"+timeString(mediaVideo.getDuration().toMillis()));
-                setShortcuts();
+            public void handle(MouseEvent mouseEvent) {
+
+                System.out.println("back pressed");
+                Stage stage=null;
+                Scene scene = null;
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource(previousInterface));
+                    stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+                    scene = new Scene(fxmlLoader.load(), 1200, 700);
+                    stage.setTitle("Project VT");
+                    if(previousInterface.equals("search-view.fxml")){
+                        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+                        stage.setScene(scene);
+                        SearchViewController searchViewController = fxmlLoader.getController();
+                        searchViewController.setStage(stage);
+                        stage.show();
+                    }else{
+                        stage.setScene(scene);
+                    }
+                    stage.show();
+                    if(isVideoFound) mediaPlayer.dispose();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
         });
 
@@ -156,7 +173,6 @@ public class VideoPlayerController {
 
 
         playBtn.setGraphic(pauseIV);
-        mediaPlayer.play();
         isPlaying=true;
         isMute=false;
         isOver=false;
@@ -167,7 +183,6 @@ public class VideoPlayerController {
         muteBtn.setGraphic(unmuteIV);
 
 
-        initCaption();
 
 
         // Initialize animations
@@ -181,6 +196,35 @@ public class VideoPlayerController {
         fadeOut.setFromValue(1);fadeOut.setToValue(0);
         editHBox.setClip(new Rectangle(320,700));
         editHBox.setTranslateX(250);
+        try{
+
+        mediaVideo = new Media(new File(videoPath).toURI().toString());
+//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4").toURI().toString());
+//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
+        mediaPlayer = new MediaPlayer(mediaVideo);
+        mediaView.setMediaPlayer(mediaPlayer);
+        isVideoFound = true;
+
+        }
+        catch (Exception e)
+        {
+            errorLabel.setText("Fichier non trouvé");
+            return;
+        }
+
+        mediaPlayer.play();
+
+        sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
+        sdf = new SimpleDateFormat("HH:mm:ss:SSS");
+        initCaption();
+        mediaPlayer.setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                totalLabel.setText("/"+timeString(mediaVideo.getDuration().toMillis()));
+                setShortcuts();
+            }
+        });
+
 
         // Control Bar animations
         videoPlayer.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -246,23 +290,20 @@ public class VideoPlayerController {
                 timeProgress.setProgress(mediaPlayer.getCurrentTime().toMillis()/mediaVideo.getDuration().toMillis());
                 if(Math.abs(currentTime-newValue.doubleValue())>500)
                 {
+                    if (isPlaying) playVideo();
                     System.out.println("event seek");
                     if(playBtn.getGraphic().equals(replayIV)) playBtn.setGraphic(playIV);
                     System.out.println("newValue.doubleValue() = " + newValue.doubleValue());
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue()));
                     findCaption(newValue.doubleValue());
+                    System.out.println("math.abs setText ");
                     loadCaption();
+                    if(!isPlaying) playVideo();
                 }
                 timeLabel.setText(timeString(timeSlider.getValue()));
             }
         });
 
-        timeSlider.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                if(!isPlaying) playVideo();
-            }
-        });
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
             public void changed(ObservableValue<? extends Duration> observableValue, Duration oldTime, Duration newValue) {
@@ -275,9 +316,10 @@ public class VideoPlayerController {
                     {
 
                         captionIndex++;
-                        closedCaptions.setText(nextCaption.getText());
                         actualCaption = nextCaption;
                         if(sp.getCaptions().containsKey(captionIndex+1)) nextCaption = sp.getCaptions().get(captionIndex+1);
+                        closedCaptions.setText(actualCaption.getText());
+                        System.out.println("isValueChanging setText");
                         loadCaption();
                     }
                     if(newValue.toMillis()>actualCaption.getEnd() && newValue.toMillis()< nextCaption.getStart())
@@ -288,6 +330,14 @@ public class VideoPlayerController {
                 }
             }
         });
+        closedCaptions.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if(t1.equals("")) closedCaptions.setVisible(false);
+                else closedCaptions.setVisible(true);
+            }
+        });
+
         fullScreenBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
@@ -313,35 +363,7 @@ public class VideoPlayerController {
 //            }
 //        });
 
-        backBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
 
-                System.out.println("back pressed");
-                Stage stage=null;
-                Scene scene = null;
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource(previousInterface));
-                    stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-                    scene = new Scene(fxmlLoader.load(), 1200, 700);
-                    stage.setTitle("Project VT");
-                    if(previousInterface.equals("search-view.fxml")){
-                        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-                        stage.setScene(scene);
-                        SearchViewController searchViewController = fxmlLoader.getController();
-                        searchViewController.setStage(stage);
-                        stage.show();
-                    }else{
-                        stage.setScene(scene);
-                    }
-                    stage.show();
-                    mediaPlayer.dispose();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
-        });
 
 
 
@@ -604,13 +626,17 @@ public class VideoPlayerController {
     }
     public void next()
     {
+        if(isPlaying) playVideo();
         Double newValue = timeSlider.getValue()+5000;
         timeSlider.setValue(newValue);
+        if(!isPlaying) playVideo();
     }
     public void prev()
     {
+        if (isPlaying) playVideo();
         Double newValue = timeSlider.getValue()-5000;
         timeSlider.setValue(newValue);
+        if (!isPlaying) playVideo();
     }
 
 
