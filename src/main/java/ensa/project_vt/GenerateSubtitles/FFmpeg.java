@@ -89,9 +89,13 @@ public class FFmpeg {
             destinationFolder=this.appFolder+videoTitle;
         }
 
-        File folder = new File(this.appFolder+"\\"+videoTitle);
+        File folder = new File(this.appFolder+videoTitle);
         if (!folder.exists()){
             folder.mkdirs();
+        }else{
+            deleteDownload(new File(this.tmpFolder));
+            videoPath=destination;
+            return 0;
         }
 
         System.out.println("FFmpeg changeCodec()-------------------------------------------------------------------");

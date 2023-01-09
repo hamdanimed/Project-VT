@@ -46,7 +46,7 @@ public class YoutubeDl {
         try {
 //            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+this.videoId+"\\"+"%(id)s.%(ext)s","-f","(webm)[height<360]+bestaudio","--config-location",configurationFilePath);
             System.out.println(audioQuality+" "+videoQuality);
-            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+"tmp"+"\\"+"%(id)s.%(ext)s","-f",videoQuality+"+"+audioQuality,"--config-location",configurationFilePath);
+            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+"tmp"+"\\"+"/%(id)s.%(ext)s","-f",videoQuality+"+"+audioQuality,"--config-location",configurationFilePath);
 
 
             pb.redirectErrorStream(true); // errorstream of the process will be redirected to standard output
@@ -64,7 +64,7 @@ public class YoutubeDl {
                     System.out.println("[YoutubeDl] the video has already been downloaded");
                     proc.destroy();
                 }
-//                System.out.println(line);
+                System.out.println(line);
                 this.parseDownloadVideoAndAudio(line,progressController);
             });
             read.close();
