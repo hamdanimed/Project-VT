@@ -219,7 +219,11 @@ public class VideoPlayerController {
         sp = new SrtParser(srtPath,mediaVideo.getDuration().toMillis());
         sdf = new SimpleDateFormat("HH:mm:ss:SSS");
         initCaption();
-        if(sp.getCaptions().isEmpty()) editBtn.setDisable(true);
+        if(sp.getCaptions().isEmpty())
+        {
+            editBtn.setVisible(false);
+            editBtn.setDisable(true);
+        }
         mediaPlayer.setOnReady(new Runnable() {
             @Override
             public void run() {
