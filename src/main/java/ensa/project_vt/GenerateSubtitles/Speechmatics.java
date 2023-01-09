@@ -104,7 +104,6 @@ public class Speechmatics {
                 this.sendAudioProgress=new ArrayList<>();
                 // % sent,size of file getting sent,speed of upload,time left for the upload to be done
                 this.sendAudioProgress.add(Arrays.asList(outputLineAsArray[0],outputLineAsArray[1],outputLineAsArray[7],outputLineAsArray[10]).toString());
-                System.out.println("happens");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -118,7 +117,6 @@ public class Speechmatics {
     }
 
     public int getSubstitles(String id,String destinationFolder,String title){
-        System.out.println("a;lsdkfja;lksdjf");
         if(id.length() == 0){
             System.out.println("[Speechmatics : getSubtitles] need a job id");
             return 1;

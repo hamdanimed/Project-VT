@@ -9,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -30,6 +32,10 @@ public class HomeController implements Initializable {
 
     @FXML
     private VBox videoContainer;
+    @FXML
+    public ImageView loadingGif;
+    @FXML
+    public Label msgLabel;
 
     private Stage stage;
     private Scene scene;
@@ -52,6 +58,9 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        loadingGif.setVisible(false);
+        msgLabel.setVisible(false);
+
         List<VideoInf> videoInfs = new ArrayList<>(videoInfs(new File(appFolderPath)));
         for (int i=0; i<videoInfs.size(); i++){
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -59,6 +68,7 @@ public class HomeController implements Initializable {
             try {
                 AnchorPane anchorPane = fxmlLoader.load();
                 SousFrame1Controller sf1C = fxmlLoader.getController();
+                sf1C.homeController=this;
                 sf1C.setData(videoInfs.get(i));
                 videoContainer.getChildren().add(anchorPane);
             } catch (IOException e) {
@@ -115,8 +125,10 @@ public class HomeController implements Initializable {
                 Path file = Paths.get(listOfFiles[i].getAbsolutePath());
                 BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
                 if(listOfFiles[i].getName().contains(".json")) continue;
-                videoInf.setId("local\\"+listOfFiles[i].getName());
-                videoInf.setTitle(dataFile.getTitle(listOfFiles[i].getName()));
+                if(listOfFiles[i].getName().contains(".srt")) continue;
+                System.out.println(listOfFiles[i].getName());
+                videoInf.setId("local\\"+listOfFiles[i].getName().substring(0,listOfFiles[i].getName().length()-4));
+                videoInf.setTitle(dataFile.getTitle(listOfFiles[i].getName().substring(0,listOfFiles[i].getName().length()-4)));
                 if(!dataFile.isSubtitled(listOfFiles[i].getName()).equals("null")){
                     videoInf.setSubnotsub("Subtitled");
                 }else{

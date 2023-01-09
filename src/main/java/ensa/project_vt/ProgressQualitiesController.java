@@ -25,6 +25,8 @@ public class ProgressQualitiesController {
     ComboBox videoQualityCombo;
     @FXML
     ComboBox audioQualityCombo;
+    @FXML
+    public Label msgLabel;
 
     @FXML
     ImageView loadingImage;
@@ -65,6 +67,7 @@ public class ProgressQualitiesController {
 //        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
 //        closeButton.managedProperty().bind(closeButton.visibleProperty());
 //        closeButton.setVisible(false);
+        msgLabel.setVisible(false);
         nextBtn.setDisable(true);
         loadingImage.setVisible(false);
 //        System.out.println(this.youtubeDl.getYoutubelink());

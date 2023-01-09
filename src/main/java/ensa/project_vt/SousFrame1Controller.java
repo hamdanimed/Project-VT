@@ -44,6 +44,7 @@ public class SousFrame1Controller {
 
     private String appFolderPath="src\\main\\resources\\ensa\\project_vt\\project-vt-files\\";
     private DataFile dataFile=new DataFile(appFolderPath);
+    public HomeController homeController;
 
     @FXML
     void DeleteVideo(ActionEvent event) throws IOException {
@@ -54,7 +55,12 @@ public class SousFrame1Controller {
         alert.setHeaderText("You're about to delete the video ");
         alert.setContentText("Do really want to delete this video ?");
         if(alert.showAndWait().get()== ButtonType.OK){
-            delfile(button_ID);
+            if(button_ID.contains("locale")){
+                delfile(button_ID+".wav");
+                delfile(button_ID+".srt");
+            }else{
+                delfile(button_ID);
+            }
         }
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -80,24 +86,27 @@ public class SousFrame1Controller {
             stage.setScene(scene);
             VideoPlayerController videoPlayerController = fxmlLoader.getController();
             stage.show();
-            videoPlayerController.intermediateFunction(appFolderPath+button_ID+"\\"+button_ID+".mp4","home.fxml");
+            videoPlayerController.intermediateFunction(dataFile.getPath(button_ID)+"\\"+button_ID+".mp4",dataFile.isSubtitled(button_ID),"home.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
     @FXML
     void getSubtitles(ActionEvent event) {
+        homeController.msgLabel.setVisible(false);
+        homeController.loadingGif.setVisible(false);
         String button_ID = subtitlesV.getId();
         String videoType="ytb";
         if(button_ID.contains("local")){
-            button_ID=button_ID.substring(6,button_ID.length()-4);
+            button_ID=button_ID.substring(6,button_ID.length());
             videoType="local";
         }
 
-
+        System.out.println(button_ID);
         if(dataFile.getJobId(button_ID).equals("null")){
             String audioPath= dataFile.getPath(button_ID)+"\\"+button_ID+".wav";
             String videoPath= dataFile.getPath(button_ID)+"\\"+button_ID+".mp4";
+            String videoTitle=dataFile.getTitle(button_ID);
 
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
@@ -116,7 +125,7 @@ public class SousFrame1Controller {
                     SearchViewController searchViewController = fxmlLoader.getController();
                     searchViewController.setStage(stage);
                     stage.show();
-                    searchViewController.launchProgressUpload(audioPath,videoPath);
+                    searchViewController.launchProgressUpload(audioPath,button_ID,videoTitle,videoPath,videoType);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -125,11 +134,27 @@ public class SousFrame1Controller {
             String configFilePath=new File("src/main/resources/ensa/project_vt/generate_subtitles/speechmatics-config-standard.json").getAbsolutePath();
             Speechmatics speechmatics=new Speechmatics(appFolderPath,configFilePath);
 
-            int exitCode=speechmatics.getSubstitles(dataFile.getJobId(button_ID),button_ID,button_ID);
-            if(exitCode==1){
-                System.out.println("Error accured with getting subititles");
+            homeController.loadingGif.setVisible(true);
+            homeController.msgLabel.setText("Getting subtitles");
+
+            int exitCode;
+            if(videoType.equals("local")){
+                exitCode=speechmatics.getSubstitles(dataFile.getJobId(button_ID),"local",button_ID);
             }else{
-                dataFile.setSubtitled(button_ID,true);
+                exitCode=speechmatics.getSubstitles(dataFile.getJobId(button_ID),button_ID,button_ID);
+            }
+            if(exitCode==1){
+                homeController.loadingGif.setVisible(false);
+                homeController.msgLabel.setText("An error accured with getting subtitles , try again");
+                System.out.println("Error accured with getting subtitles");
+            }else{
+                homeController.loadingGif.setVisible(false);
+                homeController.msgLabel.setVisible(false);
+                if(videoType.equals("local")){
+                    dataFile.setSubtitled(button_ID,appFolderPath+"local"+"\\"+button_ID+".srt",true);
+                }else{
+                    dataFile.setSubtitled(button_ID,appFolderPath+button_ID+"\\"+button_ID+".srt",true);
+                }
             }
 //            SpeechmaticsTask task=new SpeechmaticsTask(speechmatics,button_ID,videoType,"getSubtitles");
 //            Thread thread=new Thread(task);

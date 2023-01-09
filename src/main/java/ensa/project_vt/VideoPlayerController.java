@@ -105,8 +105,9 @@ public class VideoPlayerController {
     private String previousInterface;
 
 
-    public void intermediateFunction(String videoPath,String interfaceFxmlName){
+    public void intermediateFunction(String videoPath,String srtPath,String interfaceFxmlName){
         setVideoPath(videoPath);
+        setSrtPath(srtPath);
         setPreviousInterface(interfaceFxmlName);
         initializeFunction();
     }
@@ -214,7 +215,7 @@ public class VideoPlayerController {
 
         mediaPlayer.play();
 
-        sp = new SrtParser("src\\main\\resources\\ensa\\project_vt\\subs.srt",mediaVideo.getDuration().toMillis());
+        sp = new SrtParser(srtPath,mediaVideo.getDuration().toMillis());
         sdf = new SimpleDateFormat("HH:mm:ss:SSS");
         initCaption();
         mediaPlayer.setOnReady(new Runnable() {
@@ -452,7 +453,7 @@ public class VideoPlayerController {
         captionEditText.setText(validText);
         sp.editCaption(validText,captionIndex);
         try {
-            Files.writeString(Paths.get("src\\main\\resources\\ensa\\project_vt\\subs2.srt"),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
+            Files.writeString(Paths.get(srtPath),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             System.out.println("can't save file");
         }

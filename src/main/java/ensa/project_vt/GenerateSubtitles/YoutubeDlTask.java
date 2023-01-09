@@ -35,6 +35,7 @@ public class YoutubeDlTask extends Task<Integer> {
                 case "checkQuality" -> {
                     System.out.println("Thread checkQuality");
                     ProgressQualitiesController chooseQualitesDialogController=(ProgressQualitiesController) this.controller;
+                    chooseQualitesDialogController.msgLabel.setVisible(false);
                     int exitCode=this.youtubeDl.checkAvailableQualities(chooseQualitesDialogController);
                     Platform.runLater(new Runnable() {
                         @Override
@@ -44,8 +45,8 @@ public class YoutubeDlTask extends Task<Integer> {
                                 chooseQualitesDialogController.getloadingImage().setVisible(false);
                                 chooseQualitesDialogController.getStartBtn().setDisable(false);
                             }else{
-//                                chooseQualitesDialogController.getProgressMsg().setLayoutX(115);
-//                                chooseQualitesDialogController.getProgressMsg().setText("[YoutubeDlTask] 'checkQuality' Something Went Wrong , Try again");
+                                chooseQualitesDialogController.msgLabel.setText("Something Went Wrong , Try again");
+                                chooseQualitesDialogController.msgLabel.setVisible(true);
                                 System.out.println("[YoutubeDlTask] 'checkQuality' Something Went Wrong , Try again");
                             }
                         }
@@ -55,6 +56,7 @@ public class YoutubeDlTask extends Task<Integer> {
                 case "downloadVideoAndAudio" -> {
                     System.out.println("Thread downloadVideoAndAudio");
                     ProgressDownloadController downloadVideoAndAudioController=(ProgressDownloadController) this.controller;
+                    downloadVideoAndAudioController.getErrorMsgLabel().setVisible(false);
                     int exitCode=this.youtubeDl.downloadVideoAndAudio(downloadVideoAndAudioController);
                     Platform.runLater(new Runnable() {
                         @Override

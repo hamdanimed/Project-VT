@@ -20,7 +20,7 @@
          <children>
             <Pane fx:id="progressArea" layoutX="15.0" layoutY="-21.0" prefHeight="34.0" prefWidth="369.0">
                <children>
-                  <HBox alignment="CENTER" layoutX="55.0" layoutY="4.0" mouseTransparent="true" prefHeight="27.0" prefWidth="263.0" spacing="10.0">
+                  <HBox alignment="CENTER" layoutX="185.0" layoutY="181.0" mouseTransparent="true" prefHeight="27.0" prefWidth="263.0" spacing="10.0">
                      <children>
                         <Label fx:id="operation" text="operation">
                            <font>
@@ -92,9 +92,9 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <HBox alignment="CENTER" layoutX="143.0" layoutY="258.0" prefHeight="85.0" prefWidth="513.0" spacing="50.0">
+            <HBox alignment="CENTER" layoutX="31.0" layoutY="258.0" prefHeight="85.0" prefWidth="513.0" spacing="50.0">
                <children>
-                  <VBox fx:id="playArea" alignment="CENTER" prefHeight="132.0" prefWidth="100.0">
+                  <VBox fx:id="playArea" alignment="CENTER" prefHeight="132.0" prefWidth="100.0" visible="false">
                      <children>
                         <ImageView fitHeight="57.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -148,6 +148,15 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Text>
-      <Button fx:id="getSubtitlesBtn" layoutX="993.0" layoutY="28.0" mnemonicParsing="false" onAction="#getSubtitles" text="Get Subtitles" />
+      <Label fx:id="msgLabel" layoutX="1009.0" layoutY="29.0" text="Converting to Audio">
+         <font>
+            <Font name="System Italic" size="15.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="loadingGif" blendMode="EXCLUSION" fitHeight="22.0" fitWidth="24.0" layoutX="978.0" layoutY="29.0" preserveRatio="true">
+         <image>
+            <Image url="@assets/loading.gif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

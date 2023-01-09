@@ -49,6 +49,11 @@
                   <Image url="@assets/loading.gif" />
                </image>
             </ImageView>
+            <Label fx:id="msgLabel" layoutX="48.0" layoutY="246.0" text="Something went wrong" textFill="WHITE">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </header>

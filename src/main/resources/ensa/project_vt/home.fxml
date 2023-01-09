@@ -32,5 +32,15 @@
                </image>
             </ImageView>
          </graphic></Button>
+      <Label fx:id="msgLabel" layoutX="406.0" layoutY="100.0" text="Getting subtitles" textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="loadingGif" blendMode="EXCLUSION" fitHeight="27.0" fitWidth="28.0" layoutX="366.0" layoutY="102.0" preserveRatio="true">
+         <image>
+            <Image url="@assets/loading.gif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -254,7 +254,8 @@ public class DataFile {
             JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get(id).toString());
             System.out.println(contentObject.get("status"));
             if(contentObject.get("status")!=null && (boolean)contentObject.get("status")){
-                return appFolderPath+""+id+"\\"+id+".srt";
+                return (String)contentObject.get("srtPath");
+//                return appFolderPath+id+"\\"+id+".srt";
             }else {
                 return "null";
             }
@@ -262,7 +263,7 @@ public class DataFile {
 
         return "null";
     }
-    public void setSubtitled(String id,boolean status){
+    public void setSubtitled(String id,String srtPath,boolean status){
             String data="{}";
             //READ A FILE
             try {
@@ -281,6 +282,7 @@ public class DataFile {
             if(dataObject.containsKey(id)){
                 JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get(id).toString());
                 contentObject.put("status",status);
+                contentObject.put("srtPath",srtPath);
                 dataObject.put(id,contentObject);
                 System.out.println(dataObject);
             }

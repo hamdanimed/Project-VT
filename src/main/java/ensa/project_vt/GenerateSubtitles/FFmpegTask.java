@@ -27,16 +27,23 @@ public class FFmpegTask extends Task<Integer> {
     protected Integer call() throws Exception {
         switch (this.action){
             case "convertToAudio" ->{
+                searchViewController.loadingGif.setVisible(true);
+                searchViewController.msgLabel.setText("Converting to Audio");
+                searchViewController.msgLabel.setVisible(true);
                 int exitCode=ffmpeg.convertToAudio();
                 if(exitCode==1){
+                    searchViewController.loadingGif.setVisible(false);
+//                    searchViewController.msgLabel.setText("Converting to Audio");
+                    searchViewController.msgLabel.setVisible(false);
                     System.out.println("[FFmpegTask] 'convertToAudio' Something Went Wrong , Try again");
                 }else{
-                    dataFile.addVideo(ffmpeg.videoTitle, ffmpeg.videoTitle, ffmpeg.destinationFolder);
+                    searchViewController.loadingGif.setVisible(false);
+                    searchViewController.msgLabel.setVisible(false);
+                    dataFile.addVideo(ffmpeg.videoTitle, ffmpeg.videoTitle, ffmpeg.videoPath);
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-
-                            searchViewController.launchProgressUpload(ffmpeg.audioPath,ffmpeg.videoPath);
+                            searchViewController.launchProgressUpload(ffmpeg.audioPath,ffmpeg.videoTitle, ffmpeg.videoTitle, ffmpeg.videoPath,"local");
                         }
                     });
                 }

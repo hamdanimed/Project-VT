@@ -40,6 +40,10 @@ public class SearchViewController {
     @FXML
     private TextField searchField;
     @FXML
+    public ImageView loadingGif;
+    @FXML
+    public Label msgLabel;
+    @FXML
     private Button search;
     @FXML
     private Text linkLabel;
@@ -93,6 +97,8 @@ public class SearchViewController {
     @FXML
     private void initialize() {
         initializeYoutubeDlandSpeechmaticsObjects();
+        msgLabel.setVisible(false);
+        loadingGif.setVisible(false);
         textInfo.setVisible(false);
         pane.setVisible(false);
         listView.setVisible(false);
@@ -167,20 +173,20 @@ public class SearchViewController {
 //        SpeechmaticsTask task=new SpeechmaticsTask(dataObject,this,"getSubtitles");
 //        Thread thread=new Thread(task);
 //        thread.start();
-        Scene scene = null;
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(fxmlLoader.load(), 1200, 700);
-            stage.setTitle("Media Player");
-            stage.setScene(scene);
-            VideoPlayerController videoPlayerController = fxmlLoader.getController();
-//            videoPlayerController.setVideoPath("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
-            stage.show();
-            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","search-view.fxml");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        Scene scene = null;
+//        try {
+//            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
+//            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//            scene = new Scene(fxmlLoader.load(), 1200, 700);
+//            stage.setTitle("Media Player");
+//            stage.setScene(scene);
+//            VideoPlayerController videoPlayerController = fxmlLoader.getController();
+////            videoPlayerController.setVideoPath("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
+//            stage.show();
+//            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","search-view.fxml");
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
     }
 
@@ -246,7 +252,7 @@ public class SearchViewController {
                 srtPath=dataFile.isSubtitled(videoDisplayedOnPane.getUrl());
                 videoPath=dataFile.getPath(videoDisplayedOnPane.getUrl());
             }
-            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","search-view.fxml");
+            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.srt","search-view.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -330,7 +336,7 @@ public class SearchViewController {
             throw new RuntimeException(e);
         }
     }
-    public void launchProgressUpload(String audioPath,String videoPath){
+    public void launchProgressUpload(String audioPath,String videoId,String videoTitle,String videoPath,String videoType){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("progressUploadAudio.fxml"));
@@ -339,6 +345,8 @@ public class SearchViewController {
             YoutubeDl uploadYoutubeDl=this.youtubeDl;
             uploadYoutubeDl.audioPath=audioPath;
             uploadYoutubeDl.videoPath=videoPath;
+            uploadYoutubeDl.videoTitle=videoTitle;
+            uploadYoutubeDl.videoId=videoId;
 
 //            dialog = new Dialog<>();
             Dialog<Void> dialog = new Dialog<>();
@@ -346,7 +354,7 @@ public class SearchViewController {
             dialog.initStyle(StageStyle.UNDECORATED);
 
             DataObject dataObject=new DataObject(uploadYoutubeDl,this.speechmatics,this.dataFile,this.ffmpeg);
-            dataObject.videoType="local";
+            dataObject.videoType=videoType;
             dialog.getDialogPane().getScene().getWindow().setUserData(dataObject);
             dialog.showAndWait();
         } catch (IOException e) {
