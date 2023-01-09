@@ -187,8 +187,8 @@ public class Speechmatics {
 
         if(this.httpCode > 299 || this.httpCode <200){
             System.out.println("[Speechmatics : getSubtitles] An error accured with 'getSubtitles' , http code : "+this.httpCode);
-            System.exit(1);
-//            return ;
+//            System.exit(1);
+            return ;
         }
 
         //CREATE FILE
@@ -252,8 +252,8 @@ public class Speechmatics {
 
             if(this.httpCode > 299 || this.httpCode <200){
                 System.out.println("[Speechmatics : checkOnJob] An error accured with 'checkOnJob' , http code : "+this.httpCode);
-                System.exit(1);
-    //            return ;
+//                System.exit(1);
+                return ;
             }
         }
         if(outputLineAsArray.length == 1){

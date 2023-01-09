@@ -234,7 +234,7 @@ public class DataFile {
     }
 
     public String isSubtitled(String id){
-
+//        System.out.println(id);
         String data="{}";
         //READ A FILE
         try {
@@ -247,6 +247,7 @@ public class DataFile {
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
+            return "null";
         }
 
         JSONObject dataObject=(JSONObject) JSONValue.parse(data);
@@ -254,7 +255,11 @@ public class DataFile {
             JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get(id).toString());
             System.out.println(contentObject.get("status"));
             if(contentObject.get("status")!=null && (boolean)contentObject.get("status")){
-                return (String)contentObject.get("srtPath");
+                if((String)contentObject.get("srtPath")!=null){
+                    return (String)contentObject.get("srtPath");
+                }else{
+                    return "null";
+                }
 //                return appFolderPath+id+"\\"+id+".srt";
             }else {
                 return "null";

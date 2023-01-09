@@ -16,7 +16,8 @@ public class FFmpeg {
     public String audioPath="";
     private String appFolder;
     public String videoType="local";
-    private String executableLocation="C:\\ffmpeg\\bin\\ffmpeg.exe";
+//    private String executableLocation="C:\\ffmpeg\\bin\\ffmpeg.exe";
+    private String executableLocation="src\\main\\resources\\ensa\\project_vt\\project-vt-files\\ffmpeg.exe";
 
     public FFmpeg(String appFolder){
 //        this.videoTitle=videoTitle;

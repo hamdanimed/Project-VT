@@ -107,19 +107,19 @@ public class SearchViewController {
 
     }
     public void initializeYoutubeDlandSpeechmaticsObjects(){
-        File myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/speechmatics-config-standard.json");
+        File myObjForInfo = new File("src/main/resources/ensa/project_vt/project-vt-files/speechmatics-config-standard.json");
         if (myObjForInfo.exists()) {
             this.speechmaticsConfigFilePath= myObjForInfo.getAbsolutePath();
         } else {
             System.out.println("The speechmatics-config-standard.json file does not exist.");
         }
-        myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/youtube-dl-config.conf");
+        myObjForInfo = new File("src/main/resources/ensa/project_vt/project-vt-files/youtube-dl-config.conf");
         if (myObjForInfo.exists()) {
             this.youtubeDlConfigFilePath= myObjForInfo.getAbsolutePath();
         } else {
             System.out.println("The youtube-dl-config.conf file does not exist.");
         }
-        myObjForInfo = new File("src/main/resources/ensa/project_vt/generate_subtitles/youtube-dl.exe");
+        myObjForInfo = new File("src/main/resources/ensa/project_vt/project-vt-files/youtube-dl.exe");
         if (myObjForInfo.exists()) {
             this.youtubeDlExePath= myObjForInfo.getAbsolutePath();
         } else {

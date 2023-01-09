@@ -108,6 +108,7 @@ public class VideoPlayerController {
     public void intermediateFunction(String videoPath,String srtPath,String interfaceFxmlName){
         setVideoPath(videoPath);
         setSrtPath(srtPath);
+        System.out.println(videoPath+"  "+srtPath);
         setPreviousInterface(interfaceFxmlName);
         initializeFunction();
     }

@@ -55,7 +55,7 @@ public class SousFrame1Controller {
         alert.setHeaderText("You're about to delete the video ");
         alert.setContentText("Do really want to delete this video ?");
         if(alert.showAndWait().get()== ButtonType.OK){
-            if(button_ID.contains("locale")){
+            if(button_ID.contains("local")){
                 delfile(button_ID+".wav");
                 delfile(button_ID+".srt");
             }else{
@@ -75,6 +75,15 @@ public class SousFrame1Controller {
         String button_ID = playV.getId();
         System.out.println(button_ID);
         System.out.println(videoTitle+"   "+date);
+        String srtPath="null";
+        String videoPath="null";
+        if(button_ID.contains("local")){
+            srtPath=dataFile.isSubtitled(button_ID.substring(6));
+            videoPath=dataFile.getPath(button_ID.substring(6));
+        }else{
+            srtPath=dataFile.isSubtitled(button_ID);
+            videoPath=dataFile.getPath(button_ID)+"\\"+button_ID+".mp4";
+        }
 
         Stage stage=null;
         Scene scene = null;
@@ -86,7 +95,7 @@ public class SousFrame1Controller {
             stage.setScene(scene);
             VideoPlayerController videoPlayerController = fxmlLoader.getController();
             stage.show();
-            videoPlayerController.intermediateFunction(dataFile.getPath(button_ID)+"\\"+button_ID+".mp4",dataFile.isSubtitled(button_ID),"home.fxml");
+            videoPlayerController.intermediateFunction(videoPath,srtPath,"home.fxml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -162,8 +171,18 @@ public class SousFrame1Controller {
 //            thread.start();
         }
 
-        System.out.println(button_ID);
-        System.out.println(videoTitle+"   "+date);
+//        System.out.println(button_ID);
+//        System.out.println(videoTitle+"   "+date);
+        Scene scene = null;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(fxmlLoader.load());
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }

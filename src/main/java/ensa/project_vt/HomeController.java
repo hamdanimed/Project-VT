@@ -89,6 +89,8 @@ public class HomeController implements Initializable {
                 Path file = Paths.get(listOfFiles[i].getAbsolutePath());
                 BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
                 if(listOfFiles[i].getName().contains(".json")) continue;
+                if(listOfFiles[i].getName().contains(".exe")) continue;
+                if(listOfFiles[i].getName().contains(".conf")) continue;
                 if(listOfFiles[i].getName().equals("local")){
                     ls.addAll(videoInfsForLocal(listOfFiles[i]));
                     continue;
@@ -129,7 +131,7 @@ public class HomeController implements Initializable {
                 System.out.println(listOfFiles[i].getName());
                 videoInf.setId("local\\"+listOfFiles[i].getName().substring(0,listOfFiles[i].getName().length()-4));
                 videoInf.setTitle(dataFile.getTitle(listOfFiles[i].getName().substring(0,listOfFiles[i].getName().length()-4)));
-                if(!dataFile.isSubtitled(listOfFiles[i].getName()).equals("null")){
+                if(!dataFile.isSubtitled(listOfFiles[i].getName().substring(0,listOfFiles[i].getName().length()-4)).equals("null")){
                     videoInf.setSubnotsub("Subtitled");
                 }else{
                     videoInf.setSubnotsub("Not Subtitled");
