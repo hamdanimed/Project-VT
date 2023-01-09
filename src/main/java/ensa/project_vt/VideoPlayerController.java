@@ -555,7 +555,8 @@ public class VideoPlayerController {
     {
         captionIndex = -1;
         actualCaption = new Caption(-1);
-        nextCaption = sp.getCaptions().get(0);
+        if(sp.getCaptions().isEmpty()) nextCaption = new Caption(-1);
+        else nextCaption = sp.getCaptions().get(0);
         captionInit = new Caption(-1);
     }
 
