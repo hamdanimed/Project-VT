@@ -21,7 +21,7 @@
             <Pane fx:id="progressArea" layoutX="153.0" layoutY="167.0" prefHeight="34.0" prefWidth="369.0">
                <children>
                   <HBox alignment="CENTER" layoutX="185.0" layoutY="181.0" mouseTransparent="true" prefHeight="27.0" prefWidth="263.0" spacing="10.0" />
-                  <Label fx:id="operation" layoutX="152.0" layoutY="4.0" text="operation">
+                  <Label fx:id="operation" layoutX="21.0" layoutY="7.0" text="operation">
                      <font>
                         <Font size="15.0" />
                      </font>
