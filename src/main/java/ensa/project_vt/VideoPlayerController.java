@@ -1,6 +1,8 @@
 package ensa.project_vt;
 
 //Animations
+import ensa.project_vt.dataClasses.Caption;
+import ensa.project_vt.jobClasses.SrtParser;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
@@ -13,14 +15,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -35,14 +34,12 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-//public class VideoPlayerController implements Initializable {
 public class VideoPlayerController {
     @FXML
     private MediaPlayer mediaPlayer;
@@ -113,8 +110,6 @@ public class VideoPlayerController {
         initializeFunction();
     }
 
-//    @Override
-//    public void initialize(URL url,ResourceBundle resourceBundle){}
     public void initializeFunction()
     {
         isVideoFound = false;
@@ -201,8 +196,6 @@ public class VideoPlayerController {
         try{
 
         mediaVideo = new Media(new File(videoPath).toURI().toString());
-//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4").toURI().toString());
-//        mediaVideo = new Media(new File("src\\main\\resources\\ensa\\project_vt\\video\\video.mp4").toURI().toString());
         mediaPlayer = new MediaPlayer(mediaVideo);
         mediaView.setMediaPlayer(mediaPlayer);
         isVideoFound = true;
@@ -364,20 +357,6 @@ public class VideoPlayerController {
                 isFullScreen = !isFullScreen;
             }
         });
-
-
-        //TODO
-//        captionEditText.textProperty().addListener(new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-//                System.out.println(t1);
-//            }
-//        });
-
-
-
-
-
     }
 
 
@@ -677,10 +656,6 @@ public class VideoPlayerController {
 
     public void setSrtPath(String srtPath) {
         this.srtPath = srtPath;
-    }
-
-    public String getPreviousInterface() {
-        return previousInterface;
     }
 
     public void setPreviousInterface(String previousInterface) {

@@ -1,11 +1,11 @@
 package ensa.project_vt;
 
-import ensa.project_vt.GenerateSubtitles.YoutubeDl;
-import ensa.project_vt.GenerateSubtitles.YoutubeDlTask;
+import ensa.project_vt.dataClasses.DataObject;
+import ensa.project_vt.jobClasses.YoutubeDl;
+import ensa.project_vt.threading.YoutubeDlTask;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,10 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class ProgressQualitiesController {
 
@@ -54,32 +51,10 @@ public class ProgressQualitiesController {
     private String audioQuality="";
     private YoutubeDlTask task;
 
-    public void setYoutubeDl(YoutubeDl youtubeDl) {
-
-        this.youtubeDl = youtubeDl;
-    }
-    //    public ProgressQualitiesController(YoutubeDl d) {
-//        this.youtubeDl=d;
-//    }
-
     public void initialize() {
-//        dialogPane.getButtonTypes().add(ButtonType.CLOSE);
-//        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
-//        closeButton.managedProperty().bind(closeButton.visibleProperty());
-//        closeButton.setVisible(false);
         msgLabel.setVisible(false);
         nextBtn.setDisable(true);
         loadingImage.setVisible(false);
-//        System.out.println(this.youtubeDl.getYoutubelink());
-
-//        System.out.println(dialogPane.getUserData());
-
-//        stage=(Stage) ((Node)dialogPane).getScene().getWindow();
-//        System.out.println(stage.getUserData())
-//        System.out.println(dialogPane.getScene().getWindow().getUserData());
-//        System.out.println(root.getScene().getWindow().getUserData());
-//        System.out.println(root.getDialogPane().getScene().getWindow().getUserData());
-
     }
 
     @FXML
@@ -109,20 +84,12 @@ public class ProgressQualitiesController {
     }
     @FXML
     public void cancel(ActionEvent event) throws IOException {
-//        System.out.println("check qualities , cancel buttton clicked");
-//        System.out.println(this.youtubeDl.getYoutubelink());
 
         if(task!=null && task.isRunning()){
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
             alert.setHeaderText("Are you sure you want to CANCEL ?");
-//            alert.setContentText("Do really want to exit ?");
             if(alert.showAndWait().get()== ButtonType.OK){
-                //first method for canceling (somehow works) , doesnt work for download dialog for some reason
-    //            if(checkQualitiesThread!=null && checkQualitiesThread.isAlive()){
-    //                checkQualitiesThread.interrupt();
-    //            }
-                //second method for canceling (just to have a unified method with the download)
                 if(task!=null && task.isRunning()){
                     task.sendCancelSignal();
 
@@ -169,15 +136,6 @@ public class ProgressQualitiesController {
 
     public boolean isVideoQualityChoosen() {
         return videoQualityCombo.getValue() != null;
-    }
-    public boolean isAudioQualityChoosen() {
-        return audioQualityCombo.getValue() != null;
-    }
-    public String getVideoQuality(){
-        return videoQualityCombo.getValue().toString();
-    }
-    public String getAudioQuality(){
-        return audioQualityCombo.getValue().toString();
     }
 
 

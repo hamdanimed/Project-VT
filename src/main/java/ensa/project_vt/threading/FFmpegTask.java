@@ -1,6 +1,7 @@
-package ensa.project_vt.GenerateSubtitles;
+package ensa.project_vt.threading;
 
-import ensa.project_vt.DataObject;
+import ensa.project_vt.jobClasses.DataFile;
+import ensa.project_vt.jobClasses.FFmpeg;
 import ensa.project_vt.SearchViewController;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -33,7 +34,6 @@ public class FFmpegTask extends Task<Integer> {
                 int exitCode=ffmpeg.convertToAudio();
                 if(exitCode==1){
                     searchViewController.loadingGif.setVisible(false);
-//                    searchViewController.msgLabel.setText("Converting to Audio");
                     searchViewController.msgLabel.setVisible(false);
                     System.out.println("[FFmpegTask] 'convertToAudio' Something Went Wrong , Try again");
                 }else{

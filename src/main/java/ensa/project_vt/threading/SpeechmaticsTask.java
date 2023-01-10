@@ -1,6 +1,9 @@
-package ensa.project_vt.GenerateSubtitles;
+package ensa.project_vt.threading;
 
-import ensa.project_vt.DataObject;
+import ensa.project_vt.jobClasses.DataFile;
+import ensa.project_vt.dataClasses.DataObject;
+import ensa.project_vt.jobClasses.Speechmatics;
+import ensa.project_vt.jobClasses.YoutubeDl;
 import ensa.project_vt.ProgressUploadAudioController;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -23,14 +26,6 @@ public class SpeechmaticsTask extends Task<Integer> {
         if(dataObject.videoType!=null){
             this.videoType=dataObject.videoType;
         }
-    }
-
-    private String dataFileId;
-    public SpeechmaticsTask(Speechmatics speechmatics,String dataFileId,String videoType,String action){
-        this.dataFileId=dataFileId;
-        this.speechmatics=speechmatics;
-        this.videoType=videoType;
-        this.action=action;
     }
 
     @Override
@@ -65,40 +60,7 @@ public class SpeechmaticsTask extends Task<Integer> {
                 });
 
             }
-//            case "getSubtitles" ->{
-//                System.out.println("Thread getSubtitles");
-//                int exitCode;
-//
-//                if(this.videoType.equals("local")){
-//                    System.out.println("something local");
-//                    exitCode=speechmatics.getSubstitles(dataFile.getJobId(dataFileId),"local",dataFile.getTitle(dataFileId));
-//                }else{
-//                    System.out.println("somehitn ytb");
-//                    System.out.println(speechmatics.checkOnJob(dataFile.getJobId(dataFileId)));
-//                    exitCode=speechmatics.getSubstitles(dataFile.getJobId(dataFileId),dataFileId,dataFileId);
-//                }
-//                System.out.println("somehitn"+exitCode);
-//
-//                int finalExitCode = exitCode;
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if(finalExitCode ==0){
-//                            dataFile.setSubtitled(dataFileId, true);
-////                            if (videoType.equals("local")) {
-////                                dataFile.setSubtitled(dataFileId, true,"ytb");
-////                            }else{
-////                                dataFile.setSubtitled(dataFileId, true,"ytb");
-////                            }
-//                        }else{
-//                            System.out.println("[SpeechmaticsTask] Something Went Wrong, Try again");
-//
-//
-//                        }
-//                    }
-//                });
-//
-//            }
+
             default -> {
                 System.out.println("Task was Invoked");
                 return 1;

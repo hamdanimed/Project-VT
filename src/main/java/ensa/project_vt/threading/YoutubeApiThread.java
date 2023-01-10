@@ -1,11 +1,11 @@
-package ensa.project_vt.YoutubeSearch;
+package ensa.project_vt.threading;
 
-import ensa.project_vt.SearchViewController;
+import ensa.project_vt.jobClasses.VisitYoutube;
+import ensa.project_vt.dataClasses.YoutubeVideo;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -54,9 +54,6 @@ public class YoutubeApiThread  extends Thread  {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
-
-
 
     }
 }

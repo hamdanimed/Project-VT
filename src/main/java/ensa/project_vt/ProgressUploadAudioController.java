@@ -1,20 +1,17 @@
 package ensa.project_vt;
 
-import ensa.project_vt.GenerateSubtitles.Speechmatics;
-import ensa.project_vt.GenerateSubtitles.SpeechmaticsTask;
-import ensa.project_vt.GenerateSubtitles.YoutubeDl;
-import ensa.project_vt.GenerateSubtitles.YoutubeDlTask;
+import ensa.project_vt.dataClasses.DataObject;
+import ensa.project_vt.jobClasses.Speechmatics;
+import ensa.project_vt.threading.SpeechmaticsTask;
+import ensa.project_vt.jobClasses.YoutubeDl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.chrono.ThaiBuddhistEra;
 
 public class ProgressUploadAudioController {
 
@@ -49,10 +46,6 @@ public class ProgressUploadAudioController {
     private Thread sendAudioThread;
     @FXML
     public void initialize(){
-//        dialogPane.getButtonTypes().add(ButtonType.CLOSE);
-//        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
-//        closeButton.managedProperty().bind(closeButton.visibleProperty());
-//        closeButton.setVisible(false);
         finishBtn.setDisable(true);
         errorMsgLabel.setVisible(false);
     }
@@ -70,22 +63,21 @@ public class ProgressUploadAudioController {
     }
      @FXML
     public void finish(ActionEvent event) throws IOException {
-        System.out.println("upload audio , finish buttton clicked");
-        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation");
-        alert.setHeaderText("Are you sure you want to Exit ?");
-//        alert.setContentText("Do really want to exit ?");
-        if(alert.showAndWait().get()== ButtonType.OK){
+//        System.out.println("upload audio , finish buttton clicked");
+//        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setTitle("Confirmation");
+//        alert.setHeaderText("Are you sure you want to Exit ?");
+////        alert.setContentText("Do really want to exit ?");
+//        if(alert.showAndWait().get()== ButtonType.OK){
             stage=(Stage) dialogPane.getScene().getWindow();
             stage.close();
-        }
+//        }
     }
     @FXML
     public void cancel(ActionEvent event) throws IOException {
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("Are you sure you want to CANCEL ?");
-//        alert.setContentText("Do really want to exit ?");
         if(alert.showAndWait().get()== ButtonType.OK){
             if(task!=null && task.isRunning()){
                 task.sendCancelSignal();
@@ -103,7 +95,6 @@ public class ProgressUploadAudioController {
         this.percentageLabel.setText(percentage);
         this.sizeLabel.setText(size);
         double value=Double.valueOf(percentage.substring(0,percentage.length()-1));
-//        double value=Double.valueOf(percentage);
         this.progressBar.setProgress(value/100.0);
     }
 

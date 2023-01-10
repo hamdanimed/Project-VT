@@ -1,4 +1,4 @@
-package ensa.project_vt;
+package ensa.project_vt.dataClasses;
 
 import java.util.Objects;
 

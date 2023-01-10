@@ -1,4 +1,4 @@
-package ensa.project_vt.YoutubeSearch;
+package ensa.project_vt.jobClasses;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

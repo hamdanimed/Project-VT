@@ -1,6 +1,5 @@
-package ensa.project_vt;
+package ensa.project_vt.dataClasses;
 
-import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -9,8 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
 

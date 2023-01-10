@@ -1,4 +1,6 @@
-package ensa.project_vt;
+package ensa.project_vt.jobClasses;
+
+import ensa.project_vt.dataClasses.Caption;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,23 +11,8 @@ import java.util.HashMap;
 
 public class SrtParser {
     private FileReader fr;
-    private HashMap<Integer,Caption> captions;
+    private HashMap<Integer, Caption> captions;
     private double videoLength;
-
-
-
-
-
-    public double getVideoLength() {
-        return videoLength;
-    }
-
-    public void setVideoLength(double videoLength) {
-        this.videoLength = videoLength;
-    }
-
-
-
     public HashMap<Integer, Caption> getCaptions() {
         return captions;
     }

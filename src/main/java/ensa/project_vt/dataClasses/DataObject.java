@@ -1,9 +1,9 @@
-package ensa.project_vt;
+package ensa.project_vt.dataClasses;
 
-import ensa.project_vt.GenerateSubtitles.DataFile;
-import ensa.project_vt.GenerateSubtitles.FFmpeg;
-import ensa.project_vt.GenerateSubtitles.Speechmatics;
-import ensa.project_vt.GenerateSubtitles.YoutubeDl;
+import ensa.project_vt.jobClasses.DataFile;
+import ensa.project_vt.jobClasses.FFmpeg;
+import ensa.project_vt.jobClasses.Speechmatics;
+import ensa.project_vt.jobClasses.YoutubeDl;
 
 public class DataObject {
     public YoutubeDl youtubeDl;

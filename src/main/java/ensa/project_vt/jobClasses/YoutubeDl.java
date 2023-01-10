@@ -1,7 +1,7 @@
-package ensa.project_vt.GenerateSubtitles;
+package ensa.project_vt.jobClasses;
 
-import ensa.project_vt.ProgressQualitiesController;
 import ensa.project_vt.ProgressDownloadController;
+import ensa.project_vt.ProgressQualitiesController;
 import javafx.application.Platform;
 
 import java.io.*;
@@ -126,14 +126,6 @@ public class YoutubeDl {
             }
         }
 
-//        if(outputLineAsArray[0].equals("[ffmpeg]")){
-//
-//            if(outputLineAsArray[1].equals("Destination:")){
-//                //getting audio path
-//                this.audioPath=outputLineAsArray[2];
-//            }
-//        }
-//        System.out.println(Arrays.toString(outputLineAsArray));
     }
 
     public int checkAvailableQualities(ProgressQualitiesController controller) {
@@ -219,13 +211,11 @@ public class YoutubeDl {
                     filteredDownLine.add(lineAsArray[audioIndexs[i]]);
                 }
                 this.audioOptions.add(filteredDownLine.toString());
-//                this.audioOptions.add(Arrays.asList(lineAsArray).toString());
             }else {
                 for (int i=0;i<videoIndexs.length;i++){
                     filteredDownLine.add(lineAsArray[videoIndexs[i]]);
                 }
                 this.videoOptions.add(filteredDownLine.toString());
-//                this.videoOptions.add(Arrays.asList(lineAsArray).toString());
             }
         }
 
@@ -250,26 +240,13 @@ public class YoutubeDl {
         this.videoId=youtubelink.substring(youtubelink.length()-11);
     }
 
-    public String getAudioQuality() {
-        return audioQuality;
-    }
-
     public void setAudioQuality(String audioQuality) {
         this.audioQuality = audioQuality;
-    }
-
-    public String getVideoQuality() {
-        return videoQuality;
     }
 
     public void setVideoQuality(String videoQuality) {
         this.videoQuality = videoQuality;
     }
-
-    public boolean isSignal() {
-        return signal;
-    }
-
     public void setSignal(boolean signal) {
         this.signal = signal;
     }

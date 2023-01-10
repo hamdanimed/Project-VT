@@ -1,8 +1,11 @@
-package ensa.project_vt.GenerateSubtitles;
+package ensa.project_vt.threading;
 
-import ensa.project_vt.DataObject;
-import ensa.project_vt.ProgressQualitiesController;
+import ensa.project_vt.jobClasses.DataFile;
+import ensa.project_vt.dataClasses.DataObject;
+import ensa.project_vt.jobClasses.FFmpeg;
+import ensa.project_vt.jobClasses.YoutubeDl;
 import ensa.project_vt.ProgressDownloadController;
+import ensa.project_vt.ProgressQualitiesController;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
@@ -92,14 +95,6 @@ public class YoutubeDlTask extends Task<Integer> {
                     return 1;
                 }
             }
-
-//        try {
-//            while(!isCancelled()){
-//                Thread.sleep(1000);
-//            }
-//        }catch( InterruptedException e){
-//            System.out.println("[YoutubeDlTask] task was canceled");
-//        }
 
         return 0;
     }

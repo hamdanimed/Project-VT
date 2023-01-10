@@ -1,4 +1,4 @@
-package ensa.project_vt.GenerateSubtitles;
+package ensa.project_vt.jobClasses;
 
 import ensa.project_vt.HomeController;
 import ensa.project_vt.ProgressUploadAudioController;
@@ -10,7 +10,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,10 +97,8 @@ public class Speechmatics {
             String regex="[0-9]+";
             Pattern p= Pattern.compile(regex);
             Matcher firstField=p.matcher(outputLineAsArray[0]);
-//            Matcher lastField=p.matcher(outputLineAsArray[outputLineAsArray.length-1]);
             //checking if the line is a progress line
             if(firstField.matches()){
-//                this.sendAudioProgress=new ArrayList<>(Arrays.asList(outputLineAsArray));
                 this.sendAudioProgress=new ArrayList<>();
                 // % sent,size of file getting sent,speed of upload,time left for the upload to be done
                 this.sendAudioProgress.add(Arrays.asList(outputLineAsArray[0],outputLineAsArray[1],outputLineAsArray[7],outputLineAsArray[10]).toString());
@@ -111,7 +108,6 @@ public class Speechmatics {
                         uploadAudioController.setProgress(outputLineAsArray[7],outputLineAsArray[10],outputLineAsArray[0],outputLineAsArray[1]);
                     }
                 });
-//                System.out.println(this.sendAudioProgress.toString());
             }
         }
 
@@ -264,33 +260,17 @@ public class Speechmatics {
 //                System.out.println(configJsonObject);
 
                 this.jobStatus=(String) jobJsonObject.get("status");
-                System.out.println((String) jobJsonObject.get("status"));
             }
         }
     }
 
     public void setAudioPath(String s){
         audioPath="data_file=@"+s;
-//        audioPath.concat(s);
     }
-    public String getAudioPath(){
-        return audioPath;
-    }
-    public void setJobId(String jobId){
-        this.jobId=jobId;
-    }
+
     public String getJobId(){
         return this.jobId;
     }
-
-    public void setYoutubeId(String youtubeId) {
-        this.youtubeId=youtubeId;
-    }
-
-    public boolean isSignal() {
-        return signal;
-    }
-
     public void setSignal(boolean signal) {
         this.signal = signal;
     }

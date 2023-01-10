@@ -1,12 +1,11 @@
 package ensa.project_vt;
 
-import ensa.project_vt.GenerateSubtitles.DataFile;
-import ensa.project_vt.GenerateSubtitles.Speechmatics;
-import ensa.project_vt.GenerateSubtitles.SpeechmaticsTask;
+import ensa.project_vt.dataClasses.VideoInf;
+import ensa.project_vt.jobClasses.DataFile;
+import ensa.project_vt.jobClasses.Speechmatics;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -17,8 +16,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class SousFrame1Controller {
 
@@ -49,7 +46,7 @@ public class SousFrame1Controller {
     @FXML
     void DeleteVideo(ActionEvent event) throws IOException {
         String button_ID = deleteV.getId();
-        System.out.println("btn id : "+button_ID);
+//        System.out.println("btn id : "+button_ID);
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("Are you sure you want to delete the video ?");
@@ -72,8 +69,8 @@ public class SousFrame1Controller {
     @FXML
     void PlayVideo(ActionEvent event) {
         String button_ID = playV.getId();
-        System.out.println(button_ID);
-        System.out.println(videoTitle+"   "+date);
+//        System.out.println(button_ID);
+//        System.out.println(videoTitle+"   "+date);
         String srtPath="null";
         String videoPath="null";
         if(button_ID.contains("local")){
@@ -110,11 +107,15 @@ public class SousFrame1Controller {
             videoType="local";
         }
 
-        System.out.println(button_ID);
+//        System.out.println(button_ID);
         if(dataFile.getJobId(button_ID).equals("null")){
             String audioPath= dataFile.getPath(button_ID)+"\\"+button_ID+".wav";
             String videoPath= dataFile.getPath(button_ID)+"\\"+button_ID+".mp4";
             String videoTitle=dataFile.getTitle(button_ID);
+            if(videoType.equals("local")){
+                audioPath= appFolderPath+"local"+"\\"+button_ID+".wav";
+                videoPath=dataFile.getPath(button_ID);
+            }
 
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
@@ -163,38 +164,30 @@ public class SousFrame1Controller {
                     dataFile.setSubtitled(button_ID,appFolderPath+button_ID+"\\"+button_ID+".srt",true);
                 }
             }
-//            SpeechmaticsTask task=new SpeechmaticsTask(speechmatics,button_ID,videoType,"getSubtitles");
-//            Thread thread=new Thread(task);
-//            thread.setDaemon(true);
-//            thread.start();
+            Scene scene = null;
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home.fxml"));
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(fxmlLoader.load());
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+    //            throw new RuntimeException(e);
+            }
         }
 
-//        System.out.println(button_ID);
-//        System.out.println(videoTitle+"   "+date);
-        Scene scene = null;
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(fxmlLoader.load());
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-//            throw new RuntimeException(e);
-        }
 
 
     }
 
     public void setData(VideoInf videoInf){
-        //Image img = new Image(getClass().getResourceAsStream(videoInf.))
         videoTitle.setText(videoInf.getTitle());
         date.setText(videoInf.getDate());
         subNotsub.setText(videoInf.getSubnotsub());
         playV.setId(videoInf.getId());
         deleteV.setId(videoInf.getId());
         subtitlesV.setId(videoInf.getId());
-        //Size.setText(videoInf.getSize());
     }
 
     public void delfile(String id){
@@ -204,7 +197,6 @@ public class SousFrame1Controller {
             if(id.contains("local")){
                 File file=new File(appFolderPath+id);
                 if(file.exists() && file.delete()){
-//                    System.out.println(id.substring(6,id.length()-4));
                     dataFile.deleteVideo(id.substring(6,id.length()-4));
                     System.out.println("File was deleted");
                 }else{

@@ -1,11 +1,16 @@
 package ensa.project_vt;
 
-import ensa.project_vt.GenerateSubtitles.*;
-import ensa.project_vt.YoutubeSearch.YoutubeApiThread;
-import ensa.project_vt.YoutubeSearch.YoutubeVideo;
-
 //import ensa.project_vt.localVideo.localVideo;
 
+import ensa.project_vt.dataClasses.DataObject;
+import ensa.project_vt.dataClasses.ResultCell;
+import ensa.project_vt.dataClasses.YoutubeVideo;
+import ensa.project_vt.jobClasses.DataFile;
+import ensa.project_vt.jobClasses.FFmpeg;
+import ensa.project_vt.jobClasses.Speechmatics;
+import ensa.project_vt.jobClasses.YoutubeDl;
+import ensa.project_vt.threading.FFmpegTask;
+import ensa.project_vt.threading.YoutubeApiThread;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,8 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -172,45 +175,13 @@ public class SearchViewController {
 
                 // create a new video object with the information from the file
                 createVideoInstance(file);
-
-                //converting to audio
                 String fileNameWithOutExt = FilenameUtils.removeExtension(file.getName());
                 this.ffmpeg.setVideo(fileNameWithOutExt,file.getAbsolutePath());
-//
-//                FFmpegTask convertingTask=new FFmpegTask(ffmpeg,this.dataFile,this,"convertToAudio");
-//                Thread convertingThread=new Thread(convertingTask);
-//                convertingThread.setDaemon(true);
-//                convertingThread.start();
+
             }else {
                 System.out.println("No file was selected.");
             }
         });
-    }
-
-
-    public void getSubtitles(ActionEvent event){
-//        this.youtubeDl.videoPath="C:\\Users\\hp\\PC\\project-vt-files\\-EbzDqtZEh4\\-EbzDqtZEh4.mp4";
-//        this.youtubeDl.videoTitle="-EbzDqtZEh4";
-//        DataObject dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile,this.ffmpeg);
-//        dataObject.videoType="ytb";
-//        SpeechmaticsTask task=new SpeechmaticsTask(dataObject,this,"getSubtitles");
-//        Thread thread=new Thread(task);
-//        thread.start();
-//        Scene scene = null;
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
-//            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            scene = new Scene(fxmlLoader.load(), 1200, 700);
-//            stage.setTitle("Media Player");
-//            stage.setScene(scene);
-//            VideoPlayerController videoPlayerController = fxmlLoader.getController();
-////            videoPlayerController.setVideoPath("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4");
-//            stage.show();
-//            videoPlayerController.intermediateFunction("src\\main\\resources\\ensa\\project_vt\\project-vt-files\\UelDrZ1aFeY\\UelDrZ1aFeY.mp4","search-view.fxml");
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
     }
 
 
@@ -233,14 +204,14 @@ public class SearchViewController {
         // get the type of input : is it a link or a keyword ?
         String type = getInputType(searchInput);
         switch (type) {
-            case "yt-link" -> System.out.println("It's a youtube link");
-//            case "yt-link" -> {
-//                mainText.setVisible(false);
-//
-//                YoutubeApiThread apiThread = new YoutubeApiThread(searchInput,listView,progressArea,textInfo);
-//                apiThread.start();
-//                apiThread.interrupt();
-//            }
+//            case "yt-link" -> System.out.println("It's a youtube link");
+            case "yt-link" -> {
+                mainText.setVisible(false);
+
+                YoutubeApiThread apiThread = new YoutubeApiThread(searchInput,listView,progressArea,textInfo);
+                apiThread.start();
+                apiThread.interrupt();
+            }
             case "link" -> {
                 mainText.setText("Oops .. this is not a youtube link");
             }
@@ -284,7 +255,13 @@ public class SearchViewController {
         }
     }
     public void transcript() throws IOException {
-//        System.out.println("I transcript the video : " + selectedVideo.getVideoTitle()+" the link is : "+selectedVideo.getUrl());
+        if(dataFile.isVideoDownloaded(this.ffmpeg.videoTitle) != "null"){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Video was already converted to audio ");
+            alert.setContentText("Go to the home interface");
+            alert.showAndWait();
+            return ;
+        }
         if(videoDisplayedOnPane.videoType.equals("local")){
             FFmpegTask convertingTask=new FFmpegTask(ffmpeg,this.dataFile,this,"convertToAudio");
             Thread convertingThread=new Thread(convertingTask);
@@ -340,22 +317,19 @@ public class SearchViewController {
     }
     public void launchProgressQualities(){
         try {
-            //check if the video is already downloaded ; in the database (data.json)
-//            if(dataFile.isVideoDownloaded(this.youtubeDl.videoId,"ytb") != "null"){
-//                Alert alert=new Alert(Alert.AlertType.ERROR);
-//                alert.showAndWait();
-//                return ;
-//            }
+//            check if the video is already downloaded ; in the database (data.json)
+            if(dataFile.isVideoDownloaded(this.youtubeDl.videoId) != "null"){
+                Alert alert=new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Video is already downloaded or converted to audio [for local videos]");
+                alert.setContentText("Go to the home interface");
+                alert.showAndWait();
+                return ;
+            }
 
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("progressQualities.fxml"));
             DialogPane dialogPane = fxmlLoader.load(); // load the dialog view
 
-//            ProgressQualitiesController qualitiesController=fxmlLoader.getController();
-//            qualitiesController.dataObject=new DataObject(this.youtubeDl,this.speechmatics,this.dataFile);
-//            qualitiesController.setYoutubeDl(this.youtubeDl);
-
-//            dialog = new Dialog<>();
             Dialog<Void> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             dialog.initStyle(StageStyle.UNDECORATED);
@@ -439,7 +413,6 @@ public class SearchViewController {
 
         mediaPlayer.setOnReady(new Runnable() {
             // had to create the video instance here and render it becasue it's the only way to get the video duration
-
             @Override
             public void run() {
 
@@ -489,9 +462,6 @@ public class SearchViewController {
                 + "._\\+~#?&//=]*)";
         // Compile the ReGex
         Pattern p = Pattern.compile(regex);
-        // Find match between given string
-        // and regular expression
-        // using Pattern.matcher()
         Matcher m = p.matcher(url);
         return m.matches();
     }
@@ -506,16 +476,5 @@ public class SearchViewController {
     public void save(){
         System.out.println("I save the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
     }
-    public String getSearchInput(){
-        return this.searchInput;
-    }
-    public Text getMainText() {
-        return mainText;
-    }
-    public ListView<YoutubeVideo> getListView() {
-        return listView;
-    }
-
-
 
 }

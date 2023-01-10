@@ -1,6 +1,7 @@
 package ensa.project_vt;
 
-import ensa.project_vt.GenerateSubtitles.DataFile;
+import ensa.project_vt.dataClasses.VideoInf;
+import ensa.project_vt.jobClasses.DataFile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -38,7 +38,6 @@ public class HomeController implements Initializable {
     public Label msgLabel;
 
     private Stage stage;
-    private Scene scene;
     private String appFolderPath="src\\main\\resources/ensa\\project_vt\\project-vt-files\\";
     DataFile dataFile=new DataFile(appFolderPath);
 
@@ -80,8 +79,6 @@ public class HomeController implements Initializable {
     private List<VideoInf> videoInfs(File folder){
         List<VideoInf> ls = new ArrayList<>();
         try{
-//            File folder = new File("C:\\Users\\Mohamed Ben Arrouch\\OneDrive\\Desktop\\project-vt-files");
-//            File folder = new File(appFolderPath);
             File[] listOfFiles = folder.listFiles();
 
             for (int i = 0; i < listOfFiles.length; i++) {
@@ -95,10 +92,6 @@ public class HomeController implements Initializable {
                     ls.addAll(videoInfsForLocal(listOfFiles[i]));
                     continue;
                 }
-                //System.out.println("File name: " + listOfFiles[i].getName());
-                //System.out.println("Date de dernier modification: "+ attr.lastModifiedTime());
-                //System.out.println("File size: "+attr.size());
-//                videoInf.setTitle(listOfFiles[i].getName());
                 videoInf.setId(listOfFiles[i].getName());
                 videoInf.setTitle(dataFile.getTitle(listOfFiles[i].getName()));
                 if(!dataFile.isSubtitled(listOfFiles[i].getName()).equals("null")){
@@ -107,7 +100,6 @@ public class HomeController implements Initializable {
                     videoInf.setSubnotsub("Not Subtitled");
                 }
                 videoInf.setDate(String.valueOf(attr.lastModifiedTime()).substring(0,10));
-                //videoInf.setSize(String.valueOf(attr.size()/1024)+"MB");
                 ls.add(videoInf);
             }
         }catch (IOException e){
@@ -118,8 +110,6 @@ public class HomeController implements Initializable {
     private List<VideoInf> videoInfsForLocal(File folder){
         List<VideoInf> ls = new ArrayList<>();
         try{
-//            File folder = new File("C:\\Users\\Mohamed Ben Arrouch\\OneDrive\\Desktop\\project-vt-files");
-//            File folder = new File(appFolderPath);
             File[] listOfFiles = folder.listFiles();
 
             for (int i = 0; i < listOfFiles.length; i++) {
@@ -137,7 +127,6 @@ public class HomeController implements Initializable {
                     videoInf.setSubnotsub("Not Subtitled");
                 }
                 videoInf.setDate(String.valueOf(attr.lastModifiedTime()).substring(0,10));
-                //videoInf.setSize(String.valueOf(attr.size()/1024)+"MB");
                 ls.add(videoInf);
             }
         }catch (IOException e){

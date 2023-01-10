@@ -1,4 +1,4 @@
-package ensa.project_vt;
+package ensa.project_vt.dataClasses;
 
 public class VideoInf {
     private String title;
@@ -10,11 +10,9 @@ public class VideoInf {
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
-
     public String getSize() {
         return size;
     }

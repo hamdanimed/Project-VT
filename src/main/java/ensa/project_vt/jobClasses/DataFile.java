@@ -1,4 +1,4 @@
-package ensa.project_vt.GenerateSubtitles;
+package ensa.project_vt.jobClasses;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -253,7 +253,6 @@ public class DataFile {
         JSONObject dataObject=(JSONObject) JSONValue.parse(data);
         if(dataObject.containsKey(id)){
             JSONObject contentObject=(JSONObject) JSONValue.parse(dataObject.get(id).toString());
-            System.out.println(contentObject.get("status"));
             if(contentObject.get("status")!=null && (boolean)contentObject.get("status")){
                 if((String)contentObject.get("srtPath")!=null){
                     return (String)contentObject.get("srtPath");
@@ -303,58 +302,6 @@ public class DataFile {
                 e.printStackTrace();
             }
 
-    }
-
-    private void setAppFolderPath(String appFolderPath){
-        String data="{}";
-        //READ A FILE
-        try {
-            File myObj = new File(appFolderPath+"data.json");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                data = myReader.nextLine();
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        JSONObject dataObject=(JSONObject) JSONValue.parse(data);
-        dataObject.put("appFolderPath",appFolderPath);
-
-        //WRITE TO A FILE
-        try {
-            FileWriter myWriter = new FileWriter(appFolderPath+"data.json");
-            myWriter.write(dataObject.toJSONString());
-            myWriter.close();
-            //System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file.");
-            e.printStackTrace();
-        }
-    }
-    private String getAppFolderPath(){
-        String data="{}";
-        //READ A FILE
-        try {
-            File myObj = new File(appFolderPath+"\\data.json");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                data = myReader.nextLine();
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        JSONObject dataObject=(JSONObject) JSONValue.parse(data);
-        if(dataObject.containsKey("appFolderPath")){
-            return (String)dataObject.get("appFolderPath");
-        }else{
-            return "null";
-        }
     }
 
 }

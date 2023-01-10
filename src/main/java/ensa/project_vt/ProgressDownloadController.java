@@ -1,7 +1,8 @@
 package ensa.project_vt;
 
-import ensa.project_vt.GenerateSubtitles.YoutubeDl;
-import ensa.project_vt.GenerateSubtitles.YoutubeDlTask;
+import ensa.project_vt.dataClasses.DataObject;
+import ensa.project_vt.jobClasses.YoutubeDl;
+import ensa.project_vt.threading.YoutubeDlTask;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,14 +54,8 @@ public class ProgressDownloadController {
     public DataObject dataObject;
     @FXML
     public void initialize(){
-//        dialogPane.getButtonTypes().add(ButtonType.CLOSE);
-//        Node closeButton = dialogPane.lookupButton(ButtonType.CLOSE);
-//        closeButton.managedProperty().bind(closeButton.visibleProperty());
-//        closeButton.setVisible(false);
-
         nextBtn.setDisable(true);
         errorMsgLabel.setVisible(false);
-
     }
 
     @FXML

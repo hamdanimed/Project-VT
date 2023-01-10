@@ -1,14 +1,14 @@
-package ensa.project_vt.YoutubeSearch;
+package ensa.project_vt.jobClasses;
 
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import ensa.project_vt.dataClasses.YoutubeVideo;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class VisitYoutube {
         }
         return output.toString();
     }
-    public  List<ensa.project_vt.YoutubeSearch.YoutubeVideo> Search(String keyword, String part, String type, int maxResults) throws IOException {
+    public  List<YoutubeVideo> Search(String keyword, String part, String type, int maxResults) throws IOException {
         String requestUrl = this.Url.SearchUrl(keyword,part,type,maxResults);
         URL url = new URL(requestUrl);
         this.youtubeVisitor = (HttpURLConnection) url.openConnection();
@@ -57,14 +57,14 @@ public class VisitYoutube {
         JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
 
         JsonArray contents = jsonObject.get("items").getAsJsonArray();
-        List<ensa.project_vt.YoutubeSearch.YoutubeVideo> videos = new ArrayList<>();
+        List<YoutubeVideo> videos = new ArrayList<>();
         for(JsonElement jsonElement : contents){
             JsonObject videoJsonObject = jsonElement.getAsJsonObject();
             if(videoJsonObject.has("snippet")){
                 JsonObject videoId = videoJsonObject.get("id").getAsJsonObject();
                 JsonObject videoData = videoJsonObject.get("snippet").getAsJsonObject();
 
-                ensa.project_vt.YoutubeSearch.YoutubeVideo video = ensa.project_vt.YoutubeSearch.YoutubeVideo.getVideoInfo(videoId,videoData);
+                YoutubeVideo video = YoutubeVideo.getVideoInfo(videoId,videoData);
                 videos.add(video);
             }
         }
@@ -78,21 +78,6 @@ public class VisitYoutube {
         String response = this.StreamToString(this.youtubeVisitor.getInputStream());
         return response;
     }
-
-    /*
-    public String GetVideoDuration(String videoId) throws IOException {
-        String response = GetVideoDetails(videoId);
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
-        JsonArray contents = jsonObject.get("items").getAsJsonArray();
-        JsonObject info = contents.get(0).getAsJsonObject();
-        String duration = info.get("contentDetails").getAsJsonObject().get("duration").getAsString();
-        String formatDuration = duration.replace("PT","").replace("H",":").replace("M","min").replace("S","seconds");
-        return formatDuration;
-    }
-
-     */
-
 
 }
 

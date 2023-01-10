@@ -1,11 +1,6 @@
-package ensa.project_vt.GenerateSubtitles;
-
-import ensa.project_vt.ProgressQualitiesController;
+package ensa.project_vt.jobClasses;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class FFmpeg {
 
@@ -16,15 +11,11 @@ public class FFmpeg {
     public String audioPath="";
     private String appFolder;
     public String videoType="local";
-//    private String executableLocation="C:\\ffmpeg\\bin\\ffmpeg.exe";
     private String executableLocation="src\\main\\resources\\ensa\\project_vt\\project-vt-files\\ffmpeg.exe";
 
     public FFmpeg(String appFolder){
-//        this.videoTitle=videoTitle;
-//        this.videoPath=videoPath;
         this.appFolder=appFolder;
         this.tmpFolder=appFolder+"tmp";
-//        this.destinationFolderPath=destinationFolderPath;
     }
 
     public int convertToAudio() {
