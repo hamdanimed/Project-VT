@@ -32,7 +32,7 @@ public class YoutubeApiThread  extends Thread  {
     @Override
     public void run() {
 
-        String apiKey = "AIzaSyC34VqBS3fiCsJyd2fX1P2fx5yBIQnimTY";
+        String apiKey = "AIzaSyDF0TDdiIrYK4_izUOOgOSSnNQQZFACOrI";
         VisitYoutube client = new VisitYoutube(apiKey);
 
         try {

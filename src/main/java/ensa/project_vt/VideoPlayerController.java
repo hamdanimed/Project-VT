@@ -126,7 +126,7 @@ public class VideoPlayerController {
                 Stage stage=null;
                 Scene scene = null;
                 try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource(previousInterface));
+                    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(previousInterface));
                     stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
                     scene = new Scene(fxmlLoader.load(), 1200, 700);
                     stage.setTitle("Project VT");

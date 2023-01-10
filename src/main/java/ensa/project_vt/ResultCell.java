@@ -18,7 +18,7 @@ public class ResultCell extends ListCell<YoutubeVideo>{
     @FXML
     private Label titleLabel;
     @FXML
-    private Text durationLabel;
+    private Label durationLabel;
     @FXML
     private ImageView imageView;
     /*@FXML
@@ -29,6 +29,8 @@ public class ResultCell extends ListCell<YoutubeVideo>{
     @FXML
     private HBox hbox;
     public ResultCell(){
+
+
         loadFXML();
     }
     // load the fxml view for the result item

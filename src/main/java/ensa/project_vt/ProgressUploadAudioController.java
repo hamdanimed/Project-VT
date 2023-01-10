@@ -73,8 +73,8 @@ public class ProgressUploadAudioController {
         System.out.println("upload audio , finish buttton clicked");
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
-        alert.setHeaderText("You're about to exit");
-        alert.setContentText("Do really want to exit ?");
+        alert.setHeaderText("Are you sure you want to Exit ?");
+//        alert.setContentText("Do really want to exit ?");
         if(alert.showAndWait().get()== ButtonType.OK){
             stage=(Stage) dialogPane.getScene().getWindow();
             stage.close();
@@ -84,8 +84,8 @@ public class ProgressUploadAudioController {
     public void cancel(ActionEvent event) throws IOException {
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
-        alert.setHeaderText("You're about to Cancel t");
-        alert.setContentText("Do really want to exit ?");
+        alert.setHeaderText("Are you sure you want to CANCEL ?");
+//        alert.setContentText("Do really want to exit ?");
         if(alert.showAndWait().get()== ButtonType.OK){
             if(task!=null && task.isRunning()){
                 task.sendCancelSignal();
