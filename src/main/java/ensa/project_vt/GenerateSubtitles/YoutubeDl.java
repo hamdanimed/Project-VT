@@ -46,7 +46,7 @@ public class YoutubeDl {
         try {
 //            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+this.videoId+"\\"+"%(id)s.%(ext)s","-f","(webm)[height<360]+bestaudio","--config-location",configurationFilePath);
             System.out.println(audioQuality+" "+videoQuality);
-            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+"tmp"+"\\"+"/%(id)s.%(ext)s","-f",videoQuality+"+"+audioQuality,"--config-location",configurationFilePath);
+            ProcessBuilder pb = new ProcessBuilder(YoutubeDl.executableLocation,youtubelink,"-o",videoAndAudioRepository+"tmp"+"\\"+"/%(id)s.%(ext)s","-f",videoQuality+"+"+audioQuality,"--ffmpeg-location","src/main/resources/ensa/project_vt/project-vt-files/ffmpeg.exe","--config-location",configurationFilePath);
 
 
             pb.redirectErrorStream(true); // errorstream of the process will be redirected to standard output

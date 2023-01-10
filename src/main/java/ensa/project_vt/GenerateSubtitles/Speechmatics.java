@@ -1,5 +1,6 @@
 package ensa.project_vt.GenerateSubtitles;
 
+import ensa.project_vt.HomeController;
 import ensa.project_vt.ProgressUploadAudioController;
 import javafx.application.Platform;
 import org.json.simple.JSONObject;
@@ -116,7 +117,7 @@ public class Speechmatics {
 
     }
 
-    public int getSubstitles(String id,String destinationFolder,String title){
+    public int getSubstitles(String id, String destinationFolder, String title, HomeController homeController){
         if(id.length() == 0){
             System.out.println("[Speechmatics : getSubtitles] need a job id");
             return 1;
@@ -137,12 +138,6 @@ public class Speechmatics {
         if(subsFile.exists()){
             System.out.println("[Speechmatics : getSubtitles] File "+title+".srt already exists");
             return 1;
-//            Scanner scanner = new Scanner(System.in);
-//            System.out.println("Do you want to override the file ? (0:no,1:yes) :");
-//            int choice = scanner.nextInt();
-//            if(choice == 0) {
-//                return ;
-//            }
         }
 
         //GET SUBTITLES

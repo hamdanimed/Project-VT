@@ -115,8 +115,8 @@ public class ProgressQualitiesController {
         if(task!=null && task.isRunning()){
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
-            alert.setHeaderText("You're about to Cancel t");
-            alert.setContentText("Do really want to exit ?");
+            alert.setHeaderText("Are you sure you want to CANCEL ?");
+//            alert.setContentText("Do really want to exit ?");
             if(alert.showAndWait().get()== ButtonType.OK){
                 //first method for canceling (somehow works) , doesnt work for download dialog for some reason
     //            if(checkQualitiesThread!=null && checkQualitiesThread.isAlive()){
