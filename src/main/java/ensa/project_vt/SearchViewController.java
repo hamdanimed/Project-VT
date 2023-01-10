@@ -253,7 +253,7 @@ public class SearchViewController {
         //need a check of exitance
         Scene scene = null;
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mediaplayer.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(fxmlLoader.load(), 1200, 700);
             stage.setTitle("Media Player");
@@ -305,7 +305,7 @@ public class SearchViewController {
         else{
             Scene scene = null;
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("home.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(fxmlLoader.load(), 1200, 700);
                 stage.setTitle("Home");

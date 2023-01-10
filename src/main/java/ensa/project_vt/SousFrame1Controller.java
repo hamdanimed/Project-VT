@@ -87,7 +87,7 @@ public class SousFrame1Controller {
         Stage stage=null;
         Scene scene = null;
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("mediaplayer.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mediaplayer.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(fxmlLoader.load(), 1200, 700);
             stage.setTitle("Media Player");
@@ -123,7 +123,7 @@ public class SousFrame1Controller {
                 Stage stage=null;
                 Scene scene = null;
                 try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(SearchView.class.getResource("search-view.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("search-view.fxml"));
                     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     scene = new Scene(fxmlLoader.load(), 1200, 700);
                     scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
