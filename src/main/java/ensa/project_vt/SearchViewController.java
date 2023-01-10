@@ -7,6 +7,7 @@ import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 import ensa.project_vt.localVideo.localVideo;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -41,6 +44,8 @@ public class SearchViewController {
     private TextField searchField;
     @FXML
     public ImageView loadingGif;
+    @FXML
+    public Text warningMessage;
     @FXML
     public Label msgLabel;
     @FXML
@@ -99,11 +104,23 @@ public class SearchViewController {
         initializeYoutubeDlandSpeechmaticsObjects();
         msgLabel.setVisible(false);
         loadingGif.setVisible(false);
+        warningMessage.setVisible(false);
         textInfo.setVisible(false);
         pane.setVisible(false);
         listView.setVisible(false);
         progressArea.setVisible(false);
         listView.setCellFactory(resultListView -> new ResultCell());
+        searchField.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                // perform action here
+                System.out.println("Searching ");
+                try {
+                    search(e);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
     }
     public void initializeYoutubeDlandSpeechmaticsObjects(){
@@ -193,17 +210,18 @@ public class SearchViewController {
 
     //method to be called when search button is clicked
     public void search(ActionEvent a) throws Exception {
-
-        pane.setVisible(false);
-        progressArea.setVisible(true);
-        operation.setText("Fetching Data from Youtube ");
-
-
         // check if the input is empty and return
         searchInput = searchField.getText();
         if(searchInput.isEmpty()){
-            mainText.setText("Type a link for a video or a keyword");
+            warningMessage.setVisible(true);
+            mainText.setVisible(false);
             return;
+
+        }
+        else {
+            pane.setVisible(false);
+            progressArea.setVisible(true);
+            operation.setText("Fetching Data from Youtube ");
         }
         // get the type of input : is it a link or a keyword ?
         String type = getInputType(searchInput);
@@ -221,7 +239,7 @@ public class SearchViewController {
             }
             case "keyword" -> {
                 mainText.setVisible(false);
-
+                warningMessage.setVisible(false);
                 YoutubeApiThread apiThread = new YoutubeApiThread(searchInput,listView,progressArea,textInfo);
                 apiThread.start();
                 apiThread.interrupt();
@@ -229,6 +247,7 @@ public class SearchViewController {
             default -> System.out.println("Invalid input");
         }
     }
+
     public void play(ActionEvent event){
         System.out.println("I play the video : " + videoTitleLabel.getText()+" the link is : "+videoLinkLabel.getText());
         //need a check of exitance

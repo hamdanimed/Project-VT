@@ -18,10 +18,10 @@
    <children>
       <Pane fx:id="stepsPane" layoutX="239.0" layoutY="40.0" prefHeight="513.0" prefWidth="693.0">
          <children>
-            <Pane fx:id="progressArea" layoutX="153.0" layoutY="167.0" prefHeight="34.0" prefWidth="369.0">
+            <Pane fx:id="progressArea" layoutX="194.0" layoutY="141.0" prefHeight="34.0" prefWidth="369.0">
                <children>
                   <HBox alignment="CENTER" layoutX="185.0" layoutY="181.0" mouseTransparent="true" prefHeight="27.0" prefWidth="263.0" spacing="10.0" />
-                  <Label fx:id="operation" layoutX="21.0" layoutY="7.0" text="operation">
+                  <Label fx:id="operation" alignment="CENTER" contentDisplay="CENTER" layoutX="21.0" layoutY="7.0" prefHeight="21.0" prefWidth="331.0" text="operation" textAlignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -43,6 +43,11 @@
             </ImageView>
          </graphic></Button>
       <Text fx:id="mainText" boundsType="VISUAL" layoutX="510.0" layoutY="344.0" lineSpacing="1.5" opacity="0.6" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 30px; -fx-font-weight: 700; -fx-fill: #fff;" text="Search for a video" textAlignment="CENTER" textOrigin="CENTER">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text fx:id="warningMessage" boundsType="VISUAL" layoutX="430.0" layoutY="354.0" lineSpacing="1.5" opacity="0.6" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 30px; -fx-font-weight: 700; -fx-fill: #fff;" text="Please type a link or keyword" textAlignment="CENTER" textOrigin="CENTER">
          <font>
             <Font size="16.0" />
          </font>
