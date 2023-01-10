@@ -138,12 +138,6 @@ public class Speechmatics {
         if(subsFile.exists()){
             System.out.println("[Speechmatics : getSubtitles] File "+title+".srt already exists");
             return 1;
-//            Scanner scanner = new Scanner(System.in);
-//            System.out.println("Do you want to override the file ? (0:no,1:yes) :");
-//            int choice = scanner.nextInt();
-//            if(choice == 0) {
-//                return ;
-//            }
         }
 
         //GET SUBTITLES

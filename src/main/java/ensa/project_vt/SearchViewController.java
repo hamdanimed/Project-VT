@@ -4,7 +4,7 @@ import ensa.project_vt.GenerateSubtitles.*;
 import ensa.project_vt.YoutubeSearch.YoutubeApiThread;
 import ensa.project_vt.YoutubeSearch.YoutubeVideo;
 
-import ensa.project_vt.localVideo.localVideo;
+//import ensa.project_vt.localVideo.localVideo;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
