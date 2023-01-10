@@ -54,7 +54,7 @@ public class YoutubeVideo {
 
 
         //to get duration
-        VisitYoutube client = new VisitYoutube("AIzaSyC34VqBS3fiCsJyd2fX1P2fx5yBIQnimTY");
+        VisitYoutube client = new VisitYoutube("AIzaSyDF0TDdiIrYK4_izUOOgOSSnNQQZFACOrI");
         String videoInfoDuration = client.GetVideoDetails(id);
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(videoInfoDuration, JsonObject.class);
@@ -95,6 +95,7 @@ public class YoutubeVideo {
     public String getThumbnailUrl() {
         return thumbnailUrl;
     }
+
 
     public void setAudioQuality(String audioQuality) {
         this.audioQuality = audioQuality;
