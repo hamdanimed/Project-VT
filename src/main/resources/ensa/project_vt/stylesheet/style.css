@@ -3,6 +3,8 @@
 	font-family: 'Poppins Black';
 	src: url('Poppins-Black.ttf');
 }
+.root{
+-fx-font-family: "Poppins Black";}
 
 .slider .thumb {
 	-fx-background-color: #00FFD1;
@@ -13,6 +15,22 @@
 	-fx-background-color: null;
 	-fx-background-radius: 0;
 
+}
+
+.scroll-bar {
+    -fx-background-color: #333; /* Dark background color for the scrollbar */
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #555; /* Dark thumb color for the scrollbar */
+}
+
+.scroll-bar:hover .thumb {
+    -fx-background-color: #777; /* Dark thumb color when hovered over */
+}
+
+.scroll-bar:pressed .thumb {
+    -fx-background-color: #00ffd1; /* Dark thumb color when pressed */
 }
 .timeSlider
 {

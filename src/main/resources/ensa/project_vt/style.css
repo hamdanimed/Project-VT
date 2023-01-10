@@ -1,8 +1,13 @@
 
 .root{
     -fx-background-color:#1E1E1E;
+    -fx-font-family:"Poppins Black";
 }
-
+@font-face
+{
+	font-family: 'Poppins Black';
+	src: url('Poppins-Black.ttf');
+}
 
 .button{
 
@@ -12,6 +17,8 @@
     -fx-pref-width:124px;
     -fx-pref-height:60px;
     -fx-cursor: hand;
+    -fx-font-family:"Poppins Black";
+
 }
 /*
 .text {
@@ -28,7 +35,21 @@
     -fx-background-color:#403D3D;
     -fx-text-fill:#fff;
 }
+.scroll-bar {
+    -fx-background-color: #333; /* Dark background color for the scrollbar */
+}
 
+.scroll-bar .thumb {
+    -fx-background-color: #555; /* Dark thumb color for the scrollbar */
+}
+
+.scroll-bar:hover .thumb {
+    -fx-background-color: #777; /* Dark thumb color when hovered over */
+}
+
+.scroll-bar:pressed .thumb {
+    -fx-background-color: #00ffd1; /* Dark thumb color when pressed */
+}
 
 .list-view .list-cell:even {
     -fx-background-color: #252525;
