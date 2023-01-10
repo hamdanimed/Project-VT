@@ -13,19 +13,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane fx:id="parent" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ensa.project_vt.SearchViewController">
    <children>
       <Pane fx:id="stepsPane" layoutX="239.0" layoutY="40.0" prefHeight="513.0" prefWidth="693.0">
          <children>
-            <Pane fx:id="progressArea" layoutX="153.0" layoutY="167.0" prefHeight="34.0" prefWidth="369.0">
+            <Pane fx:id="progressArea" layoutX="214.0" layoutY="-3.0" prefHeight="34.0" prefWidth="369.0">
                <children>
-                  <HBox alignment="CENTER" layoutX="185.0" layoutY="181.0" mouseTransparent="true" prefHeight="27.0" prefWidth="263.0" spacing="10.0" />
-                  <Label fx:id="operation" layoutX="21.0" layoutY="7.0" text="operation">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
+                  <HBox alignment="CENTER" layoutX="53.0" mouseTransparent="true" prefHeight="34.0" prefWidth="263.0" spacing="10.0">
+                     <children>
+                        <Label fx:id="operation" text="operation">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                     </children></HBox>
                </children>
             </Pane>
          </children></Pane>
@@ -59,16 +62,7 @@
       <Button fx:id="backBtn" layoutX="28.0" layoutY="24.0" mnemonicParsing="false" onAction="#back" opacity="0.0" prefHeight="26.0" prefWidth="28.0" />
       <Pane fx:id="pane" layoutX="210.0" layoutY="259.0" prefHeight="383.0" prefWidth="798.0" style="-fx-border-radius: 30;">
          <children>
-            <HBox alignment="CENTER" layoutX="31.0" layoutY="22.0" prefHeight="115.0" prefWidth="742.0" spacing="15.0">
-               <children>
-                  <ImageView fx:id="imageView" fitHeight="115.0" fitWidth="132.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="videoTitleLabel" prefHeight="73.0" prefWidth="673.0" text="Title">
-                     <font>
-                        <Font name="System Bold" size="40.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
+            <ImageView fx:id="imageView" fitHeight="115.0" fitWidth="132.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
             <Text fill="#dbdbdb" layoutX="114.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Duration :">
                <font>
                   <Font size="20.0" />
@@ -79,16 +73,12 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <Text fx:id="linkLabel" fill="#dbdbdb" layoutX="115.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Url :">
+            <Text fx:id="linkLabel" fill="#dbdbdb" layoutX="114.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Url :">
                <font>
                   <Font size="20.0" />
                </font>
             </Text>
-            <Label fx:id="videoLinkLabel" layoutX="169.0" layoutY="194.0" prefHeight="33.0" prefWidth="663.0" text="Url">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Label>
+            <TextFlow fx:id="videoLinkTextFlow" layoutX="169.0" layoutY="194.0" />
             <HBox alignment="CENTER" layoutX="-18.0" layoutY="258.0" prefHeight="85.0" prefWidth="513.0" spacing="50.0">
                <children>
                   <VBox fx:id="playArea" alignment="CENTER" prefHeight="132.0" prefWidth="100.0" visible="false">
@@ -138,6 +128,24 @@
             <Button fx:id="playBtn" disable="true" layoutX="165.0" layoutY="275.0" mnemonicParsing="false" onAction="#play" opacity="0.0" prefHeight="26.0" prefWidth="24.0" text="playBtn" visible="false" />
             <Button fx:id="saveBtn" disable="true" layoutX="256.0" layoutY="268.0" mnemonicParsing="false" onAction="#save" opacity="0.0" prefHeight="38.0" prefWidth="28.0" text="saveBtn" visible="false" />
             <Button fx:id="generateBtn" layoutX="357.0" layoutY="264.0" mnemonicParsing="false" onAction="#transcript" opacity="0.0" prefHeight="38.0" prefWidth="53.0" text="generateBtn" />
+            <TextFlow fx:id="textFlow" layoutX="159.0" layoutY="19.0">
+               <children>
+                  <Label fx:id="videoTitleLabel" prefHeight="74.0" prefWidth="614.0" text="Title" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                  </Label>
+               </children>
+            </TextFlow>
+            <TextFlow fx:id="textFlow1" layoutX="169.0" layoutY="193.0">
+               <children>
+                  <Label fx:id="videoLinkLabel" prefHeight="74.0" prefWidth="614.0" text="Title" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="40.0" />
+                     </font>
+                  </Label>
+               </children>
+            </TextFlow>
          </children>
       </Pane>
       <Text fx:id="textInfo" fill="WHITE" layoutX="77.0" layoutY="211.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">

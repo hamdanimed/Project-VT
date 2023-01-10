@@ -63,7 +63,8 @@
 }
 #videoTitleLabel{
     -fx-font-weight: bold;
-    -fx-font-size: 30px;
+    -fx-font-size: 25px;
+    -fx-background-color:#403D3D;
 }
 .label{
     -fx-text-fill: #FFFFFF;

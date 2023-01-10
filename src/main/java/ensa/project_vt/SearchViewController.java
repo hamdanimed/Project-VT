@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
@@ -61,8 +62,12 @@ public class SearchViewController {
     @FXML
     Label videoLinkLabel;
     @FXML
+    TextFlow videoLinkTextFlow = new TextFlow();
+    @FXML
     Label videoTitleLabel;
 
+    @FXML
+    TextFlow textFlow = new TextFlow();
     @FXML
     Label videoDurationLabel;
     @FXML
@@ -93,6 +98,7 @@ public class SearchViewController {
     private DataFile dataFile;
 
     private YoutubeVideo videoDisplayedOnPane=null;
+
 
     @FXML
     private void initialize() {
@@ -370,8 +376,10 @@ public class SearchViewController {
             imageView.setImage(image);
         }
         videoTitleLabel.setText(video.getVideoTitle());
+        textFlow.setPrefWidth(70);
         videoDurationLabel.setText(video.getDuration());
         videoLinkLabel.setText(video.getUrl());
+        videoLinkTextFlow.setPrefWidth(70);
         textInfo.setVisible(true);
         textInfo.setText("Your Video");
     }
@@ -403,6 +411,7 @@ public class SearchViewController {
                 selectedVideo.videoType="local";
                 displayInfo(selectedVideo);
                 pane.setVisible(true);
+                listView.setVisible(false);
 
 
             }
