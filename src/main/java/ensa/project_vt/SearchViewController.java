@@ -272,9 +272,16 @@ public class SearchViewController {
     }
     public void back(ActionEvent event) {
         if(pane.isVisible()){
-            pane.setVisible(false);
-            listView.setVisible(true);
-            textInfo.setText("Results");
+            if(!selectedVideo.videoType.equals("local")) {
+                pane.setVisible(false);
+                listView.setVisible(true);
+                textInfo.setText("Results");
+            }
+            else {
+                pane.setVisible(false);
+                mainText.setVisible(true);
+                textInfo.setVisible(false);
+            }
         }
         else{
             Scene scene = null;

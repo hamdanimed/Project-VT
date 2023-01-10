@@ -6,26 +6,27 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<HBox fx:id="hbox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1025.0" style="-fx-background-color: #323232;" styleClass="style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="hbox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1025.0" spacing="30.0" style="-fx-background-color: #323232;" styleClass="style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ImageView fx:id="imageView" fitHeight="86.0" fitWidth="191.0" pickOnBounds="true" preserveRatio="true" smooth="false" HBox.hgrow="ALWAYS">
+        <ImageView fx:id="imageView" fitHeight="85.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true" smooth="false">
             <HBox.margin>
-                <Insets left="20.0" />
+                <Insets />
             </HBox.margin>
             <image>
                 <Image url="@assets/video_playlist.png" />
             </image>
         </ImageView>
-        <Label fx:id="titleLabel" prefHeight="95.0" prefWidth="730.0" style="-fx-padding: 24px; -fx-text-fill: #fff; -fx-font-size: 32px;" text="Cat Video funny 1080p" textAlignment="CENTER">
+        <Label fx:id="titleLabel" prefHeight="95.0" prefWidth="700.0" style="-fx-text-fill: #fff; -fx-font-size: 24px;" text="Cat Video funny 1080p" textAlignment="CENTER">
             <font>
-                <Font size="36.0" />
+                <Font size="24.0" />
             </font>
         </Label>
-        <Label fx:id="durationLabel" alignment="CENTER" contentDisplay="TEXT_ONLY" prefHeight="50.0" prefWidth="176.0" style="-fx-label-padding: 10px; -fx-text-fill: #fff;" text="4:00" textAlignment="CENTER">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Label>
+      <Text fx:id="durationLabel" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="04:00" textAlignment="RIGHT">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
     </children>
 </HBox>
