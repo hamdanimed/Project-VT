@@ -120,7 +120,7 @@ public class SousFrame1Controller {
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
             alert.setHeaderText("You need to upload the audio to speechmatics");
-            alert.setContentText("Do really want to upload the audio ?");
+//            alert.setContentText("Do really want to upload the audio ?");
             if(alert.showAndWait().get()== ButtonType.OK){
                 Stage stage=null;
                 Scene scene = null;

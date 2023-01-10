@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 
@@ -17,7 +18,7 @@ public class ResultCell extends ListCell<YoutubeVideo>{
     @FXML
     private Label titleLabel;
     @FXML
-    private Label durationLabel;
+    private Text durationLabel;
     @FXML
     private ImageView imageView;
     /*@FXML
