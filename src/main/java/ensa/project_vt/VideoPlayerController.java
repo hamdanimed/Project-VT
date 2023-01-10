@@ -424,33 +424,70 @@ public class VideoPlayerController {
         }
         isMute = !isMute;
     }
+
+    //old function
+//    @FXML
+//    void saveCaptions(ActionEvent event) {
+//
+//        //Validation
+//        if(!sp.getCaptions().isEmpty())
+//        {
+//            String[] parts = captionEditText.getText().split("\n");
+//            String validText = "";
+//            for (int i = 0; i < parts.length; i++) {
+//                if(!parts[i].equals("")) {
+//                    validText+=parts[i];
+//                    if(i != parts.length-1) validText+="\n";
+//                }
+//            }
+//
+//            captionEditText.setText(validText);
+//            sp.editCaption(validText,captionIndex);
+//            try {
+//                Files.writeString(Paths.get(srtPath),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
+//            } catch (IOException e) {
+//                System.out.println("can't save file");
+//            }
+//            closedCaptions.setText(captionEditText.getText());
+//            System.out.println("Saved");
+//        }
+//    }
+
+    //new function
     @FXML
     void saveCaptions(ActionEvent event) {
 
         //Validation
         if(!sp.getCaptions().isEmpty())
         {
-            String[] parts = captionEditText.getText().split("\n");
-            String validText = "";
-            for (int i = 0; i < parts.length; i++) {
-                if(!parts[i].equals("")) {
-                    validText+=parts[i];
-                    if(i != parts.length-1) validText+="\n";
-                }
-            }
+            if(captionEditText.getText().equals(""))
+            {
+                captionEditText.setText(actualCaption.getText());
 
-            captionEditText.setText(validText);
-            sp.editCaption(validText,captionIndex);
-            try {
-                Files.writeString(Paths.get(srtPath),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
-            } catch (IOException e) {
-                System.out.println("can't save file");
             }
-            closedCaptions.setText(captionEditText.getText());
-            System.out.println("Saved");
+            else {
+                String[] parts = captionEditText.getText().split("\n");
+                String validText = "";
+                for (int i = 0; i < parts.length; i++) {
+                    if(!parts[i].equals("")) {
+                        validText+=parts[i];
+                        if(i != parts.length-1) validText+="\n";
+                    }
+                }
+
+                captionEditText.setText(validText);
+                sp.editCaption(validText,captionIndex);
+                try {
+                    Files.writeString(Paths.get(srtPath),sp.format(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING);
+                } catch (IOException e) {
+                    System.out.println("can't save file");
+                }
+                closedCaptions.setText(captionEditText.getText());
+                System.out.println("Saved");
+
+            }
         }
     }
-
 
     @FXML
     void loadCaption(MouseEvent event) {
