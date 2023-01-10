@@ -1,11 +1,10 @@
-package ensa.project_vt.dataClasses;
+package ensa.project_vt;
 
 import java.io.IOException;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import ensa.project_vt.jobClasses.VisitYoutube;
 
 import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
 

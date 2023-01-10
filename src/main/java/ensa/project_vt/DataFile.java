@@ -1,4 +1,4 @@
-package ensa.project_vt.jobClasses;
+package ensa.project_vt;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;

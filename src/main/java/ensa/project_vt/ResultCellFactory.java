@@ -1,7 +1,7 @@
-package ensa.project_vt.jobClasses;
+package ensa.project_vt;
 
-import ensa.project_vt.dataClasses.ResultCell;
-import ensa.project_vt.dataClasses.YoutubeVideo;
+import ensa.project_vt.ResultCell;
+import ensa.project_vt.YoutubeVideo;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;

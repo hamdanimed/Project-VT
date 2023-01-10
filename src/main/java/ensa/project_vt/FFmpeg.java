@@ -1,4 +1,4 @@
-package ensa.project_vt.jobClasses;
+package ensa.project_vt;
 
 import java.io.*;
 

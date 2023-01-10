@@ -1,7 +1,7 @@
-package ensa.project_vt.threading;
+package ensa.project_vt;
 
-import ensa.project_vt.jobClasses.DataFile;
-import ensa.project_vt.jobClasses.FFmpeg;
+import ensa.project_vt.DataFile;
+import ensa.project_vt.FFmpeg;
 import ensa.project_vt.SearchViewController;
 import javafx.application.Platform;
 import javafx.concurrent.Task;

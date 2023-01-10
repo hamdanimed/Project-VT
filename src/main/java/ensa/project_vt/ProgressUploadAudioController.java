@@ -1,9 +1,5 @@
 package ensa.project_vt;
 
-import ensa.project_vt.dataClasses.DataObject;
-import ensa.project_vt.jobClasses.Speechmatics;
-import ensa.project_vt.threading.SpeechmaticsTask;
-import ensa.project_vt.jobClasses.YoutubeDl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;

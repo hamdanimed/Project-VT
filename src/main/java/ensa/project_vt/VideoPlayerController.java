@@ -1,8 +1,6 @@
 package ensa.project_vt;
 
 //Animations
-import ensa.project_vt.dataClasses.Caption;
-import ensa.project_vt.jobClasses.SrtParser;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;

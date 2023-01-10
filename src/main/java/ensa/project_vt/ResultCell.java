@@ -1,4 +1,4 @@
-package ensa.project_vt.dataClasses;
+package ensa.project_vt;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ContentDisplay;

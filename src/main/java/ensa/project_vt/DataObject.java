@@ -1,9 +1,4 @@
-package ensa.project_vt.dataClasses;
-
-import ensa.project_vt.jobClasses.DataFile;
-import ensa.project_vt.jobClasses.FFmpeg;
-import ensa.project_vt.jobClasses.Speechmatics;
-import ensa.project_vt.jobClasses.YoutubeDl;
+package ensa.project_vt;
 
 public class DataObject {
     public YoutubeDl youtubeDl;

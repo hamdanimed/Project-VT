@@ -1,7 +1,5 @@
-package ensa.project_vt.jobClasses;
+package ensa.project_vt;
 
-import ensa.project_vt.ProgressDownloadController;
-import ensa.project_vt.ProgressQualitiesController;
 import javafx.application.Platform;
 
 import java.io.*;

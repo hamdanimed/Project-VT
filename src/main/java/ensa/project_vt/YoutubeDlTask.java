@@ -1,9 +1,9 @@
-package ensa.project_vt.threading;
+package ensa.project_vt;
 
-import ensa.project_vt.jobClasses.DataFile;
-import ensa.project_vt.dataClasses.DataObject;
-import ensa.project_vt.jobClasses.FFmpeg;
-import ensa.project_vt.jobClasses.YoutubeDl;
+import ensa.project_vt.DataFile;
+import ensa.project_vt.DataObject;
+import ensa.project_vt.FFmpeg;
+import ensa.project_vt.YoutubeDl;
 import ensa.project_vt.ProgressDownloadController;
 import ensa.project_vt.ProgressQualitiesController;
 import javafx.application.Platform;

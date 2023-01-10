@@ -1,7 +1,7 @@
-package ensa.project_vt.threading;
+package ensa.project_vt;
 
-import ensa.project_vt.jobClasses.VisitYoutube;
-import ensa.project_vt.dataClasses.YoutubeVideo;
+import ensa.project_vt.VisitYoutube;
+import ensa.project_vt.YoutubeVideo;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

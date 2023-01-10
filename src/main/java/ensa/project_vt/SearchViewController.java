@@ -2,15 +2,6 @@ package ensa.project_vt;
 
 //import ensa.project_vt.localVideo.localVideo;
 
-import ensa.project_vt.dataClasses.DataObject;
-import ensa.project_vt.dataClasses.ResultCell;
-import ensa.project_vt.dataClasses.YoutubeVideo;
-import ensa.project_vt.jobClasses.DataFile;
-import ensa.project_vt.jobClasses.FFmpeg;
-import ensa.project_vt.jobClasses.Speechmatics;
-import ensa.project_vt.jobClasses.YoutubeDl;
-import ensa.project_vt.threading.FFmpegTask;
-import ensa.project_vt.threading.YoutubeApiThread;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

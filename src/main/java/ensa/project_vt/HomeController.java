@@ -1,7 +1,5 @@
 package ensa.project_vt;
 
-import ensa.project_vt.dataClasses.VideoInf;
-import ensa.project_vt.jobClasses.DataFile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

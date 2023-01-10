@@ -1,9 +1,9 @@
-package ensa.project_vt.threading;
+package ensa.project_vt;
 
-import ensa.project_vt.jobClasses.DataFile;
-import ensa.project_vt.dataClasses.DataObject;
-import ensa.project_vt.jobClasses.Speechmatics;
-import ensa.project_vt.jobClasses.YoutubeDl;
+import ensa.project_vt.DataFile;
+import ensa.project_vt.DataObject;
+import ensa.project_vt.Speechmatics;
+import ensa.project_vt.YoutubeDl;
 import ensa.project_vt.ProgressUploadAudioController;
 import javafx.application.Platform;
 import javafx.concurrent.Task;

@@ -1,6 +1,6 @@
-package ensa.project_vt.jobClasses;
+package ensa.project_vt;
 
-import ensa.project_vt.dataClasses.Caption;
+import ensa.project_vt.Caption;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

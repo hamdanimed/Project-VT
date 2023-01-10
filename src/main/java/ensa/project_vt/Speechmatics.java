@@ -1,4 +1,4 @@
-package ensa.project_vt.jobClasses;
+package ensa.project_vt;
 
 import ensa.project_vt.HomeController;
 import ensa.project_vt.ProgressUploadAudioController;

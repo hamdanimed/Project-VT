@@ -1,11 +1,10 @@
-package ensa.project_vt.jobClasses;
+package ensa.project_vt;
 
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import ensa.project_vt.dataClasses.YoutubeVideo;
 
 import java.io.*;
 import java.net.HttpURLConnection;

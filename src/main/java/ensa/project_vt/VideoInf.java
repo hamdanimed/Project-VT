@@ -1,4 +1,4 @@
-package ensa.project_vt.dataClasses;
+package ensa.project_vt;
 
 public class VideoInf {
     private String title;

@@ -1,4 +1,4 @@
-package ensa.project_vt.jobClasses;
+package ensa.project_vt;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
