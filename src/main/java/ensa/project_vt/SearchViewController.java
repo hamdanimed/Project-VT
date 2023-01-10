@@ -50,6 +50,10 @@ public class SearchViewController {
     @FXML
     public Label msgLabel;
     @FXML
+    public TextFlow videoLinkTextFlow= new TextFlow();
+    @FXML
+    public TextFlow textFlow = new TextFlow();
+    @FXML
     private Button search;
     @FXML
     private Text linkLabel;
@@ -395,11 +399,20 @@ public class SearchViewController {
     }
 
     public void displayInfo(YoutubeVideo video){
+
         videoDisplayedOnPane=video;
         System.out.println(videoDisplayedOnPane.toString());
         if(video.getThumbnailUrl()!=null) {
+            imageView.setVisible(true);
             Image image = new Image(video.getThumbnailUrl());
             imageView.setImage(image);
+            textFlow.setPrefWidth(70);
+            System.out.println("yt");
+        }else if(video.getThumbnailUrl()==null){
+            imageView.setVisible(false);
+            videoTitleLabel.setPrefWidth(pane.getPrefWidth()-2*25);
+            textFlow.setLayoutX(25);
+            System.out.println("local");
         }
         videoTitleLabel.setText(video.getVideoTitle());
         textFlow.setPrefWidth(70);
@@ -435,6 +448,8 @@ public class SearchViewController {
                 selectedVideo.setUrl(path);
                 linkLabel.setText("Path :");
                 selectedVideo.videoType="local";
+                selectedVideo.setThumbnailUrl(null);
+                listView.setVisible(false);
                 displayInfo(selectedVideo);
                 pane.setVisible(true);
                 listView.setVisible(false);

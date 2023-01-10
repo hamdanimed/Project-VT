@@ -18,6 +18,11 @@ public class YoutubeVideo {
     public String videoType="";
     private String videoTitle;
     private String duration;
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
     private String url;
     private String thumbnailUrl;
     private String videoQuality;
