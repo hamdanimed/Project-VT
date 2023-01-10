@@ -52,8 +52,7 @@ public class SousFrame1Controller {
         System.out.println("btn id : "+button_ID);
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
-        alert.setHeaderText("You're about to delete the video ");
-        alert.setContentText("Do really want to delete this video ?");
+        alert.setHeaderText("Are you sure you want to delete the video ?");
         if(alert.showAndWait().get()== ButtonType.OK){
             if(button_ID.contains("local")){
                 delfile(button_ID+".wav");
@@ -120,7 +119,6 @@ public class SousFrame1Controller {
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
             alert.setHeaderText("You need to upload the audio to speechmatics");
-//            alert.setContentText("Do really want to upload the audio ?");
             if(alert.showAndWait().get()== ButtonType.OK){
                 Stage stage=null;
                 Scene scene = null;
@@ -148,9 +146,9 @@ public class SousFrame1Controller {
 
             int exitCode;
             if(videoType.equals("local")){
-                exitCode=speechmatics.getSubstitles(dataFile.getJobId(button_ID),"local",button_ID);
+                exitCode=speechmatics.getSubstitles(dataFile.getJobId(button_ID),"local",button_ID,homeController);
             }else{
-                exitCode=speechmatics.getSubstitles(dataFile.getJobId(button_ID),button_ID,button_ID);
+                exitCode=speechmatics.getSubstitles(dataFile.getJobId(button_ID),button_ID,button_ID,homeController);
             }
             if(exitCode==1){
                 homeController.loadingGif.setVisible(false);
@@ -181,7 +179,8 @@ public class SousFrame1Controller {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+//            throw new RuntimeException(e);
         }
 
 

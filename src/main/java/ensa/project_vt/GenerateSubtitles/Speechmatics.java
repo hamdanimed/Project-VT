@@ -1,5 +1,6 @@
 package ensa.project_vt.GenerateSubtitles;
 
+import ensa.project_vt.HomeController;
 import ensa.project_vt.ProgressUploadAudioController;
 import javafx.application.Platform;
 import org.json.simple.JSONObject;
@@ -116,7 +117,7 @@ public class Speechmatics {
 
     }
 
-    public int getSubstitles(String id,String destinationFolder,String title){
+    public int getSubstitles(String id, String destinationFolder, String title, HomeController homeController){
         if(id.length() == 0){
             System.out.println("[Speechmatics : getSubtitles] need a job id");
             return 1;

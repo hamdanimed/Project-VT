@@ -90,8 +90,8 @@ public class ProgressDownloadController {
         if(task!=null && task.isRunning()){
             Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle(videoIdLabel.getText());
-            alert.setHeaderText("You're about to Cancel t");
-            alert.setContentText("Do really want to exit ?");
+            alert.setHeaderText("Are you sure you want to CANCEL ?");
+//            alert.setContentText("Do really want to exit ?");
             if(alert.showAndWait().get()== ButtonType.OK){
                     if(task!=null && task.isRunning()){
                         task.sendCancelSignal();
