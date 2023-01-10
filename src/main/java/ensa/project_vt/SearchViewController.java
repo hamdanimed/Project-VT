@@ -23,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
@@ -48,6 +49,10 @@ public class SearchViewController {
     public Text warningMessage;
     @FXML
     public Label msgLabel;
+    @FXML
+    public TextFlow videoLinkTextFlow= new TextFlow();
+    @FXML
+    public TextFlow textFlow = new TextFlow();
     @FXML
     private Button search;
     @FXML
@@ -389,15 +394,25 @@ public class SearchViewController {
     }
 
     public void displayInfo(YoutubeVideo video){
+
         videoDisplayedOnPane=video;
         System.out.println(videoDisplayedOnPane.toString());
         if(video.getThumbnailUrl()!=null) {
+            imageView.setVisible(true);
             Image image = new Image(video.getThumbnailUrl());
             imageView.setImage(image);
+            textFlow.setPrefWidth(70);
+            System.out.println("yt");
+        }else if(video.getThumbnailUrl()==null){
+            imageView.setVisible(false);
+            videoTitleLabel.setPrefWidth(pane.getPrefWidth()-2*25);
+            textFlow.setLayoutX(25);
+            System.out.println("local");
         }
         videoTitleLabel.setText(video.getVideoTitle());
         videoDurationLabel.setText(video.getDuration());
         videoLinkLabel.setText(video.getUrl());
+        videoLinkTextFlow.setPrefWidth(70);
         textInfo.setVisible(true);
         textInfo.setText("Your Video");
     }
@@ -427,6 +442,8 @@ public class SearchViewController {
                 selectedVideo.setUrl(path);
                 linkLabel.setText("Path :");
                 selectedVideo.videoType="local";
+                selectedVideo.setThumbnailUrl(null);
+                listView.setVisible(false);
                 displayInfo(selectedVideo);
                 pane.setVisible(true);
 
